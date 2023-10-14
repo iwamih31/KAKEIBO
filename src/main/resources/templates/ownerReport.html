@@ -7,7 +7,7 @@
 	</th:block>
 
 	<!--	main フラグメントの定義（ページコンテンツ）	-->
-	<div th:fragment="main" class="officeReport">
+	<div th:fragment="main" class="ownerReport">
 		<!--	ページタイトル	-->
 		<div class="header border-bottom">
 			<h1 class="h2">[[${title}]]</h1>
@@ -16,7 +16,7 @@
 		<div>
 			<!--	操作系	-->
 			<div class="flex margin_02em">
-				<form id="output" method="post" th:action="@{${req} + '/Office/Output/Excel'}">
+				<form id="output" method="post" th:action="@{${req} + '/Owner/Output/Excel'}">
 					<button form="output" type="submit" class="btn btn-primary margin_1em">
 						Excelに出力
 					</button>
@@ -36,15 +36,15 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="office : ${office_Report}">
+					<tr th:each="owner : ${owner_Report}">
 						<td>
-							[[${office.id}]]
+							[[${owner.id}]]
 						</td>
 						<td>
-							[[${office.item_name}]]
+							[[${owner.item_name}]]
 						</td>
 						<td>
-							[[${office.item_value}]]
+							[[${owner.item_value}]]
 						</td>
 					</tr>
 				</tbody>

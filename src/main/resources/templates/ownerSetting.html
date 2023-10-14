@@ -7,14 +7,14 @@
 	</th:block>
 
 	<!--	main フラグメントの定義（メインコンテンツ）	-->
-	<div th:fragment="main" class="officeSetting">
+	<div th:fragment="main" class="ownerSetting">
 		<div class="header border-bottom">
 			<h1 class="h2">[[${title}]]</h1>
 		</div>
 		<!--	一覧表示	-->
 		<div>
 			<div>
-				<a th:href="@{${req} + '/OfficeInsert'}">
+				<a th:href="@{${req} + '/OwnerInsert'}">
 					<button type="button" class="btn btn-primary margin_1em">
 						新しい項目を追加する
 					</button>
@@ -22,7 +22,7 @@
 				<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
 			</div>
 			<table class="vertical font-size-x-large">
-				<th:block th:each="office : ${officeList}" th:object="${office}">
+				<th:block th:each="owner : ${ownerList}" th:object="${owner}">
 					<tr>
 						<td>
 							[[*{id}]].　
@@ -34,7 +34,7 @@
 							：[[*{item_value}]]　
 						</td>
 						<td>
-							<form method="post" th:action="@{${req} + '/OfficeUpdate'}">
+							<form method="post" th:action="@{${req} + '/OwnerUpdate'}">
 								<input type="hidden" name="id" th:value="*{id}" />
 								<button type="submit" class="btn btn-primary">
 									編集

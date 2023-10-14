@@ -14,7 +14,7 @@
 		</div>
 		<!--	操作系	-->
 		<div class="flex margin_1em">
-			<form id="output" method="post" th:action="@{${req} + '/Office/Output/Excel'}">
+			<form id="output" method="post" th:action="@{${req} + '/Owner/Output/Excel'}">
 				<button form="output" type="submit" class="btn btn-primary margin_1em">
 					Excelに出力
 				</button>
@@ -23,7 +23,7 @@
 		<!--	一覧表示開始	-->
 		<div>
 			<table class="detail font-size-x-large vertical">
-				<th:block th:each="data : ${office_data}" th:object="${data}">
+				<th:block th:each="data : ${owner_data}" th:object="${data}">
 					<tr>
 						<td>
 							● [[*{item_name}]]

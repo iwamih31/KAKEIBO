@@ -8,12 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface OfficeRepository extends JpaRepository<Office, Integer> {
+public interface OwnerRepository extends JpaRepository<Owner, Integer> {
 
 	/**	item_name 列の値が引数 item_name の値と同じ行の item_value 列の値を文字列で返す */
-	@Query("select office.item_value"
-			+ " from Office office"
-			+ " where office.item_name = :item_name")
+	@Query("select owner.item_value"
+			+ " from Owner owner"
+			+ " where owner.item_name = :item_name")
 	public List<String> item_value(@Param("item_name")String item_name);
 
 }

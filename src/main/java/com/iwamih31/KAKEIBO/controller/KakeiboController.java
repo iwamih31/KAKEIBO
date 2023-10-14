@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.iwamih31.KAKEIBO.Action;
 import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.LabelSet;
-import com.iwamih31.KAKEIBO.Office;
+import com.iwamih31.KAKEIBO.Owner;
 import com.iwamih31.KAKEIBO.service.KakeiboService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -73,32 +73,32 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@GetMapping("/Office")
-	public String office(
+	@GetMapping("/Owner")
+	public String owner(
 			@Param("date")String date,
 			Model model) {
-		add_View_Data_(model, "office", "事業所情報");
-		String[] item_Names = service.office_Item_Names();
+		add_View_Data_(model, "owner", "所有者情報");
+		String[] item_Names = service.owner_Item_Names();
 		model.addAttribute("name", item_Names[0]);
 		model.addAttribute("department", item_Names[1]);
-		model.addAttribute("office_data", service.office_All());
+		model.addAttribute("owner_data", service.owner_All());
 		return "view";
 	}
 
-	@GetMapping("/OfficeSetting")
-	public String officeSetting(
+	@GetMapping("/OwnerSetting")
+	public String ownerSetting(
 			Model model) {
-		add_View_Data_(model, "officeSetting", "事業所設定");
-		model.addAttribute("officeList", service.office_Report());
+		add_View_Data_(model, "ownerSetting", "所有者設定");
+		model.addAttribute("ownerList", service.owner_Report());
 		return "view";
 	}
 
-	@GetMapping("/OfficeInsert")
-	public String officeInsert(
+	@GetMapping("/OwnerInsert")
+	public String ownerInsert(
 			Model model) {
-		add_View_Data_(model, "officeInsert", "新規項目追加");
-		model.addAttribute("office", service.new_Office());
-		model.addAttribute("next_id", service.next_Office_Id());
+		add_View_Data_(model, "ownerInsert", "新規項目追加");
+		model.addAttribute("owner", service.new_Owner());
+		model.addAttribute("next_id", service.next_Owner_Id());
 		return "view";
 	}
 
@@ -248,14 +248,14 @@ public class KakeiboController {
 	}
 
 
-	@PostMapping("/Office/Insert")
-	public String office_Insert(
+	@PostMapping("/Owner/Insert")
+	public String owner_Insert(
 			@RequestParam("post_id")int id,
-			@ModelAttribute("office")Office office,
+			@ModelAttribute("owner")Owner owner,
 			RedirectAttributes redirectAttributes) {
-		String message = service.office_Insert(office, id);
+		String message = service.owner_Insert(owner, id);
 		redirectAttributes.addFlashAttribute("message", message);
-		return redirect("/OfficeSetting");
+		return redirect("/OwnerSetting");
 	}
 
 	@PostMapping("/Action/Insert")
@@ -295,13 +295,13 @@ public class KakeiboController {
 		return redirect("/Daily?date=" + date);
 	}
 
-	@PostMapping("/OfficeUpdate")
-	public String officeUpdate(
+	@PostMapping("/OwnerUpdate")
+	public String ownerUpdate(
 			@RequestParam("id")int id,
 			Model model) {
-		add_View_Data_(model, "officeUpdate", "事業所情報更新");
+		add_View_Data_(model, "ownerUpdate", "所有者情報更新");
 		model.addAttribute("id", id);
-		model.addAttribute("office", service.office(id));
+		model.addAttribute("owner", service.owner(id));
 		return "view";
 	}
 
@@ -335,14 +335,14 @@ public class KakeiboController {
 		return redirect("/Daily?date=" + localDate);
 	}
 
-	@PostMapping("/Office/Update")
-	public String office_Update(
+	@PostMapping("/Owner/Update")
+	public String owner_Update(
 			@RequestParam("post_id")int id,
-			@ModelAttribute("office")Office office,
+			@ModelAttribute("owner")Owner owner,
 			RedirectAttributes redirectAttributes) {
-		String message = service.office_Update(office, id);
+		String message = service.owner_Update(owner, id);
 		redirectAttributes.addFlashAttribute("message", message);
-		return redirect("/OfficeSetting");
+		return redirect("/OwnerSetting");
 	}
 
 	@PostMapping("/ActionDelete")
@@ -372,27 +372,27 @@ public class KakeiboController {
 	}
 
 
-	@PostMapping("/OfficeReport")
-	public String officeReport() {
+	@PostMapping("/OwnerReport")
+	public String ownerReport() {
 		return "redirect:/CareRecord/RoutineReport";
 	}
 
-	@GetMapping("/OfficeReport")
-	public String officeReport(
+	@GetMapping("/OwnerReport")
+	public String ownerReport(
 			Model model) {
-		add_View_Data_(model, "officeReport", "事業所情報印刷");
-		model.addAttribute("label_Set", LabelSet.officeReport_Set);
-		model.addAttribute("office_Report", service.office_Report());
+		add_View_Data_(model, "ownerReport", "所有者情報印刷");
+		model.addAttribute("label_Set", LabelSet.ownerReport_Set);
+		model.addAttribute("owner_Report", service.owner_Report());
 		return "view";
 	}
 
-	@PostMapping("/Office/Output/Excel")
-	public String office_Output_Excel(
+	@PostMapping("/Owner/Output/Excel")
+	public String owner_Output_Excel(
 			HttpServletResponse httpServletResponse,
 			RedirectAttributes redirectAttributes) {
-		String message = service.office_Output_Excel(httpServletResponse);
+		String message = service.owner_Output_Excel(httpServletResponse);
 		redirectAttributes.addFlashAttribute("message", message);
-		return redirect("/OfficeReport");
+		return redirect("/OwnerReport");
 	}
 
 	@PostMapping("/LastMonth")

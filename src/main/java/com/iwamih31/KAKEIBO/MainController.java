@@ -16,25 +16,28 @@ public class MainController {
 	@Autowired
 	private KakeiboService service;
 
+	/** メインページのURL */
+	private final String URL = "/Kakeibo/";
+
 	@GetMapping("/")
 	public String accountBook_index() {
 		service.___consoleOut___("@PostMapping(\"/\")開始");
 		service.___consoleOut___("@PostMapping(\"/\")終了");
-		return "redirect:/AccountBook/";
+		return "redirect:" + URL;
 	}
 
 	@GetMapping("/main")
 	public String main0() {
 		service.___consoleOut___("@PostMapping(\"/\")開始");
 		service.___consoleOut___("@PostMapping(\"/\")終了");
-		return "redirect:/AccountBook/";
+		return "redirect:" + URL;
 	}
 
 	@GetMapping("/Main")
 	public String main() {
 		service.___consoleOut___("@PostMapping(\"/\")開始");
 		service.___consoleOut___("@PostMapping(\"/\")終了");
-		return "redirect:/AccountBook/";
+		return "redirect:" + URL;
 	}
 
 	/** view 表示に必要な属性データをモデルに登録 */

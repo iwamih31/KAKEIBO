@@ -24,8 +24,8 @@ import com.iwamih31.KAKEIBO.DailyWorkSheet;
 import com.iwamih31.KAKEIBO.Excel;
 import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.MonthlyWorkSheet;
-import com.iwamih31.KAKEIBO.Office;
-import com.iwamih31.KAKEIBO.OfficeRepository;
+import com.iwamih31.KAKEIBO.Owner;
+import com.iwamih31.KAKEIBO.OwnerRepository;
 import com.iwamih31.KAKEIBO.Set;
 import com.iwamih31.KAKEIBO.State;
 import com.iwamih31.KAKEIBO.WorkSheet;
@@ -39,7 +39,7 @@ public class KakeiboService {
 	@Autowired
 	private ActionRepository actionRepository;
 	@Autowired
-	private OfficeRepository officeRepository;
+	private OwnerRepository ownerRepository;
 	@Autowired
 	private CashRepository cashRepository;
 
@@ -67,33 +67,33 @@ public class KakeiboService {
 	}
 
 	public String name() {
-		List<String> name = officeRepository.item_value("事業所名");
+		List<String> name = ownerRepository.item_value("所有者名");
 		if (name.isEmpty()) {
-			Office office_Item = new Office(null, "事業所名", "出納帳");
-			officeRepository.save(office_Item);
+			Owner owner_Item = new Owner(null, "所有者名", "My家計簿");
+			ownerRepository.save(owner_Item);
 		}
-		return officeRepository.item_value("事業所名").get(0);
+		return ownerRepository.item_value("所有者名").get(0);
 	}
 
 	public Action action(int id) {
 		return actionRepository.getReferenceById(id);
 	}
 
-	public Office office(int id) {
-		return officeRepository.getReferenceById(id);
+	public Owner owner(int id) {
+		return ownerRepository.getReferenceById(id);
 	}
 
-	public List<Office> office_All() {
-		if (next_Office_Id() == 1)
-			set_Office();
-		return officeRepository.findAll();
+	public List<Owner> owner_All() {
+		if (next_Owner_Id() == 1)
+			set_Owner();
+		return ownerRepository.findAll();
 	}
 
-	public String office_Insert(Office office_Item, int id) {
-		office_Item.setId(id);
-		String message = "ID = " + office_Item.getId() + " の事業所データ登録";
+	public String owner_Insert(Owner owner_Item, int id) {
+		owner_Item.setId(id);
+		String message = "ID = " + owner_Item.getId() + " の所有者データ登録";
 		try {
-			officeRepository.save(office_Item);
+			ownerRepository.save(owner_Item);
 			message += "が完了しました";
 		} catch (Exception e) {
 			message += "が正常に行われませんでした";
@@ -116,11 +116,11 @@ public class KakeiboService {
 		return message;
 	}
 
-	public String office_Update(Office office, int id) {
-		office.setId(id);
-		String message = "ID = " + office.getId() + " の事業所データ更新";
+	public String owner_Update(Owner owner, int id) {
+		owner.setId(id);
+		String message = "ID = " + owner.getId() + " の所有者データ更新";
 		try {
-			officeRepository.save(office);
+			ownerRepository.save(owner);
 			message += "が完了しました";
 		} catch (Exception e) {
 			message += "が正常に行われませんでした";
@@ -154,20 +154,20 @@ public class KakeiboService {
 		return message;
 	}
 
-	public String[] office_Item_Names() {
-		String[] item_Names = { "事業所名", "部署名" };
+	public String[] owner_Item_Names() {
+		String[] item_Names = { "所有者名", "部署名" };
 		return item_Names;
 	}
 
-	public List<Office> office_Report() {
-		return officeRepository.findAll();
+	public List<Owner> owner_Report() {
+		return ownerRepository.findAll();
 	}
 
-	public Office new_Office() {
-		Office new_Office = new Office(next_Office_Id(), "", "");
-		if (new_Office.getId() == 1)
-			set_Office();
-		return new Office(next_Office_Id(), "", "");
+	public Owner new_Owner() {
+		Owner new_Owner = new Owner(next_Owner_Id(), "", "");
+		if (new_Owner.getId() == 1)
+			set_Owner();
+		return new Owner(next_Owner_Id(), "", "");
 	}
 
 	public Action new_Action() {
@@ -178,12 +178,12 @@ public class KakeiboService {
 		return new Action(next_Action_Id(), to_LocalDate(date), "", "", 0, 0);
 	}
 
-	public int next_Office_Id() {
+	public int next_Owner_Id() {
 		int nextId = 1;
-		Office lastElement = getLastElement(officeRepository.findAll());
+		Owner lastElement = getLastElement(ownerRepository.findAll());
 		if (lastElement != null)
 			nextId = lastElement.getId() + 1;
-		___consoleOut___("next_Office_Id = " + nextId);
+		___consoleOut___("next_Owner_Id = " + nextId);
 		return nextId;
 	}
 
@@ -205,29 +205,29 @@ public class KakeiboService {
 		return nextId;
 	}
 
-	private void set_Office() {
-		String[] item_Names = office_Item_Names();
-		officeRepository.save(new Office(1, item_Names[0], ""));
-		officeRepository.save(new Office(2, item_Names[1], ""));
+	private void set_Owner() {
+		String[] item_Names = owner_Item_Names();
+		ownerRepository.save(new Owner(1, item_Names[0], ""));
+		ownerRepository.save(new Owner(2, item_Names[1], ""));
 	}
 
-	/** 事業所データをExcelファイルとして出力 */
-	public String office_Output_Excel(HttpServletResponse response) {
+	/** 所有者データをExcelファイルとして出力 */
+	public String owner_Output_Excel(HttpServletResponse response) {
 		Excel excel = new Excel();
 		String message = null;
-		String[] column_Names = Set.get_Name_Set(LabelSet.officeReport_Set);
-		int[] column_Width = Set.get_Value_Set(LabelSet.officeReport_Set);
-		List<Office> office_Report = office_Report();
-		String[][] table_Data = new String[office_Report.size()][];
+		String[] column_Names = Set.get_Name_Set(LabelSet.ownerReport_Set);
+		int[] column_Width = Set.get_Value_Set(LabelSet.ownerReport_Set);
+		List<Owner> owner_Report = owner_Report();
+		String[][] table_Data = new String[owner_Report.size()][];
 		for (int i = 0; i < table_Data.length; i++) {
-			Office office = office_Report.get(i);
+			Owner owner = owner_Report.get(i);
 			table_Data[i] = new String[] {
-					String.valueOf(office.getId()),
-					String.valueOf(office.getItem_name()),
-					String.valueOf(office.getItem_value())
+					String.valueOf(owner.getId()),
+					String.valueOf(owner.getItem_name()),
+					String.valueOf(owner.getItem_value())
 			};
 		}
-		message = excel.output_Excel("事業所", column_Names, column_Width, table_Data, response);
+		message = excel.output_Excel("所有者", column_Names, column_Width, table_Data, response);
 		return message;
 	}
 
@@ -293,7 +293,7 @@ public class KakeiboService {
 
 	private List<String[]> head_Rows_Daily(String date) {
 		String da = japanese_Date(date);
-		String co = office_item_value("事業所名");
+		String co = owner_item_value("所有者名");
 		String[][] head_Rows = {
 				{ "", co, "", "", ""},
 				{ "", "", "", "", ""},
@@ -304,7 +304,7 @@ public class KakeiboService {
 
 	private List<String[]> head_Rows_Monthly(String date) {
 		String da = japanese_Date(date, "Gy年M月分");
-		String co = office_item_value("事業所名");
+		String co = owner_item_value("所有者名");
 		String[][] head_Rows = {
 				{ da, "", "", "", co, ""},
 				{ "", "", "", "", "", ""}
@@ -315,7 +315,7 @@ public class KakeiboService {
 	private List<String[]> head_Rows_Year(String date, String subject) {
 		String da = japanese_Date(date, "Gy年度分");
 		String su = subject;
-		String co = office_item_value("事業所名");
+		String co = owner_item_value("所有者名");
 		String[][] head_Rows = {
 				{ da, "", su, "", co, ""},
 				{ "", "", "", "", "", ""}
@@ -538,11 +538,11 @@ public class KakeiboService {
 		return list;
 	}
 
-	private String office_item_value(String item_name) {
+	private String owner_item_value(String item_name) {
 		String value = "";
-		List<String> item_value = officeRepository.item_value(item_name);
+		List<String> item_value = ownerRepository.item_value(item_name);
 		if (item_value.size() > 0)
-			value = officeRepository.item_value(item_name).get(0);
+			value = ownerRepository.item_value(item_name).get(0);
 		return value;
 	}
 

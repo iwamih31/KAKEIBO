@@ -70,7 +70,7 @@ public class LabelSet {
 			set("支出",		6),
 	};
 
-	public static Set[] officeReport_Set = {
+	public static Set[] ownerReport_Set = {
 			set("ID",				6),
 			set("項目",			4),
 			set("内容",			8)
