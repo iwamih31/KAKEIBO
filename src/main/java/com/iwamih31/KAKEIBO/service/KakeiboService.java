@@ -22,12 +22,14 @@ import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.CashRepository;
 import com.iwamih31.KAKEIBO.DailyWorkSheet;
 import com.iwamih31.KAKEIBO.Excel;
+import com.iwamih31.KAKEIBO.ItemRepository;
 import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.MonthlyWorkSheet;
 import com.iwamih31.KAKEIBO.Owner;
 import com.iwamih31.KAKEIBO.OwnerRepository;
 import com.iwamih31.KAKEIBO.Set;
 import com.iwamih31.KAKEIBO.State;
+import com.iwamih31.KAKEIBO.TypeRepository;
 import com.iwamih31.KAKEIBO.WorkSheet;
 import com.iwamih31.KAKEIBO.YearWorkSheet;
 
@@ -42,6 +44,10 @@ public class KakeiboService {
 	private OwnerRepository ownerRepository;
 	@Autowired
 	private CashRepository cashRepository;
+	@Autowired
+	private TypeRepository typeRepository;
+	@Autowired
+	private ItemRepository itemRepository;
 
 	/** アクションリスト（1日分） */
 	public List<Action> action_List(String date) {
@@ -938,8 +944,9 @@ public class KakeiboService {
 		return String.valueOf(localDate.getYear());
 	}
 
-	public void setItem_id(Action action, String item) {
-		action.setItem_id(itemRepository.getId(item));
+	public void setItem_id(Action action, String type, String item) {
+		int type_id = typeRepository.getID(type);
+		action.setItem_id(itemRepository.getID(type_id,item));
 	}
 
 }

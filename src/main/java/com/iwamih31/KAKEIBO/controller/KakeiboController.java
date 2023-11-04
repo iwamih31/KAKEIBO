@@ -183,7 +183,7 @@ public class KakeiboController {
 		model.addAttribute("name", service.name());
 		model.addAttribute("guide", "適用を選択して下さい");
 
-		service.setItem_id(action, item);
+		service.setItem_id(action, type, item);
 		model.addAttribute("object", action);
 		model.addAttribute("field", item);
 		model.addAttribute("options", service.applys());
