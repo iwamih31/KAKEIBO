@@ -171,11 +171,11 @@ public class KakeiboService {
 	}
 
 	public Action new_Action() {
-		return new Action(next_Action_Id(), null, "", "", 0, 0);
+		return new Action(next_Action_Id(), 0,  "", null, 0, 0, "");
 	}
 
 	public Action new_Action(String date) {
-		return new Action(next_Action_Id(), to_LocalDate(date), "", "", 0, 0);
+		return new Action(next_Action_Id(), 0, "", to_LocalDate(date), 0, 0, "");
 	}
 
 	public int next_Owner_Id() {
@@ -449,8 +449,8 @@ public class KakeiboService {
 
 	private String[] 	data_Row_Daily(Action action) {
 		return new String[] {
-				make_String(action.getSubject()),
-				make_String(action.getApply()),
+				make_String(action.getItem_id()),
+				make_String(action.getDetail()),
 				make_String(Zero_Blank(action.getIncome())),
 				make_String(Zero_Blank(action.getSpending())),
 				make_String("")
@@ -460,8 +460,8 @@ public class KakeiboService {
 	private String[] 	data_Row_Monthly(Action action, Integer remainder) {
 		return new String[] {
 				japanese_Date(action.getDate().toString(), "M月d日"),
-				make_String(action.getSubject()),
-				make_String(action.getApply()),
+				make_String(action.getItem_id()),
+				make_String(action.getDetail()),
 				make_String(Zero_Blank(action.getIncome())),
 				make_String(Zero_Blank(action.getSpending())),
 				make_String(remainder)
@@ -471,8 +471,8 @@ public class KakeiboService {
 	private String[] 	data_Row_Year(Action action, Integer remainder) {
 		return new String[] {
 				japanese_Date(action.getDate().toString(), "Gy/M/d"),
-				make_String(action.getSubject()),
-				make_String(action.getApply()),
+				make_String(action.getItem_id()),
+				make_String(action.getDetail()),
 				make_String(Zero_Blank(action.getIncome())),
 				make_String(Zero_Blank(action.getSpending())),
 				make_String(remainder)
@@ -936,6 +936,10 @@ public class KakeiboService {
 		___consoleOut___("year = " + year + "format_Pattern = " + format_Pattern );
 		LocalDate localDate = to_LocalDate(year, format_Pattern);
 		return String.valueOf(localDate.getYear());
+	}
+
+	public void setItem_id(Action action, String item) {
+		action.setItem_id(itemRepository.getId(item));
 	}
 
 }

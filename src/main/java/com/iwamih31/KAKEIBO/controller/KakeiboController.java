@@ -21,6 +21,7 @@ import com.iwamih31.KAKEIBO.Owner;
 import com.iwamih31.KAKEIBO.service.KakeiboService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 
 @Controller
@@ -30,18 +31,20 @@ public class KakeiboController {
 
 	@Autowired
 	private KakeiboService service;
+	@Autowired
+	private HttpSession session;
 
 	/** RequestMappingのURL */
 	public String req() {
 		return "/Kakeibo";
 	}
 
-	/** RequestMappingのURL */
+	/** RequestMappingのURL + path */
 	public String req(String path) {
 		return req() + path;
 	}
 
-	/** このクラスの@GetMapping(path)にredirect */
+	/** このクラスの@GetMapping(req() + path)にredirect */
 	public String redirect(String path) {
 		return "redirect:" + req() + path;
 	}
@@ -143,9 +146,9 @@ public class KakeiboController {
 		model.addAttribute("displayed_Date", service.japanese_Date(date));
 		model.addAttribute("name", service.name());
 		model.addAttribute("guide", "科目を選択して下さい");
-		Action object = service.new_Action(date);
-		model.addAttribute("object", object);
-		model.addAttribute("field", object.getSubject());
+		Action action = service.new_Action(date);
+		model.addAttribute("object", action);
+		model.addAttribute("field", action.getItem_id());
 		model.addAttribute("options", service.subjects());
 		return "view";
 	}
@@ -170,7 +173,7 @@ public class KakeiboController {
 	@PostMapping("/ActionApply/Select")
 	public String actionApply_Select(
 			@RequestParam("post_date")String date,
-			@RequestParam("field")String subject,
+			@RequestParam("field")String item,
 			@ModelAttribute("object")Action action,
 			Model model) {
 		add_View_Data_(model, "select", "適用選択");
@@ -179,9 +182,10 @@ public class KakeiboController {
 		model.addAttribute("displayed_Date", service.japanese_Date(date));
 		model.addAttribute("name", service.name());
 		model.addAttribute("guide", "適用を選択して下さい");
-		action.setSubject(subject);
+
+		service.setItem_id(action, item);
 		model.addAttribute("object", action);
-		model.addAttribute("field", action.getApply());
+		model.addAttribute("field", item);
 		model.addAttribute("options", service.applys());
 		return "view";
 	}
@@ -206,7 +210,7 @@ public class KakeiboController {
 	@PostMapping("/ActionAccount/Select")
 	public String actionAccount_Select(
 			@RequestParam("post_date")String date,
-			@RequestParam("field")String apply,
+			@RequestParam("field")String detail,
 			@ModelAttribute("object")Action action,
 			Model model) {
 		add_View_Data_(model, "select", "収支選択");
@@ -215,7 +219,7 @@ public class KakeiboController {
 		model.addAttribute("displayed_Date", service.japanese_Date(date));
 		model.addAttribute("name", service.name());
 		model.addAttribute("guide", "収支を選択して下さい");
-		action.setApply(apply);
+		action.setDetail(detail);
 		model.addAttribute("object", action);
 		model.addAttribute("field", "");
 		model.addAttribute("options", service.accounts());
@@ -564,7 +568,7 @@ public class KakeiboController {
 	public String selectMonth(
 			@RequestParam("date") String date,
 			Model model) {
-		add_View_Data_(model, "date", "日付選択");
+		add_View_Data_(model, "date", "月選択");
 		model.addAttribute("date", date);
 		model.addAttribute("label", "日付を選んでください");
 		model.addAttribute("url", req("/Monthly"));
