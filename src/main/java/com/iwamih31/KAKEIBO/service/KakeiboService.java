@@ -24,11 +24,13 @@ import com.iwamih31.KAKEIBO.DailyWorkSheet;
 import com.iwamih31.KAKEIBO.Excel;
 import com.iwamih31.KAKEIBO.ItemRepository;
 import com.iwamih31.KAKEIBO.LabelSet;
+import com.iwamih31.KAKEIBO.Link;
 import com.iwamih31.KAKEIBO.MonthlyWorkSheet;
 import com.iwamih31.KAKEIBO.Owner;
 import com.iwamih31.KAKEIBO.OwnerRepository;
 import com.iwamih31.KAKEIBO.Set;
 import com.iwamih31.KAKEIBO.State;
+import com.iwamih31.KAKEIBO.Table_Data;
 import com.iwamih31.KAKEIBO.TypeRepository;
 import com.iwamih31.KAKEIBO.WorkSheet;
 import com.iwamih31.KAKEIBO.YearWorkSheet;
@@ -947,6 +949,49 @@ public class KakeiboService {
 	public void setItem_id(Action action, String type, String item) {
 		int type_id = typeRepository.getID(type);
 		action.setItem_id(itemRepository.getID(type_id,item));
+	}
+
+	public List<Link> menu(String key) {
+		List<Link> menu = new ArrayList<>();
+		switch (key) {
+		case "Summary":
+			menu.add(new Link("新規入力", "/Insert/Action"));
+			menu.add(new Link("設定", "/Setting"));
+			break;
+
+		default:
+			break;
+		}
+		return menu;
+	}
+
+	public Table_Data table(String key, String section, String date) {
+		Table_Data table = new Table_Data();
+		String link = "/Result";
+		switch (key) {
+		case "Summary":
+			if(section == "実績") link = "/Plan";
+			table.setSection(new Link(section, link));
+			String[] columns = {
+					"種別",
+					"項目",
+					"入金",
+					"出金",
+					};
+			table.setColumn(columns);
+			List<List<String>> data = summary(section, date);
+			table.setData(data);
+			break;
+
+		default:
+			break;
+		}
+		return table;
+	}
+
+	private List<List<String>> summary(String section, String date) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
 	}
 
 }

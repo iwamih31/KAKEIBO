@@ -18,6 +18,7 @@ import com.iwamih31.KAKEIBO.Action;
 import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.Owner;
+import com.iwamih31.KAKEIBO.Table_Data;
 import com.iwamih31.KAKEIBO.service.KakeiboService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -63,6 +64,27 @@ public class KakeiboController {
 		model.addAttribute("req", req());
 		return "main";
 	}
+
+	@GetMapping("/Start")
+	public String start(
+			Model model) {
+		model.addAttribute("date", service.today());
+		return redirect("/Summary");
+	}
+
+	@GetMapping("/Summary")
+	public String summary(
+			@Param("date")String date,
+			Model model) {
+		add_View_Data_(model, "summary", "項目別一覧");
+		model.addAttribute("date", date);
+		model.addAttribute("menu", service.menu("Summary"));
+		Table_Data table = service.table("Summary", "実績", date);
+		model.addAttribute("table", table);
+		return "main";
+	}
+
+
 
 	@GetMapping("/Setting")
 	public String setting(
@@ -380,7 +402,7 @@ public class KakeiboController {
 
 	@PostMapping("/OwnerReport")
 	public String ownerReport() {
-		return "redirect:/CareRecord/RoutineReport";
+		return redirect("/OwnerReport");
 	}
 
 	@GetMapping("/OwnerReport")
