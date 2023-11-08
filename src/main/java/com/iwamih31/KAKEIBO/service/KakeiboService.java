@@ -30,6 +30,7 @@ import com.iwamih31.KAKEIBO.Owner;
 import com.iwamih31.KAKEIBO.OwnerRepository;
 import com.iwamih31.KAKEIBO.Set;
 import com.iwamih31.KAKEIBO.State;
+import com.iwamih31.KAKEIBO.Summary;
 import com.iwamih31.KAKEIBO.Table_Data;
 import com.iwamih31.KAKEIBO.TypeRepository;
 import com.iwamih31.KAKEIBO.WorkSheet;
@@ -538,7 +539,7 @@ public class KakeiboService {
 	}
 
 	private List<String[]> to_List(String[][] array) {
-		// Listから2次配列へ変換
+		// 2次配列からListへ変換
 		List<String[]> list = new ArrayList<>();
 		for (int i = 0; i < array.length; i++) {
 			list.add(array[i]);
@@ -951,9 +952,9 @@ public class KakeiboService {
 		action.setItem_id(itemRepository.getID(type_id,item));
 	}
 
-	public List<Link> menu(String key) {
+	public List<Link> menu(String view) {
 		List<Link> menu = new ArrayList<>();
-		switch (key) {
+		switch (view) {
 		case "Summary":
 			menu.add(new Link("新規入力", "/Insert/Action"));
 			menu.add(new Link("設定", "/Setting"));
@@ -965,22 +966,17 @@ public class KakeiboService {
 		return menu;
 	}
 
-	public Table_Data table(String key, String section, String date) {
+	public Table_Data table(String view, String section, String date) {
 		Table_Data table = new Table_Data();
 		String link = "/Result";
-		switch (key) {
+		switch (view) {
 		case "Summary":
 			if(section == "実績") link = "/Plan";
 			table.setSection(new Link(section, link));
 			String[] columns = {
-					"種別",
-					"項目",
-					"入金",
-					"出金",
-					};
+					"種別","項目","入金","出金"};
 			table.setColumn(columns);
-			List<List<String>> data = summary(section, date);
-			table.setData(data);
+			table.setData(data(section, date));
 			break;
 
 		default:
@@ -989,9 +985,56 @@ public class KakeiboService {
 		return table;
 	}
 
-	private List<List<String>> summary(String section, String date) {
+	private List<List<String>> data(String section, String date) {
 		// TODO 自動生成されたメソッド・スタブ
+
+		List<List<String>> data = new ArrayList<>();
 		return null;
+	}
+
+	public Summary summary(String section, String date) {
+		String view = "Summary";
+		Table_Data table;
+		String[] columns = {"種別","項目","入金","出金"};
+		List<Link> menu = menu(view);
+		Summary summary = null;
+		switch (section) {
+		case "実績":
+			table = table(view, section, date);
+			summary = new Summary(null, null, menu, table);
+			break;
+
+		case "予算":
+			summary = new Summary(null, null, null, plan(date));
+			break;
+
+		default:
+			summary = new Summary(null, null, null, result(date));
+			break;
+		}
+		return summary;
+	}
+
+	private Table_Data result(String date) {
+		String[] columns = {"種別","項目","入金","出金"};
+		Link section = link("実績", "/Result");
+		List<List<String>> data = data(section.getText(), date);
+		return new Table_Data(section, columns, data);
+	}
+
+	private Link link(String text, String url) {
+		return new Link(text, url);
+	}
+
+	private Table_Data plan(String date) {
+		// TODO 自動生成されたメソッド・スタブ
+		String[] columns = {"種別","項目","入金","出金"};
+		Link section = link("予算", "/Plan");
+		return null;
+	}
+
+	public Link title(String text) {
+		return new Link(text, "/View");
 	}
 
 }

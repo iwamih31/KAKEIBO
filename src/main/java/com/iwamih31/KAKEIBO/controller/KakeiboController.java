@@ -17,8 +17,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.iwamih31.KAKEIBO.Action;
 import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.LabelSet;
+import com.iwamih31.KAKEIBO.Link;
 import com.iwamih31.KAKEIBO.Owner;
-import com.iwamih31.KAKEIBO.Table_Data;
+import com.iwamih31.KAKEIBO.Summary;
 import com.iwamih31.KAKEIBO.service.KakeiboService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -69,18 +70,21 @@ public class KakeiboController {
 	public String start(
 			Model model) {
 		model.addAttribute("date", service.today());
+		model.addAttribute("section", "実績");
 		return redirect("/Summary");
 	}
 
 	@GetMapping("/Summary")
 	public String summary(
 			@Param("date")String date,
+			@Param("section")String section,
 			Model model) {
+		Link title = service.title("項目別一覧");
 		add_View_Data_(model, "summary", "項目別一覧");
 		model.addAttribute("date", date);
 		model.addAttribute("menu", service.menu("Summary"));
-		Table_Data table = service.table("Summary", "実績", date);
-		model.addAttribute("table", table);
+		Summary summary = service.summary(section, date);
+		model.addAttribute("table", summary);
 		return "main";
 	}
 
