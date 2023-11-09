@@ -29,6 +29,8 @@ import com.iwamih31.KAKEIBO.Link;
 import com.iwamih31.KAKEIBO.MonthlyWorkSheet;
 import com.iwamih31.KAKEIBO.Owner;
 import com.iwamih31.KAKEIBO.OwnerRepository;
+import com.iwamih31.KAKEIBO.Plan;
+import com.iwamih31.KAKEIBO.PlanRepository;
 import com.iwamih31.KAKEIBO.Set;
 import com.iwamih31.KAKEIBO.State;
 import com.iwamih31.KAKEIBO.Summary;
@@ -53,6 +55,8 @@ public class KakeiboService {
 	private TypeRepository typeRepository;
 	@Autowired
 	private ItemRepository itemRepository;
+	@Autowired
+	private PlanRepository planRepository;
 
 	/** アクションリスト（1日分） */
 	public List<Action> action_List(String date) {
@@ -1049,8 +1053,12 @@ public class KakeiboService {
 		return data;
 	}
 
-	private List<Item> itemList(Integer type_id) {
+	private List<Plan> plan_List(String date) {
 		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	private List<Item> itemList(Integer type_id) {
 		return itemRepository.list(type_id);
 	}
 
