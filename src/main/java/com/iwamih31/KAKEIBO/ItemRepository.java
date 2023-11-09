@@ -10,7 +10,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
 
-	/**	ID 取得（value 指定） */
+	/**	Item リスト取得（type_id 指定 value 順） */
+	@Query("select item"
+			+ " from Type item"
+			+ " where item.type_id = :type_id"
+			+ " order by item.value asc")
+	public List<Item> list(
+			@Param("type_id") Integer type_id
+			);
+
+	/**	ID 取得（type_id, value 指定） */
 	@Query("select item.id"
 			+ " from Item item"
 			+ " where item.type_id = :type_id"
@@ -24,5 +33,8 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	@Query("select distinct item.name"
 			+ " from Item item")
 	public List<String> itemList();
+
+	/**	id から value 取得 */
+	public String item(Integer id);
 
 }

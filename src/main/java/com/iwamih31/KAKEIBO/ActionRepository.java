@@ -60,4 +60,14 @@ public interface ActionRepository extends JpaRepository<Action, Integer> {
 			@Param("date") LocalDate localDate
 			);
 
+	/**	Action リスト取得（item_id, date 指定 date 順） */
+	@Query("select action"
+			+ " from Action action"
+			+ " where action.item_id = :item_id"
+			+ " where action.date like :date%"
+			+ " order by action.date asc")
+	public List<Action> list(
+			@Param("item_id") Integer item_id,
+			@Param("date") String date);
+
 }

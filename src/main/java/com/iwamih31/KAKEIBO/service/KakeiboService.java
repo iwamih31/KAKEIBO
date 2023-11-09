@@ -22,6 +22,7 @@ import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.CashRepository;
 import com.iwamih31.KAKEIBO.DailyWorkSheet;
 import com.iwamih31.KAKEIBO.Excel;
+import com.iwamih31.KAKEIBO.Item;
 import com.iwamih31.KAKEIBO.ItemRepository;
 import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.Link;
@@ -32,6 +33,7 @@ import com.iwamih31.KAKEIBO.Set;
 import com.iwamih31.KAKEIBO.State;
 import com.iwamih31.KAKEIBO.Summary;
 import com.iwamih31.KAKEIBO.Table_Data;
+import com.iwamih31.KAKEIBO.Type;
 import com.iwamih31.KAKEIBO.TypeRepository;
 import com.iwamih31.KAKEIBO.WorkSheet;
 import com.iwamih31.KAKEIBO.YearWorkSheet;
@@ -955,11 +957,14 @@ public class KakeiboService {
 	public List<Link> menu(String view) {
 		List<Link> menu = new ArrayList<>();
 		switch (view) {
-		case "Summary":
+		case "summary":
 			menu.add(new Link("新規入力", "/Insert/Action"));
 			menu.add(new Link("設定", "/Setting"));
 			break;
-
+		case "type":
+			menu.add(new Link("新規入力", "/Insert/Action"));
+			menu.add(new Link("全種別", "/Setting"));
+			break;
 		default:
 			break;
 		}
@@ -967,52 +972,111 @@ public class KakeiboService {
 	}
 
 	public Table_Data table(String view, String section, String date) {
-		Table_Data table = new Table_Data();
-		String link = "/Result";
-		switch (view) {
-		case "Summary":
-			if(section == "実績") link = "/Plan";
-			table.setSection(new Link(section, link));
-			String[] columns = {
-					"種別","項目","入金","出金"};
-			table.setColumn(columns);
-			table.setData(data(section, date));
-			break;
+		Link section_Link = section_Link(section);
+		String[] columns = columns(view);
+		List<List<String>> data = data(section, date);
+		return new Table_Data(section_Link, columns, data);
+	}
 
+	private String[] columns(String view) {
+		String[] columns = null;
+		switch (view) {
+		case "summary":
+			columns = new String[]{"種別","項目","入金","出金"};
+			break;
+		case "type":
+			columns = new String[]{"項目", "日付","項目","入金","出金"};
+			break;
 		default:
 			break;
 		}
-		return table;
+		return columns;
 	}
 
-	private List<List<String>> data(String section, String date) {
-		// TODO 自動生成されたメソッド・スタブ
-
-		List<List<String>> data = new ArrayList<>();
-		return null;
-	}
-
-	public Summary summary(String section, String date) {
-		String view = "Summary";
-		Table_Data table;
-		String[] columns = {"種別","項目","入金","出金"};
-		List<Link> menu = menu(view);
-		Summary summary = null;
+	private Link section_Link(String section) {
+		String link = "/Result";
 		switch (section) {
 		case "実績":
-			table = table(view, section, date);
-			summary = new Summary(null, null, menu, table);
+			link = "/Plan";
 			break;
-
 		case "予算":
-			summary = new Summary(null, null, null, plan(date));
+			link = "/Result";
 			break;
-
 		default:
-			summary = new Summary(null, null, null, result(date));
 			break;
 		}
-		return summary;
+		return new Link(section, link);
+	}
+
+	/** Tableのデータ行作成 */
+	private List<List<String>> data(String section, String date) {
+		List<List<String>> data = new ArrayList<>();
+		switch (section) {
+		case "実績":
+			String current_Type_Value = "";
+			List<Type> typeList = typeList();
+			for (Type type : typeList) {
+				String type_Value = "";
+				if(current_Type_Value == type.getValue()) {
+					type_Value = type.getValue();
+				}
+				current_Type_Value = type.getValue();
+				String current_Item_Value = "";
+				List<Item> itemList = itemList(type.getId());
+				for (Item item : itemList) {
+					String item_Value = "";
+					if(current_Item_Value == item.getValue()) {
+						item_Value = item.getValue();
+					}
+					current_Item_Value = item.getValue();
+					List<Action> actionList = actionList(item.getId(), date);
+					for (Action action : actionList) {
+						List<String> list = new ArrayList<>();
+						list.add(type_Value);
+						list.add(type_Value);
+						list.add(itemRepository.item(action.getItem_id()));
+					}
+				}
+			}
+
+			break;
+		case "予算":
+			List<Plan> plan_List = plan_List(date);
+			break;
+		default:
+			break;
+		}
+		return data;
+	}
+
+	private List<Item> itemList(Integer type_id) {
+		// TODO 自動生成されたメソッド・スタブ
+		return itemRepository.list(type_id);
+	}
+
+	private List<Type> typeList() {
+		return typeRepository.list();
+	}
+
+	private List<Action> actionList(Integer item_id, String date) {
+		return actionRepository.list(item_id, date);
+	}
+
+	public Summary page(String view, String section, String date) {
+		Link title_Link = link("項目別一覧", "/View");
+		Link date_Link = link(date, "/Date");
+		List<Link> menu = menu(view);
+		Table_Data table= table(view, section, date);;
+		return new Summary(title_Link, date_Link, menu, table);
+	}
+
+	public Summary type(String section, String date) {
+		String view = "Type";
+		Link title_Link = link("項目別一覧", "/View");
+		Link date_Link = link(date, "/Date");
+		List<Link> menu = menu(view);
+		Table_Data table= table(view, section, date);;
+		return new Summary(title_Link, date_Link, menu, table);
 	}
 
 	private Table_Data result(String date) {

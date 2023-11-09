@@ -10,6 +10,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TypeRepository extends JpaRepository<Type, Integer> {
 
+	/**	表示 Type リスト取得（表示順） */
+	@Query("select type"
+			+ " from Type type"
+			+ " where type.rank != 0"
+			+ " order by type.rank asc"
+			)
+	public List<Type> list();
+
 	/**	ID 取得（value 指定） */
 	@Query("select type.id"
 			+ " from Type type"
@@ -19,8 +27,8 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 			);
 
 	/**	種別名 一覧取得 */
-	@Query("select distinct type.name"
+	@Query("select distinct type.value"
 			+ " from Type type")
-	public List<String> typeList();
+	public List<String> valueList();
 
 }
