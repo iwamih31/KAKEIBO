@@ -151,7 +151,6 @@ public class KakeiboController {
 		model.addAttribute("action", service.new_Action(date));
 		model.addAttribute("next_id", service.next_Action_Id());
 		model.addAttribute("label_Set_List", LabelSet.actionInsert_Set);
-		model.addAttribute("subjects", service.subjects());
 		return "view";
 	}
 
@@ -167,7 +166,6 @@ public class KakeiboController {
 		model.addAttribute("action", action);
 		model.addAttribute("next_id", service.next_Action_Id());
 		model.addAttribute("label_Set_List", LabelSet.actionInsert_Set);
-		model.addAttribute("subjects", service.subjects());
 		return "view";
 	}
 
@@ -184,7 +182,6 @@ public class KakeiboController {
 		Action action = service.new_Action(date);
 		model.addAttribute("object", action);
 		model.addAttribute("field", action.getItem_id());
-		model.addAttribute("options", service.subjects());
 		return "view";
 	}
 
@@ -221,7 +218,6 @@ public class KakeiboController {
 		service.setItem_id(action, type, item);
 		model.addAttribute("object", action);
 		model.addAttribute("field", item);
-		model.addAttribute("options", service.applys());
 		return "view";
 	}
 
@@ -358,7 +354,6 @@ public class KakeiboController {
 		model.addAttribute("date", date);
 		model.addAttribute("object", service.action(id));
 		model.addAttribute("label_Set_List", LabelSet.actionUpdate_Set);
-		model.addAttribute("subjects", service.subjects());
 		return "view";
 	}
 
@@ -520,7 +515,6 @@ public class KakeiboController {
 		model.addAttribute("guide", "科目を選択して下さい");
 		if(subject.equals("全科目")) subject = "";
 		model.addAttribute("subject", subject);
-		model.addAttribute("options", service.subjects());
 		return "view";
 	}
 

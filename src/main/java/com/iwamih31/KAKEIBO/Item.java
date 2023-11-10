@@ -27,8 +27,8 @@ public class Item {
   private Integer type_id;
 
   // 項目の値
-  @Column(name = "value", nullable = true)
-  private String value;
+  @Column(name = "name", nullable = true)
+  private String name;
 
   // 値の説明
   @Column(name = "note", nullable = true)

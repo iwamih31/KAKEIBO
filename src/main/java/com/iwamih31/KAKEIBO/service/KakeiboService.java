@@ -7,10 +7,8 @@ import java.time.chrono.JapaneseDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +18,11 @@ import com.iwamih31.KAKEIBO.Action;
 import com.iwamih31.KAKEIBO.ActionRepository;
 import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.CashRepository;
-import com.iwamih31.KAKEIBO.DailyWorkSheet;
 import com.iwamih31.KAKEIBO.Excel;
 import com.iwamih31.KAKEIBO.Item;
 import com.iwamih31.KAKEIBO.ItemRepository;
 import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.Link;
-import com.iwamih31.KAKEIBO.MonthlyWorkSheet;
 import com.iwamih31.KAKEIBO.Owner;
 import com.iwamih31.KAKEIBO.OwnerRepository;
 import com.iwamih31.KAKEIBO.Plan;
@@ -37,8 +33,6 @@ import com.iwamih31.KAKEIBO.Summary;
 import com.iwamih31.KAKEIBO.Table_Data;
 import com.iwamih31.KAKEIBO.Type;
 import com.iwamih31.KAKEIBO.TypeRepository;
-import com.iwamih31.KAKEIBO.WorkSheet;
-import com.iwamih31.KAKEIBO.YearWorkSheet;
 
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -57,29 +51,6 @@ public class KakeiboService {
 	private ItemRepository itemRepository;
 	@Autowired
 	private PlanRepository planRepository;
-
-	/** アクションリスト（1日分） */
-	public List<Action> action_List(String date) {
-		___consoleOut___("date = " + date);
-		LocalDate local_Date = to_LocalDate(date);
-		return actionRepository.action_List(local_Date, local_Date);
-	}
-
-	/** アクションリスト（1カ月分） */
-	public List<Action> action_List_Monthly(String date) {
-		LocalDate local_Date = to_LocalDate(date);
-		LocalDate start_date = local_Date.withDayOfMonth(1);
-		LocalDate end_date = start_date.plusMonths(1).minusDays(1);
-		return actionRepository.action_List(start_date, end_date);
-	}
-
-	/** アクションリスト（月初めから date まで分） */
-	public List<Action> month_Till_Date(String date) {
-		LocalDate local_Date = to_LocalDate(date);
-		LocalDate start_date = local_Date.withDayOfMonth(1);
-		LocalDate end_date = local_Date;
-		return actionRepository.action_List(start_date, end_date);
-	}
 
 	public String name() {
 		List<String> name = ownerRepository.item_value("所有者名");
@@ -246,66 +217,6 @@ public class KakeiboService {
 		return message;
 	}
 
-	/** 出納帳（1日分）をExcelファイルとして出力 */
-	public String daily_Output_Excel(String date, HttpServletResponse response) {
-		Excel excel = new Excel();
-		String message = null;
-		int[] column_Width = Set.get_Value_Set(LabelSet.daily_Output_Set);
-		String[][] output_Data = daily_Sheet(date);
-		String sheet_Name = date;
-		WorkSheet workSheet = new DailyWorkSheet(sheet_Name, column_Width, output_Data);
-		message = excel.output_Excel_Sheet("出納帳" + sheet_Name + "-", workSheet, response);
-		return message;
-	}
-
-	/** 月別出納一覧をExcelファイルとして出力 */
-	public String monthly_Output_Excel(String date, HttpServletResponse response) {
-		Excel excel = new Excel();
-		String message = null;
-		int[] column_Width = Set.get_Value_Set(LabelSet.monthly_Output_Set);
-		String[][] output_Data = monthly_Sheet(date);
-		String sheet_Name = japanese_Date(date, "M月");
-		WorkSheet workSheet = new MonthlyWorkSheet(sheet_Name, column_Width, output_Data);
-		message = excel.output_Excel_Sheet("現金出納帳" + japanese_Date(date, "Gyy年MM月") + "-", workSheet, response);
-		return message;
-	}
-
-	/** 年度別出納一覧をExcelファイルとして出力
-	 * @param subject */
-	public String year_Output_Excel(String date, String subject, HttpServletResponse response) {
-		Excel excel = new Excel();
-		String message = null;
-		if (subject == null) subject = "";
-		int[] column_Width = Set.get_Value_Set(LabelSet.year_Output_Set);
-		String[][] output_Data = year_Sheet(date, subject);
-		String sheet_Name = japanese_Date(date, "Gy年") +  subject;
-		WorkSheet workSheet = new YearWorkSheet(sheet_Name, column_Width, output_Data);
-		message = excel.output_Excel_Sheet("年度別現金出納帳" + japanese_Date(date, "Gy年") + subject, workSheet, response);
-		return message;
-	}
-
-	private String[][] daily_Sheet(String date) {
-		List<String[]> head_Rows = head_Rows_Daily(date);
-		String[] labels = Set.get_Name_Set(LabelSet.daily_Output_Set);
-		List<String[]> data_Rows = data_Row_Values_Daily(date);
-		List<String[]> foot_Rows = foot_Rows_Daily();
-		return make_Sheet(head_Rows, labels, data_Rows, foot_Rows);
-	}
-
-	private String[][] monthly_Sheet(String date) {
-		List<String[]> head_Rows = head_Rows_Monthly(date);
-		String[] labels = Set.get_Name_Set(LabelSet.monthly_Output_Set);
-		List<String[]> data_Rows = data_Row_Values_Monthly(date);
-		return make_Sheet(head_Rows, labels, data_Rows, null);
-	}
-
-	private String[][] year_Sheet(String date, String subject) {
-		List<String[]> head_Rows = head_Rows_Year(date, subject);
-		String[] labels = Set.get_Name_Set(LabelSet.year_Output_Set);
-		List<String[]> data_Rows = data_Row_Values_Year(date, subject);
-		return make_Sheet(head_Rows, labels, data_Rows, null);
-	}
-
 	private List<String[]> head_Rows_Daily(String date) {
 		String da = japanese_Date(date);
 		String co = owner_item_value("所有者名");
@@ -364,89 +275,6 @@ public class KakeiboService {
 		// フッター部分追加
 		if (foot_Rows != null) sheet_Rows.addAll(foot_Rows);
 		return to_Array(sheet_Rows);
-	}
-
-	/** 表部分 データ行（１日分） */
-	List<String[]> data_Row_Values_Daily(String date) {
-		// その日のデータ取得
-		Map<String, Integer> account = account_Monthly(date);
-		Integer carryover = account.get("carryover");
-		Integer income_today = account.get("income_today");
-		Integer spending_today = account.get("spending_today");
-		Integer remainder = account.get("remainder");
-		Integer income_cumulative = account.get("income_cumulative");
-		Integer spending_cumulative = account.get("spending_cumulative");
-		// データ格納用リスト作成
-		List<String[]> data_Row_Values = new ArrayList<>();
-		data_Row_Values.add(data_Row_Daily_carryover(carryover));
-		// List<Action> を取得
-		List<Action> action_List = action_List(date);
-		// List<Action> があれば
-		if (action_List.size() > 0) {
-			// List<Action> 数分ループ
-			for (Action action : action_List) {
-				// Actionに応じた行を作成
-				data_Row_Values.add(data_Row_Daily(action));
-			}
-		}
-		data_Row_Values.add(data_Row_total(income_today, spending_today, remainder));
-		data_Row_Values.add(data_Row_cumulative(income_cumulative, spending_cumulative));
-		return data_Row_Values;
-	}
-
-	/** 表部分 データ行（ひと月分） */
-	List<String[]> data_Row_Values_Monthly(String date) {
-		Integer carryover = carryover(date);
-		Integer remainder = carryover;
-		Integer income_cumulative = 0;
-		Integer spending_cumulative = 0;
-		// データ格納用リスト作成
-		List<String[]> data_Row_Values = new ArrayList<>();
-		data_Row_Values.add(data_Row_carryover(carryover, "前月繰越"));
-		// List<Action> を取得
-		List<Action> action_List = action_List_Monthly(date);
-		// List<Action> があれば
-		if (action_List.size() > 0) {
-			// List<Action> 数分ループ
-			for (Action action : action_List) {
-				income_cumulative += action.getIncome();
-				spending_cumulative += action.getSpending();
-				remainder = carryover + income_cumulative - spending_cumulative;
-				// Actionに応じた行を作成
-				data_Row_Values.add(data_Row_Monthly(action, remainder));
-			}
-		}
-		data_Row_Values.add(data_Row_carried_forward(remainder, "翌月繰越"));
-		data_Row_Values.add(data_Row_total_amount(income_cumulative, spending_cumulative));
-		return data_Row_Values;
-	}
-
-	/** 表部分 データ行（1年分）
-	 * @param subject */
-	List<String[]> data_Row_Values_Year(String date, String subject) {
-		Integer carryover = carryover(new_Year(date));
-		Integer remainder = carryover;
-		Integer income_cumulative = 0;
-		Integer spending_cumulative = 0;
-		// データ格納用リスト作成
-		List<String[]> data_Row_Values = new ArrayList<>();
-		data_Row_Values.add(data_Row_carryover(carryover, "前年繰越"));
-		// List<Action> を取得
-		List<Action> action_List = year_List(date, 1, subject);
-		// List<Action> があれば
-		if (action_List.size() > 0) {
-			// List<Action> 数分ループ
-			for (Action action : action_List) {
-				income_cumulative += action.getIncome();
-				spending_cumulative += action.getSpending();
-				remainder = carryover + income_cumulative - spending_cumulative;
-				// Actionに応じた行を作成
-				data_Row_Values.add(data_Row_Year(action, remainder));
-			}
-		}
-		data_Row_Values.add(data_Row_carried_forward(remainder, "翌年繰越"));
-		data_Row_Values.add(data_Row_total_amount(income_cumulative, spending_cumulative));
-		return data_Row_Values;
 	}
 
 	private String new_Year(String date) {
@@ -690,162 +518,8 @@ public class KakeiboService {
 		return new OptionData();
 	}
 
-	public List<String> subjects() {
-
-		List<String> subjects = actionRepository.subjects();
-		subjects.add(0, "");
-		return subjects;
-	}
-
-	public List<String> applys() {
-		List<String> applys = actionRepository.applys();
-		applys.add(0, "");
-		return applys;
-	}
-
 	public String[] accounts() {
 		return new String[] {"支出", "収入"};
-	}
-
-	public int remainder(String date) {
-		int income_total = 0;
-		int spending_total = 0;
-		List<Action> actions = actionRepository.up_to_date(to_LocalDate(date));
-		if (actions.size() < 1) return 0;
-		for (Action action : actions) {
-			income_total += action.getIncome();
-			spending_total += action.getSpending();
-		}
-		return income_total - spending_total;
-	}
-
-	/** 1日前の残高を返す */
-	public int carryover(String date) {
-		LocalDate localDate = to_LocalDate(date);
-		String yesterday = localDate.minusDays(1).toString();
-		return remainder(yesterday);
-	}
-
-	// localDate の年の1日から volume 年分の Action リストを返す
-	public List<Action> year_List(LocalDate localDate, int volume) {
-		LocalDate start_date = localDate.withDayOfYear(1);
-		LocalDate end_date = start_date.plusYears(volume).minusDays(1);
-		return actionRepository.action_List(start_date, end_date);
-	}
-
-	// localDate の年の1日から volume 年分の Action リストを返す（subject 指定）
-	public List<Action> year_List(LocalDate localDate, int volume, String subject) {
-		LocalDate start_date = localDate.withDayOfYear(1);
-		LocalDate end_date = start_date.plusYears(volume).minusDays(1);
-		if(subject == null || subject.equals("")) {
-			return actionRepository.action_List(start_date, end_date);
-		}
-		return actionRepository.action_List(start_date, end_date, subject);
-	}
-
-	// localDate の月の1日から volume 月分の Action リストを返す
-	public List<Action> monthly_List(LocalDate localDate, int volume) {
-		LocalDate start_date = localDate.withDayOfMonth(1);
-		LocalDate end_date = start_date.plusMonths(volume).minusDays(1);
-		return actionRepository.action_List(start_date, end_date);
-	}
-
-	// date の年の1日から volume 月分の Action リストを返す
-	public List<Action> year_List(String date, int volume) {
-		LocalDate localDate = to_LocalDate(date);
-		return year_List(localDate, volume);
-	}
-
-	//date の年の1日から volume 月分の Action リストを返す（subject 指定）
-	public List<Action> year_List(String year, int volume, String subject) {
-		LocalDate localDate = to_LocalDate(year);
-		return year_List(localDate, volume, subject);
-	}
-
-	// date の月の1日から volume 月分の Action リストを返す
-	public List<Action> monthly_List(String date, int volume) {
-		LocalDate localDate = to_LocalDate(date);
-		return monthly_List(localDate, volume);
-	}
-
-	// localDate の年の1日から localDate までの Action リストを返す
-	public List<Action> year_List(LocalDate localDate) {
-		return actionRepository.action_List(localDate.withDayOfYear(1), localDate);
-	}
-
-	// localDate の月の1日から localDate までの Action リストを返す
-	public List<Action> monthly_List(LocalDate localDate) {
-		return actionRepository.action_List(localDate.withDayOfMonth(1), localDate);
-	}
-
-	// date の年の1日から date までの Action リストを返す
-	public List<Action> year_List(String date) {
-		LocalDate localDate = to_LocalDate(date);
-		return actionRepository.action_List(localDate.withDayOfYear(1), localDate);
-	}
-
-	// date の月の1日から date までの Action リストを返す
-	public List<Action> monthly_List(String date) {
-		LocalDate localDate = to_LocalDate(date);
-		return actionRepository.action_List(localDate.withDayOfYear(1), localDate);
-	}
-
-	public Map<String, Integer> account(String date) {
-		Map<String, Integer> account = new HashMap<>();
-		int carryover = carryover(date);
-		int remainder = remainder(date);
-		int income_today = 0;
-		int spending_today = 0;
-		int income_tihs_year = 0;
-		int spending_tihs_year = 0;
-		int balance = cash_Balance(date, cash(date));
-		List<Action> today_List = action_List(date);
-		for (Action action : today_List) {
-			income_today += action.getIncome();
-			spending_today += action.getSpending();
-		}
-		List<Action> year_List = year_List(date);
-		for (Action action : year_List) {
-			income_tihs_year += action.getIncome();
-			spending_tihs_year += action.getSpending();
-		}
-		account.put("carryover", carryover);
-		account.put("remainder", remainder);
-		account.put("income_today", income_today);
-		account.put("spending_today", spending_today);
-		account.put("income_tihs_year", income_tihs_year);
-		account.put("spending_tihs_year", spending_tihs_year);
-		account.put("balance", balance);
-		return account;
-	}
-
-	public Map<String, Integer> account_Monthly(String date) {
-		Map<String, Integer> account = new HashMap<>();
-		int carryover = carryover(date);
-		int remainder = remainder(date);
-		int income_today = 0;
-		int spending_today = 0;
-		int income_cumulative = 0;
-		int spending_cumulative = 0;
-		int balance = cash_Balance(date, cash(date));
-		List<Action> today_List = action_List(date);
-		for (Action action : today_List) {
-			income_today += action.getIncome();
-			spending_today += action.getSpending();
-		}
-		List<Action> monthly_List = month_Till_Date(date);
-		for (Action action : monthly_List) {
-			income_cumulative += action.getIncome();
-			spending_cumulative += action.getSpending();
-		}
-		account.put("carryover", carryover);
-		account.put("remainder", remainder);
-		account.put("income_today", income_today);
-		account.put("spending_today", spending_today);
-		account.put("income_cumulative", income_cumulative);
-		account.put("spending_cumulative", spending_cumulative);
-		account.put("balance", balance);
-		return account;
 	}
 
 	public Cash cash(String date) {
@@ -884,12 +558,6 @@ public class KakeiboService {
 			e.printStackTrace();
 		}
 		return message;
-	}
-
-	public int cash_Balance(String date, Cash cash) {
-		int remainder = remainder(date);
-		int cash_Total = cash_Total(cash);
-		return cash_Total - remainder;
 	}
 
 	public String this_Year_Month() {
@@ -1021,23 +689,23 @@ public class KakeiboService {
 			List<Type> typeList = typeList();
 			for (Type type : typeList) {
 				String type_Value = "";
-				if(current_Type_Value == type.getValue()) {
-					type_Value = type.getValue();
+				if(current_Type_Value == type.getName()) {
+					type_Value = type.getName();
 				}
-				current_Type_Value = type.getValue();
+				current_Type_Value = type.getName();
 				String current_Item_Value = "";
 				List<Item> itemList = itemList(type.getId());
 				for (Item item : itemList) {
 					String item_Value = "";
-					if(current_Item_Value == item.getValue()) {
-						item_Value = item.getValue();
+					if(current_Item_Value == item.getName()) {
+						item_Value = item.getName();
 					}
-					current_Item_Value = item.getValue();
+					current_Item_Value = item.getName();
 					List<Action> actionList = actionList(item.getId(), date);
 					for (Action action : actionList) {
 						List<String> list = new ArrayList<>();
 						list.add(type_Value);
-						list.add(type_Value);
+						list.add(item_Value);
 						list.add(itemRepository.item(action.getItem_id()));
 					}
 				}
@@ -1107,6 +775,51 @@ public class KakeiboService {
 
 	public Link title(String text) {
 		return new Link(text, "/View");
+	}
+
+	public List<Action> monthly_List(String date, int i) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public Object carryover(String date) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public List<Action> year_List(String year, int i, String subject) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public String daily_Output_Excel(String date, HttpServletResponse httpServletResponse) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public String monthly_Output_Excel(String date, HttpServletResponse httpServletResponse) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public String year_Output_Excel(String date, String subject, HttpServletResponse httpServletResponse) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public Object action_List(String date) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public Object account_Monthly(String date) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
+	}
+
+	public Object cash_Balance(String date, Cash cash) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
 	}
 
 }

@@ -18,17 +18,17 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 			)
 	public List<Type> list();
 
-	/**	ID 取得（value 指定） */
+	/**	ID 取得（name 指定） */
 	@Query("select type.id"
 			+ " from Type type"
-			+ " where type.value = :value")
+			+ " where type.name = :name")
 	public Integer getID(
-			@Param("value") String type
+			@Param("name") String type
 			);
 
 	/**	種別名 一覧取得 */
-	@Query("select distinct type.value"
+	@Query("select distinct type.name"
 			+ " from Type type")
-	public List<String> valueList();
+	public List<String> nameList();
 
 }
