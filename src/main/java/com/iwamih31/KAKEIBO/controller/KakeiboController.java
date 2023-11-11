@@ -34,7 +34,7 @@ public class KakeiboController {
 	@Autowired
 	private HttpSession session;
 
-	private String type = "";//////////////////// 仮
+//	private String type = "";//////////////////// 仮
 
 	/** RequestMappingのURL */
 	public String req() {
@@ -81,7 +81,7 @@ public class KakeiboController {
 		add_View_Data_(model, view, "項目別一覧");
 		model.addAttribute("date", date);
 		model.addAttribute("page", service.page(view, section, date));
-		return "main";
+		return "view";
 	}
 
 	@GetMapping("/Type")
@@ -92,7 +92,7 @@ public class KakeiboController {
 		add_View_Data_(model, "type", "種別毎内訳");
 		model.addAttribute("date", date);
 		model.addAttribute("page", service.type(section, date));
-		return "main";
+		return "view";
 	}
 
 
@@ -215,7 +215,7 @@ public class KakeiboController {
 		model.addAttribute("name", service.name());
 		model.addAttribute("guide", "適用を選択して下さい");
 
-		service.setItem_id(action, type, item);
+//		service.setItem_id(action, type, item);
 		model.addAttribute("object", action);
 		model.addAttribute("field", item);
 		return "view";
