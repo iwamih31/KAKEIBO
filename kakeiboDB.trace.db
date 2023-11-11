@@ -1,0 +1,3 @@
+2023-11-11 23:20:14 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
