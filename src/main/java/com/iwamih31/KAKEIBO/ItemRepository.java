@@ -12,7 +12,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
 	/**	Item リスト取得（type_id 指定 name 順） */
 	@Query("select item"
-			+ " from Type item"
+			+ " from Item item"
 			+ " where item.type_id = :type_id"
 			+ " order by item.name asc")
 	public List<Item> list(
@@ -35,6 +35,9 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 	public List<String> itemList();
 
 	/**	id から name 取得 */
+	@Query("select item.name"
+			+ " from Item item"
+			+ " where item.id = :id")
 	public String item(Integer id);
 
 }
