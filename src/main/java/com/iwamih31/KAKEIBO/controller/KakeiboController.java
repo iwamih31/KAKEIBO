@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/Kakeibo")
+@RequestMapping("/KAKEIBO")
 public class KakeiboController {
 
 	@Autowired
@@ -38,7 +38,7 @@ public class KakeiboController {
 
 	/** RequestMappingのURL */
 	public String req() {
-		return "/Kakeibo";
+		return "/KAKEIBO";
 	}
 
 	/** RequestMappingのURL + path */

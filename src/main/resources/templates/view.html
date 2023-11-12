@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 
 	<!-- ページタイトルの反映場所 -->
-	<title th:text="${title ?: _}">CareRecord</title>
+	<title th:text="${title ?: _} + '　' + ${req}">CareRecord</title>
 
 	<!-- 共通の CSS 読込	-->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
