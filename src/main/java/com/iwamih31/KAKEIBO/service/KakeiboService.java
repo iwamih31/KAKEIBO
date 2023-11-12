@@ -764,12 +764,34 @@ public class KakeiboService {
 	}
 
 	public Summary page(String view, String section, String date) {
-		Link title_Link = link(view, "/View");
+		Link title_Link = link(view_Name(view), next_View(view));
 		if (date == null) date = this_Year_Month();
 		Link date_Link = link(date, "/Date");
 		List<Link> menu = menu(view);
 		Table_Data table= table(view, section, date);
 		return new Summary(title_Link, date_Link, menu, table);
+	}
+
+	private String next_View(String view) {
+		switch (view) {
+		case "summary":
+			return "/Type";
+		case "type":
+			return "/Summary";
+		default:
+			return "/";
+		}
+	}
+
+	private String view_Name(String view) {
+			switch (view) {
+			case "summary":
+				return "項目別一覧";
+			case "type":
+				return "種別毎内訳";
+			default:
+				return "";
+			}
 	}
 
 	public Summary type(String section, String date) {

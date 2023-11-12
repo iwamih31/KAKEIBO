@@ -11,10 +11,17 @@
 
 		<div class="header bg_skyblue">
 			<!--	タイトル表示	-->
-			<h1 class="h2">[[${title}]]</h1>
-				<div class="date">
-					 [[${page.date.text}]]
-				</div>
+			<form id="title" th:action="@{${req + page.title.url}}" method="get">
+				<input type="hidden" name="date"
+				 th:value="${page.date.text}"/>
+				<button type="submit" class="btn-title">
+					<h1 class="h2">[[${page.title.text}]]</h1>
+				</button>
+			</form>
+
+			<div class="date">
+				 [[${page.date.text}]]
+			</div>
 		</div>
 		<!--	本体表示	-->
 		<div>
