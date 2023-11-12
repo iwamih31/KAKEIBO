@@ -740,6 +740,7 @@ public class KakeiboService {
 
 	public Summary page(String view, String section, String date) {
 		if (section == null) section = "実績";
+		if (date == null) date = this_Year_Month();
 		Link title_Link = link("項目別一覧", "/View");
 		Link date_Link = link(date, "/Date");
 		List<Link> menu = menu(view);

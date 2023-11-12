@@ -9,51 +9,46 @@
 	<!--	main フラグメントの定義（メインコンテンツ）	-->
 	<div th:fragment="main">
 
-		<div class="header border-bottom">
+		<div class="header bg_skyblue">
 			<!--	タイトル表示	-->
 			<h1 class="h2">[[${title}]]</h1>
-			<!--	メッセージ表示	-->
-			<div class="flex">
-				<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
-			</div>
+				<div class="date">
+					 [[${page.date.text}]]
+				</div>
 		</div>
 		<!--	本体表示	-->
 		<div>
-			<div class="flex">
+			<div class="flex-end margin_1em">
 				<div class="name">
-					 [[${name}]]
+					 [[${page.table.section.text}]]
 				</div>
-				<form id="output" method="post" th:action="@{${req} + '/Year/Output/Excel'}">
-					<input type="hidden" name="year" th:value="${year}"/>
-					<input type="hidden" name="subject" th:value="${subject}"/>
-					<button form="output" type="submit" class="btn btn-primary">
-						Excel出力
-					</button>
-				</form>
+				<div class="nav">
+					<form id="output" method="post" th:action="@{${req} + '/Year/Output/Excel'}">
+						<input type="hidden" name="year" th:value="${year}"/>
+						<input type="hidden" name="subject" th:value="${subject}"/>
+						<button form="output" type="submit" class="btn btn-primary">
+							Excel出力
+						</button>
+					</form>
+					<form id="date" method="post" th:action="@{${req} + '/SelectYear'}">
+						<input type="hidden" name="year" th:value="${year}"/>
+						<input type="hidden" name="subject" th:value="${subject}"/>
+						<button form="date" type="submit" class="btn btn-primary">
+							年度選択
+						</button>
+					</form>
+					<form id="subject" method="post" th:action="@{${req} + '/Subject'}">
+						<input type="hidden" name="year" th:value="${year}"/>
+						<input type="hidden" name="subject" th:value="${subject}"/>
+						<button form="subject" type="submit" class="btn btn-primary bg_green">
+							科目指定
+						</button>
+					</form>
+				</div>
 			</div>
-			<div class="flex margin_1em">
-				<div class="date">
-					[[${year}]]
-				</div>
-				<form id="date" method="post" th:action="@{${req} + '/SelectYear'}">
-					<input type="hidden" name="year" th:value="${year}"/>
-					<input type="hidden" name="subject" th:value="${subject}"/>
-					<button form="date" type="submit" class="btn btn-primary">
-						年度選択
-					</button>
-				</form>
-				　
-				<div class="subject">
-					[[${subject}]]
-				</div>
-				　
-				<form id="subject" method="post" th:action="@{${req} + '/Subject'}">
-					<input type="hidden" name="year" th:value="${year}"/>
-					<input type="hidden" name="subject" th:value="${subject}"/>
-					<button form="subject" type="submit" class="btn btn-primary bg_green">
-						科目指定
-					</button>
-				</form>
+			<!--	メッセージ表示	-->
+			<div class="flex">
+				<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
 			</div>
 			<table class="table table-striped table-bordered table-hover monthly">
 				<thead class="thead-light">

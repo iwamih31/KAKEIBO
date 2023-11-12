@@ -95,6 +95,11 @@ nav button,
 	display: flex;
 }
 
+.flex-end {
+	display: flex;
+	align-items: flex-end;
+}
+
 
 .fixed {
 	position: fixed;
@@ -117,6 +122,10 @@ nav button,
 
 .bg_yellow {
 	background-color: yellow;
+}
+
+.bg_skyblue {
+	background-color: skyblue;
 }
 
 .bg_green {
@@ -146,6 +155,7 @@ nav button,
 
 .name {
 	display: inline-flex;
+	background-color: white;
 	border: solid blue thin;
 	border-radius: 0.2em;
 	padding: 0.2em;
@@ -157,6 +167,7 @@ nav button,
 .subject
  {
 	display: inline-flex;
+	background-color: white;
 	border: solid blue thin;
 	border-radius: 0.2em;
 	padding: 0.2em;
@@ -180,6 +191,8 @@ nav button,
 
 .header {
 	display: flex;
+	justify-content: space-between;
+
 }
 
 .alert {
