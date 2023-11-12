@@ -31,4 +31,11 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 			+ " from Type type")
 	public List<String> nameList();
 
+	/**	デフォルトType 取得 */
+	@Query("select type.name"
+			+ " from Type type"
+			+ " where type.rank = 1"
+			)
+	public String default_Type();
+
 }

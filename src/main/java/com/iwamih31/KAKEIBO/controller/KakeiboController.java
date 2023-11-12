@@ -79,7 +79,6 @@ public class KakeiboController {
 			Model model) {
 		String view = "summary";
 		add_View_Data_(model, view, "項目別一覧");
-		model.addAttribute("date", date);
 		model.addAttribute("page", service.page(view, section, date));
 		return "view";
 	}
@@ -89,9 +88,9 @@ public class KakeiboController {
 			@Param("date")String date,
 			@Param("section")String section,
 			Model model) {
-		add_View_Data_(model, "type", "種別毎内訳");
-		model.addAttribute("date", date);
-		model.addAttribute("page", service.type(section, date));
+		String view = "type";
+		add_View_Data_(model,view , "種別毎内訳");
+		model.addAttribute("page", service.page(view, section, date));
 		return "view";
 	}
 

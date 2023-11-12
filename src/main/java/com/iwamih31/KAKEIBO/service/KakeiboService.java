@@ -644,10 +644,35 @@ public class KakeiboService {
 	}
 
 	public Table_Data table(String view, String section, String date) {
+		section = null_Section(view, section);
 		Link section_Link = section_Link(section);
 		String[] columns = columns(view);
 		List<List<String>> data = data(section, date);
 		return new Table_Data(section_Link, columns, data);
+	}
+
+	private String null_Section(String view, String section) {
+		if (section == null) {
+			switch (view) {
+			case "summary":
+				return default_Summary();
+			case "type":
+				return default_Type();
+			default:
+				break;
+			}
+		}
+		return section;
+	}
+
+	private String default_Type() {
+		String default_Type = typeRepository.default_Type();
+		if (default_Type == null) default_Type = "種別がありません";
+		return default_Type;
+	}
+
+	private String default_Summary() {
+		return "実績";
 	}
 
 	private String[] columns(String view) {
@@ -739,12 +764,11 @@ public class KakeiboService {
 	}
 
 	public Summary page(String view, String section, String date) {
-		if (section == null) section = "実績";
+		Link title_Link = link(view, "/View");
 		if (date == null) date = this_Year_Month();
-		Link title_Link = link("項目別一覧", "/View");
 		Link date_Link = link(date, "/Date");
 		List<Link> menu = menu(view);
-		Table_Data table= table(view, section, date);;
+		Table_Data table= table(view, section, date);
 		return new Summary(title_Link, date_Link, menu, table);
 	}
 
