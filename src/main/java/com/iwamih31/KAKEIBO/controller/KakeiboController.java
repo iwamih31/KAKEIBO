@@ -94,7 +94,20 @@ public class KakeiboController {
 		return "view";
 	}
 
-
+	@PostMapping("/InsertAction")
+	public String insertAction(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "actionInsert", "新規出納追加");
+		model.addAttribute("date", date);
+		model.addAttribute("japanese_Date", service.japanese_Date(date));
+		model.addAttribute("name", service.name());
+		model.addAttribute("action", service.new_Action(date));
+		model.addAttribute("next_id", service.next_Action_Id());
+		model.addAttribute("label_Set_List", LabelSet.actionInsert_Set);
+		return "view";
+	}
 
 	@GetMapping("/Setting")
 	public String setting(
@@ -136,20 +149,6 @@ public class KakeiboController {
 		add_View_Data_(model, "ownerInsert", "新規項目追加");
 		model.addAttribute("owner", service.new_Owner());
 		model.addAttribute("next_id", service.next_Owner_Id());
-		return "view";
-	}
-
-	@PostMapping("/ActionInsert")
-	public String actionInsert(
-			@RequestParam("date")String date,
-			Model model) {
-		add_View_Data_(model, "actionInsert", "新規出納追加");
-		model.addAttribute("date", date);
-		model.addAttribute("japanese_Date", service.japanese_Date(date));
-		model.addAttribute("name", service.name());
-		model.addAttribute("action", service.new_Action(date));
-		model.addAttribute("next_id", service.next_Action_Id());
-		model.addAttribute("label_Set_List", LabelSet.actionInsert_Set);
 		return "view";
 	}
 
@@ -292,8 +291,8 @@ public class KakeiboController {
 		return redirect("/OwnerSetting");
 	}
 
-	@PostMapping("/Action/Insert")
-	public String action_Insert(
+	@PostMapping("/Insert/Action")
+	public String insert_Action(
 			@RequestParam("date")String date,
 			@ModelAttribute("action")Action action,
 			RedirectAttributes redirectAttributes) {
