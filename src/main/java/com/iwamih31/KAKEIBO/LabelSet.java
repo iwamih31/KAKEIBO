@@ -2,13 +2,28 @@ package com.iwamih31.KAKEIBO;
 
 public class LabelSet {
 
+	public static Set[] summary_Set = {
+			set("種別",	 10),
+			set("項目",	 25),
+			set("入金",	  7),
+			set("出金",		7)
+	};
+
+	public static Set[] type_Set = {
+			set("項目",	 25),
+			set("日付",	 10),
+			set("詳細",	 10),
+			set("入金",	  7),
+			set("出金",		7)
+	};
+
 	public static Set[] daily_Set = {
 			set("科目",	 10),
 			set("適用",	 25),
 			set("収入",	  7),
 			set("支出",		7),
 			set("残高",		7)
-		};
+	};
 
 	public static Set[] daily_Output_Set = {
 			set("科目",	 10),
@@ -74,7 +89,7 @@ public class LabelSet {
 			set("ID",				6),
 			set("項目",			4),
 			set("内容",			8)
-		};
+	};
 	public static Set[] cash_Set = {
 			set("金種",10),
 			set("枚数",10)

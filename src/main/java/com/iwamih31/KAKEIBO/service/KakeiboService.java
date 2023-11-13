@@ -632,10 +632,12 @@ public class KakeiboService {
 		case "summary":
 			menu.add(new Link("新規入力", "/Insert/Action"));
 			menu.add(new Link("設定", "/Setting"));
+			menu.add(new Link("Excel出力", "/Output/Excel"));
 			break;
 		case "type":
 			menu.add(new Link("新規入力", "/Insert/Action"));
 			menu.add(new Link("全種別", "/Setting"));
+			menu.add(new Link("Excel出力", "/Output/Excel"));
 			break;
 		default:
 			break;
@@ -646,7 +648,7 @@ public class KakeiboService {
 	public Table_Data table(String view, String section, String date) {
 		section = null_Section(view, section);
 		Link section_Link = section_Link(section);
-		String[] columns = columns(view);
+		Set[] columns = columns(view);
 		List<List<String>> data = data(section, date);
 		return new Table_Data(section_Link, columns, data);
 	}
@@ -675,19 +677,15 @@ public class KakeiboService {
 		return "実績";
 	}
 
-	private String[] columns(String view) {
-		String[] columns = null;
+	private Set[] columns(String view) {
 		switch (view) {
 		case "summary":
-			columns = new String[]{"種別","項目","入金","出金"};
-			break;
+			return LabelSet.summary_Set;
 		case "type":
-			columns = new String[]{"項目", "日付","項目","入金","出金"};
-			break;
+			return LabelSet.type_Set;
 		default:
-			break;
+			return new Set[]{};
 		}
-		return columns;
 	}
 
 	private Link section_Link(String section) {
@@ -735,7 +733,6 @@ public class KakeiboService {
 					}
 				}
 			}
-
 			break;
 		case "予算":
 			List<Plan> plan_List = plan_List(date);
@@ -766,10 +763,14 @@ public class KakeiboService {
 	public Summary page(String view, String section, String date) {
 		Link title_Link = link(view_Name(view), next_View(view));
 		if (date == null) date = this_Year_Month();
-		Link date_Link = link(date, "/Date");
+		Link date_Link = date_Link(date);
 		List<Link> menu = menu(view);
 		Table_Data table= table(view, section, date);
 		return new Summary(title_Link, date_Link, menu, table);
+	}
+
+	private Link date_Link(String date) {
+		return link(date, "/Date");
 	}
 
 	private String next_View(String view) {
@@ -804,7 +805,7 @@ public class KakeiboService {
 	}
 
 	private Table_Data result(String date) {
-		String[] columns = {"種別","項目","入金","出金"};
+		Set[] columns = LabelSet.summary_Set;
 		Link section = link("実績", "/Result");
 		List<List<String>> data = data(section.getText(), date);
 		return new Table_Data(section, columns, data);

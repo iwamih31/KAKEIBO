@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Table_Data {
 	private Link section;
-	private String[] column;
+	private Set[] columns;
 	private List<List<String>> data;
 }

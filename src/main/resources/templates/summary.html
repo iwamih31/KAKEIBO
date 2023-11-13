@@ -39,109 +39,39 @@
 							</button>
 						</form>
 					</th:block>
-					<form id="output" method="post" th:action="@{${req} + '/Output/Excel'}">
-							<input type="hidden" name="date" th:value="${page.date.text}"/>
-							<input type="hidden" name="section" th:value="${page.table.section.text}"/>
-						<button form="output" type="submit" class="btn btn-primary">
-							Excel出力
-						</button>
-					</form>
 				</div>
 			</div>
 			<!-- メッセージ表示	-->
 			<div class="flex">
 				<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
 			</div>
-			<!-- テーブル表示	-->
+			<!-- テーブル表示 -->
 			<table class="table table-striped table-bordered table-hover monthly">
 				<thead class="thead-light">
 					<tr>
-						<th th:each="label_Set : ${label_Set_List}" class="th-width"
-														th:width="${label_Set.value * 1.5} + '%'">
-							[[${label_Set.name}]]
+						<th th:each="column, status : ${page.table.columns}"
+						 class="th-width" th:width="${column.value * 1.5} + '%'">
+							[[${column.name}]]
 						</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td>                             </td>
-						<td>                             </td>
-						<td class="center">前年度繰り越し  </td>
-						<td>                             </td>
-						<td>                             </td>
-						<td class="num3">[[${carryover}]]</td>
-					</tr>
 				<th:block th:if="${page.table.data.size() &gt; 0}">
-					<tr th:each="action, status : ${action_List}" th:object="${action}">
-						<td>[[*{#temporals.format(date, 'M月d日')}]]                 </td>
-						<td>[[*{subject}]]              </td>
-						<td>[[*{apply}]]                </td>
-						<th:block th:if="*{income} == 0">
-							<td></td>
-						</th:block>
-						<th:block th:if="*{income} &gt; 0">
-							<td class="num3">[[*{income}]]</td>
-						</th:block>
-						<th:block th:if="*{spending} == 0">
-							<td></td>
-						</th:block>
-						<th:block th:if="*{spending} &gt; 0">
-							<td class="num3">[[*{spending}]]</td>
-						</th:block>
-						<td class="num3">
-							[[${carryover} + ${income.get(status.index)} - ${spending.get(status.index)}]]
-						</td>
-					</tr>
-				</th:block>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>                           </td>
-						<td>                           </td>
-						<td class="center">翌年繰り越し</td>
-						<td>                           </td>
-						<td>                           </td>
-						<th:block th:each="action, status : ${action_List}">
-							<th:block  th:if="${status.last}">
+					<th:block th:each="row, status : ${page.table.data}">
+						<tr th:each="value : ${row}">
+							<th:block th:if="${value} &gt; 0">
 								<td class="num3">
-									[[${carryover} + ${income.get(status.index)} - ${spending.get(status.index)}]]
+									<form action="@{${page.title.url}}" method="get">
+										<input type="hidden" name="date" th:value="${page.date.text}"/>
+										<input type="hidden" name="section" th:value="${row.get(1)}"/>
+									</form>[[${value}]]
 								</td>
 							</th:block>
-						</th:block>
-						<th:block th:if="${page.table.data.size() == 0}">
-							<td class="num3">[[${carryover}]]</td>
-						</th:block>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tr>
-						<td>                            </td>
-						<td>                            </td>
-						<td class="center">合　計         </td>
-						<th:block th:each="action, status : ${action_List}">
-							<th:block  th:if="${status.last}">
-								<td class="num3">[[${income.get(status.index)}]]  </td>
-								<td class="num3">[[${spending.get(status.index)}]]</td>
+							<th:block th:if="${value} == 0">
+								<td></td>
 							</th:block>
-						</th:block>
-						<th:block th:if="${page.table.data.size() == 0}">
-							<td class="num3"></td>
-							<td class="num3"></td>
-						</th:block>
-						<td>                            </td>
-					</tr>
+						</tr>
+					</th:block>
 				</tbody>
 			</table>
 		</div>
