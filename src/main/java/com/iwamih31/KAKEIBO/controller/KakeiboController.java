@@ -100,7 +100,7 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			Model model) {
 		String view = "insertAction";
-		add_View_Data_(model,view , "新規出納追加");
+		add_View_Data_(model,view , "新規入力");
 		model.addAttribute("page", service.page(view, section, date));
 //		model.addAttribute("date", date);
 //		model.addAttribute("japanese_Date", service.japanese_Date(date));
@@ -159,7 +159,7 @@ public class KakeiboController {
 			@RequestParam("post_date")String date,
 			@ModelAttribute("action")Action action,
 			Model model) {
-		add_View_Data_(model, "actionInput", "新規入力");
+		add_View_Data_(model, "actionInput", "新規出納追加");
 		model.addAttribute("date", date);
 		model.addAttribute("japanese_Date", service.japanese_Date(date));
 		model.addAttribute("name", service.name());
