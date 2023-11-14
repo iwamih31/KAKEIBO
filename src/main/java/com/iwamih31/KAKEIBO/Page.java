@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Summary {
+public class Page {
 	private Link title;
 	private Link date;
 	private List<Link> menu;

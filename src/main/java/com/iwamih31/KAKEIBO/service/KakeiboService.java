@@ -25,11 +25,11 @@ import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.Link;
 import com.iwamih31.KAKEIBO.Owner;
 import com.iwamih31.KAKEIBO.OwnerRepository;
+import com.iwamih31.KAKEIBO.Page;
 import com.iwamih31.KAKEIBO.Plan;
 import com.iwamih31.KAKEIBO.PlanRepository;
 import com.iwamih31.KAKEIBO.Set;
 import com.iwamih31.KAKEIBO.State;
-import com.iwamih31.KAKEIBO.Summary;
 import com.iwamih31.KAKEIBO.Table_Data;
 import com.iwamih31.KAKEIBO.Type;
 import com.iwamih31.KAKEIBO.TypeRepository;
@@ -630,7 +630,7 @@ public class KakeiboService {
 		List<Link> menu = new ArrayList<>();
 		switch (view) {
 		case "summary":
-			menu.add(new Link("新規入力", "/Insert/Action"));
+			menu.add(new Link("新規入力", "/InsertAction"));
 			menu.add(new Link("設定", "/Setting"));
 			menu.add(new Link("Excel出力", "/Output/Excel"));
 			break;
@@ -683,6 +683,8 @@ public class KakeiboService {
 			return LabelSet.summary_Set;
 		case "type":
 			return LabelSet.type_Set;
+		case "insertAction":
+			return LabelSet.insertAction_Set;
 		default:
 			return new Set[]{};
 		}
@@ -760,13 +762,13 @@ public class KakeiboService {
 		return actionRepository.list(item_id, date);
 	}
 
-	public Summary page(String view, String section, String date) {
+	public Page page(String view, String section, String date) {
 		Link title_Link = link(view_Name(view), next_View(view));
 		if (date == null) date = this_Year_Month();
 		Link date_Link = date_Link(date);
 		List<Link> menu = menu(view);
 		Table_Data table= table(view, section, date);
-		return new Summary(title_Link, date_Link, menu, table);
+		return new Page(title_Link, date_Link, menu, table);
 	}
 
 	private Link date_Link(String date) {
@@ -795,13 +797,13 @@ public class KakeiboService {
 			}
 	}
 
-	public Summary type(String section, String date) {
+	public Page type(String section, String date) {
 		String view = "Type";
 		Link title_Link = link("項目別一覧", "/View");
 		Link date_Link = link(date, "/Date");
 		List<Link> menu = menu(view);
 		Table_Data table= table(view, section, date);;
-		return new Summary(title_Link, date_Link, menu, table);
+		return new Page(title_Link, date_Link, menu, table);
 	}
 
 	private Table_Data result(String date) {

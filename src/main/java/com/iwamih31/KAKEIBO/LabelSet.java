@@ -55,16 +55,19 @@ public class LabelSet {
 			set("日付",		8),
 			set("科目",		10),
 			set("適用",		20),
-			set("収入",	  8),
+			set("収入",	    8),
 			set("支出",		8),
 			set("残高",		8),
 	};
 
-	public static Set[] actionInsert_Set = {
-			set("科目",		10),
-			set("適用",		20),
-			set("収入",	  8),
-			set("支出",		8),
+	public static Set[] insertAction_Set = {
+			set("種別",	 10),
+			set("項目",	 10),
+			set("日付",	 10),
+			set("詳細",	 10),
+			set("入金",	  7),
+			set("出金",	  7),
+			set("備考",	 25),
 	};
 
 	public static Set[] actionUpdate_Set = {
