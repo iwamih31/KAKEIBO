@@ -7,68 +7,79 @@
 	</th:block>
 
 	<!--	main フラグメントの定義（メインコンテンツ）	-->
-	<div th:fragment="main">
+	<div th:fragment="main"  th:object="${action}">
 		<!--	タイトル表示	-->
 		<div class="header border-bottom">
 			<h1 class="h2">[[${title}]]</h1>
 		</div>
 		<!--	操作系表示	-->
-		<div  th:object="${action}">
-			<div class="flex">
-				<div class="name">
-					[[${page.table.section.text}]]
-				</div>
+		<!-- 操作系表示 -->
+		<div class="flex-end margin_1em">
+			<div class="name">
+				 [[${page.table.section.text}]]
 			</div>
-			<div class="flex margin_1em">
-				<div class="date">
-					[[${page.date.text}]]
-				</div>
+			<div class="nav">
+				<th:block th:each="button, status : ${page.menu}">
+					<form th:id="'button' + ${status.index}" method="post" th:action="@{${req + button.url}}">
+						<input type="hidden" name="date" th:value="${page.date.text}"/>
+						<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+						<button th:form="'button' + ${status.index}" type="submit" class="btn btn-primary">
+							[[${button.text}]]
+						</button>
+					</form>
+				</th:block>
 			</div>
+		</div>
+		<!-- メッセージ表示	-->
+		<div class="flex">
+			<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
+		</div>
 
-			<form id="insert" method="post" th:action="@{${req} + '/Action/Insert'}">
-				<input type="hidden" name="date" th:value="${page.date.text}" />
-				<input type="hidden" name="section" th:value="${page.table.section.text}" />
-				<table class="table table-striped table-bordered table-hover">
-					<thead class="thead-light">
-						<tr>
-							<th th:each="column : ${page.table.columns}" class="th-width"
-															th:width="${column.value * 1.5} + '%'">
-								[[${column.name}]]
-							</th>
-							<th class="th-width"></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<button form="input" type="submit" class="btn btn-primary">
-									入力
-								</button>
-							</td>
-							<td>
-								<button form="input" type="submit" class="btn btn-primary">
-									入力
-								</button>
-							</td>
-							<td><input type="text" th:field="*{income}" /></td>
-							<td><input type="text" th:field="*{spending}" /></td>
-							<td>
-								<button form="insert" type="submit" class="btn btn-primary">
-									確定
-								</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</form>
-			<form id="input" method="post"  th:action="@{${req} + '/ActionInput'}">
+		<form id="insert" method="post" th:action="@{${req} + '/Action/Insert'}">
+			<input type="hidden" name="date" th:value="${page.date.text}" />
+			<input type="hidden" name="section" th:value="${page.table.section.text}" />
+			<table class="table table-striped table-bordered table-hover">
+				<thead class="thead-light">
+					<tr>
+						<th th:each="column : ${page.table.columns}"
+						 class="th-width" th:width="${column.value * 1.5} + '%'">
+							[[${column.name}]]
+						</th>
+						<th class="th-width"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><input type="date" th:field="*{date}" /></td>
+						<td>
+							<button form="input" type="submit" class="btn btn-primary">
+								種別
+							</button>
+						</td>
+						<td>
+							<button form="input" type="submit" class="btn btn-primary">
+								項目選択
+							</button>
+						</td>
+						<td><input type="text" th:field="*{detail}" /></td>
+						<td><input type="text" th:field="*{income}" /></td>
+						<td><input type="text" th:field="*{spending}" /></td>
+						<td>
+							<button form="insert" type="submit" class="btn btn-primary">
+								確定
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+		<form id="input" method="post"  th:action="@{${req} + '/ActionInput'}">
 			<input type="hidden" name="post_date" th:value="${date}" />
 			<input type="hidden" th:field="*{id}" />
 			<input type="hidden" th:field="*{date}" />
 			<input type="hidden" th:field="*{income}" />
 			<input type="hidden" th:field="*{spending}" />
-			</form>
-		</div>
+		</form>
 		<br>
 		<a th:href="@{/main}">メインページへ</a>
 	</div>
