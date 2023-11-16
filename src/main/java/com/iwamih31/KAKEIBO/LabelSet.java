@@ -62,8 +62,8 @@ public class LabelSet {
 
 	public static Set[] insertAction_Set = {
 			set("日付",	 10),
-			set("種別",	 10),
-			set("項目",	 10),
+			set("種別",	  7),
+			set("項目",	  7),
 			set("詳細",	 10),
 			set("入金",	  7),
 			set("出金",	  7),
