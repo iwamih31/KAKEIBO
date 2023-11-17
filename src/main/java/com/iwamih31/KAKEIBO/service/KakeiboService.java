@@ -165,7 +165,12 @@ public class KakeiboService {
 	}
 
 	private Integer max_Rank() {
-		return typeRepository.max_Rank();
+		int max_Rank = 1;
+		Type lastElement = getLastElement(typeRepository.list());
+		if (lastElement != null)
+			max_Rank = lastElement.getRank();
+		___consoleOut___("max_Rank() = " + max_Rank);
+		return max_Rank;
 	}
 
 	public Action new_Action(String date) {
@@ -177,7 +182,7 @@ public class KakeiboService {
 		Owner lastElement = getLastElement(ownerRepository.findAll());
 		if (lastElement != null)
 			nextId = lastElement.getId() + 1;
-		___consoleOut___("next_Owner_Id = " + nextId);
+		___consoleOut___("next_Owner_Id() = " + nextId);
 		return nextId;
 	}
 
@@ -186,7 +191,7 @@ public class KakeiboService {
 		Action lastElement = getLastElement(actionRepository.findAll());
 		if (lastElement != null)
 			nextId = lastElement.getId() + 1;
-		___consoleOut___("next_Action_Id = " + nextId);
+		___consoleOut___("next_Action_Id() = " + nextId);
 		return nextId;
 	}
 
@@ -195,7 +200,7 @@ public class KakeiboService {
 		Type lastElement = getLastElement(typeRepository.findAll());
 		if (lastElement != null)
 			next_Id = lastElement.getId() + 1;
-		___consoleOut___("next_Type_Id = " + next_Id);
+		___consoleOut___("next_Type_Id() = " + next_Id);
 		return next_Id;
 	}
 
@@ -787,6 +792,8 @@ public class KakeiboService {
 			return LabelSet.type_Set;
 		case "新規入力":
 			return LabelSet.insertAction_Set;
+		case "種別登録":
+			return LabelSet.insertType_Set;
 		default:
 			return new Set[]{};
 		}
@@ -833,6 +840,8 @@ public class KakeiboService {
 			return new Link(title, "/Type");
 		case "種別毎内訳":
 			return new Link(title, "/Summary");
+		case "種別登録":
+			return new Link(title, "/SettingType");
 		default:
 			return new Link(title, "/");
 		}

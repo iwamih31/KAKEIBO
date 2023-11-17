@@ -138,9 +138,9 @@ public class KakeiboController {
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
 			Model model) {
-		add_View_Data_(model, "setting");
-		model.addAttribute("page", service.page("種別設定", section, date));
-		model.addAttribute("type", service.new_type());
+		add_View_Data_(model, "insertType");
+		model.addAttribute("page", service.page("種別登録", section, date));
+		model.addAttribute("type", service.new_Type());
 		return "view";
 	}
 
