@@ -160,6 +160,14 @@ public class KakeiboService {
 		return new Action(next_Action_Id(), 0,  "", null, 0, 0, "");
 	}
 
+	public Type new_Type() {
+		return new Type(next_Type_Id(), "", "", max_Rank() + 1);
+	}
+
+	private Integer max_Rank() {
+		return typeRepository.max_Rank();
+	}
+
 	public Action new_Action(String date) {
 		return new Action(next_Action_Id(), 0, "", to_LocalDate(date), 0, 0, "");
 	}
@@ -180,6 +188,15 @@ public class KakeiboService {
 			nextId = lastElement.getId() + 1;
 		___consoleOut___("next_Action_Id = " + nextId);
 		return nextId;
+	}
+
+	public int next_Type_Id() {
+		int next_Id = 1;
+		Type lastElement = getLastElement(typeRepository.findAll());
+		if (lastElement != null)
+			next_Id = lastElement.getId() + 1;
+		___consoleOut___("next_Type_Id = " + next_Id);
+		return next_Id;
 	}
 
 	public int next_Cash_Id() {
@@ -658,8 +675,7 @@ public class KakeiboService {
 		switch (section) {
 		case "実績":
 			String current_Type_Value = "";
-			List<Type> typeList = typeList();
-			for (Type type : typeList) {
+			for (Type type : typeList()) {
 				String type_Value = "";
 				if(current_Type_Value == type.getName()) {
 					type_Value = type.getName();
@@ -676,9 +692,11 @@ public class KakeiboService {
 					List<Action> actionList = actionList(item.getId(), date);
 					for (Action action : actionList) {
 						List<String> list = new ArrayList<>();
-						list.add(type_Value);
-						list.add(item_Value);
-						list.add(itemRepository.item(action.getItem_id()));
+						add(list, type_Value);
+						add(list, item_Value);
+						add(list, action.getIncome());
+						add(list, action.getSpending());
+						data.add(list);
 					}
 				}
 			}
@@ -686,10 +704,29 @@ public class KakeiboService {
 		case "予算":
 			List<Plan> plan_List = plan_List(date);
 			break;
+		case "種別":
+			for (Type type : typeList()) {
+				List<String> list = new ArrayList<>();
+				add(list, type.getId());
+				add(list, type.getName());
+				add(list, type.getNote());
+				add(list, type.getRank());
+				data.add(list);
+			}
+			break;
 		default:
 			break;
 		}
 		return data;
+	}
+
+	private void add(List<String> list, Object object) {
+		list.add(make_String(object));
+	}
+
+	private List<Type> list_Type(String date) {
+		// TODO 自動生成されたメソッド・スタブ
+		return null;
 	}
 
 	private List<Plan> plan_List(String date) {
@@ -724,6 +761,8 @@ public class KakeiboService {
 				return "実績";
 			case "種別毎内訳":
 				return default_Type();
+			case "種別設定":
+				return "種別";
 			default:
 				break;
 			}
@@ -773,6 +812,10 @@ public class KakeiboService {
 		case "各種設定":
 			menu.add(new Link("所有者設定", "/OwnerSetting"));
 			menu.add(new Link("種別設定", "/SettingType"));
+			break;
+		case "種別設定":
+			menu.add(new Link("種別登録", "/InsertType"));
+			menu.add(new Link("並べ替え", "/OrderType"));
 			break;
 		default:
 			break;

@@ -38,4 +38,11 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 			)
 	public String default_Type();
 
+	/**	デフォルトType 取得 */
+	@Query("select type.rank"
+			+ " from Type type"
+			+ " where type.rank = 1"
+			)
+	public Integer max_Rank();
+
 }

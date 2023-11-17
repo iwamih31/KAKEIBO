@@ -123,6 +123,27 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/SettingType")
+	public String settingType(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "setting");
+		model.addAttribute("page", service.page("種別設定", section, date));
+		return "view";
+	}
+
+	@PostMapping("/InsertType")
+	public String insertType(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "setting");
+		model.addAttribute("page", service.page("種別設定", section, date));
+		model.addAttribute("type", service.new_type());
+		return "view";
+	}
+
 	@GetMapping("/List")
 	public String list(
 			Model model) {

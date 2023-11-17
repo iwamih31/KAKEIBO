@@ -3,22 +3,73 @@
 
 	<!-- library フラグメントの定義（JavaScript／CSS） -->
 	<th:block th:fragment="library">
-		<link rel="stylesheet" th:href="@{/css/user.css}">
+		<link rel="stylesheet" th:href="@{/css/list.css}">
 	</th:block>
 
-	<!--	main フラグメントの定義（メインコンテンツ）	-->
+	<!-- main フラグメントの定義（メインコンテンツ） -->
 	<div th:fragment="main">
-		<div class="header border-bottom">
-			<h1 class="h2">[[${title}]]</h1>
+		<!-- ヘッダー部分 -->
+		<div class="header bg_skyblue">
+			<!-- タイトル表示 -->
+			<form id="title" th:action="@{${req + page.title.url}}" method="get">
+				<input type="hidden" name="date" th:value="${page.date.text}"/>
+				<button type="submit" class="btn-title">
+					<h1 class="h2">[[${page.title.text}]]</h1>
+				</button>
+			</form>
 		</div>
-		<div class="margin_1em">
-			<nav>
-				<a th:href="@{${req} + '/OwnerSetting'}">
-					<button type="button" class="btn btn-primary">所有者設定</button>
-				</a>
-			</nav>
+		<!-- 本体部分 -->
+		<div>
+			<!-- 操作系表示 -->
+			<div class="flex-end margin_1em">
+				<div class="nav">
+					<th:block th:each="button, status : ${page.menu}">
+						<form th:id="'button' + ${status.index}" method="post" th:action="@{${req + button.url}}">
+							<input type="hidden" name="date" th:value="${page.date.text}"/>
+							<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+							<button th:form="'button' + ${status.index}" type="submit" class="btn btn-primary">
+								[[${button.text}]]
+							</button>
+						</form>
+					</th:block>
+				</div>
+			</div>
+			<!-- メッセージ表示	-->
+			<div class="flex">
+				<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
+			</div>
+			<!-- テーブル表示 -->
+			<table class="table table-striped table-bordered table-hover monthly">
+				<thead class="thead-light">
+					<tr>
+						<th th:each="column, status : ${page.table.columns}"
+						 class="th-width" th:width="${column.value * 1.5} + '%'">
+							[[${column.name}]]
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+				<th:block th:if="${page.table.data.size() &gt; 0}">
+					<th:block th:each="row, status : ${page.table.data}">
+						<tr th:each="value : ${row}">
+							<th:block th:if="${value} &gt; 0">
+								<td class="num3">
+									<form action="@{${page.title.url}}" method="get">
+										<input type="hidden" name="date" th:value="${page.date.text}"/>
+										<input type="hidden" name="section" th:value="${row.get(1)}"/>
+									</form>[[${value}]]
+								</td>
+							</th:block>
+							<th:block th:if="${value} == 0">
+								<td></td>
+							</th:block>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
 		</div>
 		<br>
-		<a th:href="@{${req} + '/Main'}">メインページへ</a>
+		<a th:href="@{/main}">メインページへ</a>
 	</div>
+
 </html>
