@@ -94,6 +94,17 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/SelectType")
+	public String selectType(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		String view = "selectType";
+		add_View_Data_(model, view, "種別選択");
+		model.addAttribute("page", service.page(view, section, date));
+		return "view";
+	}
+
 	@PostMapping("/InsertAction")
 	public String insertAction(
 			@RequestParam("date")String date,

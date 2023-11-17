@@ -630,14 +630,18 @@ public class KakeiboService {
 		List<Link> menu = new ArrayList<>();
 		switch (view) {
 		case "summary":
-			menu.add(new Link("新規入力", "/InsertAction"));
+			menu.add(new Link("新規入力", "/SelectType"));
 			menu.add(new Link("設定", "/Setting"));
 			menu.add(new Link("Excel出力", "/Output/Excel"));
 			break;
 		case "type":
-			menu.add(new Link("新規入力", "/Insert/Action"));
+			menu.add(new Link("新規入力", "/InsertAction"));
 			menu.add(new Link("全種別", "/Setting"));
 			menu.add(new Link("Excel出力", "/Output/Excel"));
+			break;
+		case "insertAction":
+			menu.add(new Link("種別選択", "/SelectType"));
+			menu.add(new Link("項目作成", "/InsertItem"));
 			break;
 		default:
 			break;
@@ -700,6 +704,7 @@ public class KakeiboService {
 			link = "/Result";
 			break;
 		default:
+			link = "/";
 			break;
 		}
 		return new Link(section, link);
