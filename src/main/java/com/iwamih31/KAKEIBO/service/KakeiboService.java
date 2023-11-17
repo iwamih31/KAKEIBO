@@ -626,51 +626,6 @@ public class KakeiboService {
 		action.setItem_id(itemRepository.getID(type_id,item));
 	}
 
-	public List<Link> menu(String view) {
-		List<Link> menu = new ArrayList<>();
-		switch (view) {
-		case "summary":
-			menu.add(new Link("新規入力", "/SelectType"));
-			menu.add(new Link("設定", "/Setting"));
-			menu.add(new Link("Excel出力", "/Output/Excel"));
-			break;
-		case "type":
-			menu.add(new Link("新規入力", "/InsertAction"));
-			menu.add(new Link("全種別", "/Setting"));
-			menu.add(new Link("Excel出力", "/Output/Excel"));
-			break;
-		case "insertAction":
-			menu.add(new Link("種別選択", "/SelectType"));
-			menu.add(new Link("項目作成", "/InsertItem"));
-			break;
-		default:
-			break;
-		}
-		return menu;
-	}
-
-	public Table_Data table(String view, String section, String date) {
-		section = null_Section(view, section);
-		Link section_Link = section_Link(section);
-		Set[] columns = columns(view);
-		List<List<String>> data = data(section, date);
-		return new Table_Data(section_Link, columns, data);
-	}
-
-	private String null_Section(String view, String section) {
-		if (section == null) {
-			switch (view) {
-			case "summary":
-				return default_Summary();
-			case "type":
-				return default_Type();
-			default:
-				break;
-			}
-		}
-		return section;
-	}
-
 	private String default_Type() {
 		String default_Type = typeRepository.default_Type();
 		if (default_Type == null) default_Type = "種別がありません";
@@ -679,19 +634,6 @@ public class KakeiboService {
 
 	private String default_Summary() {
 		return "実績";
-	}
-
-	private Set[] columns(String view) {
-		switch (view) {
-		case "summary":
-			return LabelSet.summary_Set;
-		case "type":
-			return LabelSet.type_Set;
-		case "insertAction":
-			return LabelSet.insertAction_Set;
-		default:
-			return new Set[]{};
-		}
 	}
 
 	private Link section_Link(String section) {
@@ -767,39 +709,90 @@ public class KakeiboService {
 		return actionRepository.list(item_id, date);
 	}
 
-	public Page page(String view, String section, String date) {
-		Link title_Link = link(view_Name(view), next_View(view));
+	public Table_Data table(String title, String section, String date) {
+		section = null_Section(title, section);
+		Link section_Link = section_Link(section);
+		Set[] columns = columns(title);
+		List<List<String>> data = data(section, date);
+		return new Table_Data(section_Link, columns, data);
+	}
+
+	private String null_Section(String title, String section) {
+		if (section == null) {
+			switch (title) {
+			case "項目別一覧":
+				return "実績";
+			case "種別毎内訳":
+				return default_Type();
+			default:
+				break;
+			}
+		}
+		return section;
+	}
+
+	public Page page(String title,String section, String date) {
+		Link title_Link = title_Link(title);
 		if (date == null) date = this_Year_Month();
 		Link date_Link = date_Link(date);
-		List<Link> menu = menu(view);
-		Table_Data table= table(view, section, date);
+		List<Link> menu = menu(title);
+		Table_Data table= table(title, section, date);
 		return new Page(title_Link, date_Link, menu, table);
+	}
+
+	private Set[] columns(String title) {
+		switch (title) {
+		case "項目別一覧":
+			return LabelSet.summary_Set;
+		case "種別毎内訳":
+			return LabelSet.type_Set;
+		case "新規入力":
+			return LabelSet.insertAction_Set;
+		default:
+			return new Set[]{};
+		}
+	}
+
+	public List<Link> menu(String title) {
+		List<Link> menu = new ArrayList<>();
+		switch (title) {
+		case "項目別一覧":
+			menu.add(new Link("新規入力", "/SelectType"));
+			menu.add(new Link("設定", "/Setting"));
+			menu.add(new Link("Excel出力", "/Output/Excel"));
+			break;
+		case "種別毎内訳":
+			menu.add(new Link("新規入力", "/InsertAction"));
+			menu.add(new Link("全種別", "/Setting"));
+			menu.add(new Link("Excel出力", "/Output/Excel"));
+			break;
+		case "新規入力":
+			menu.add(new Link("種別選択", "/SelectType"));
+			menu.add(new Link("項目作成", "/InsertItem"));
+			break;
+		case "各種設定":
+			menu.add(new Link("所有者設定", "/OwnerSetting"));
+			menu.add(new Link("種別設定", "/SettingType"));
+			break;
+		default:
+			break;
+		}
+		return menu;
 	}
 
 	private Link date_Link(String date) {
 		return link(date, "/Date");
 	}
 
-	private String next_View(String view) {
-		switch (view) {
-		case "summary":
-			return "/Type";
-		case "type":
-			return "/Summary";
+	private Link title_Link(String title) {
+		switch (title) {
+		case "項目別一覧":
+			return new Link(title, "/Type");
+		case "種別毎内訳":
+			return new Link(title, "/Summary");
 		default:
-			return "/";
+			return new Link(title, "/");
 		}
-	}
-
-	private String view_Name(String view) {
-			switch (view) {
-			case "summary":
-				return "項目別一覧";
-			case "type":
-				return "種別毎内訳";
-			default:
-				return "";
-			}
 	}
 
 	public Page type(String section, String date) {

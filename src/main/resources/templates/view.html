@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 
 	<!-- ページタイトルの反映場所 -->
-	<title th:text="${title ?: _}
+	<title th:text="${page.title.text ?: _}
 	 + '　'
 	 + ${page.table.section.text}
 	 + '　' + ${req}
@@ -36,9 +36,11 @@
 				<a th:href="@{${req} + '/Owner'}">
 					<button type="button" class="btn btn-primary">所有者情報</button>
 				</a>
-				<a th:href="@{${req} + '/Setting'}">
-					<button type="button" class="btn btn-primary">設定</button>
-				</a>
+				<form method="post" th:action="@{${req} + '/Setting'}">
+					<input type="hidden" name="date" th:value="${page.date.text}"/>
+					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+					<button type="submit" class="btn btn-primary">設定</button>
+				</form>
 				<form method="post" action="/shutdown">
 					<button type="submit" class="btn btn-primary bg_red">終了する</button>
 				</form>

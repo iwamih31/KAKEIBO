@@ -77,9 +77,8 @@ public class KakeiboController {
 			@Param("date")String date,
 			@Param("section")String section,
 			Model model) {
-		String view = "summary";
-		add_View_Data_(model, view, "項目別一覧");
-		model.addAttribute("page", service.page(view, section, date));
+		add_View_Data_(model, "summary");
+		model.addAttribute("page", service.page("項目別一覧", section, date));
 		return "view";
 	}
 
@@ -88,9 +87,8 @@ public class KakeiboController {
 			@Param("date")String date,
 			@Param("section")String section,
 			Model model) {
-		String view = "type";
-		add_View_Data_(model,view , "種別毎内訳");
-		model.addAttribute("page", service.page(view, section, date));
+		add_View_Data_(model, "type");
+		model.addAttribute("page", service.page("種別毎内訳", section, date));
 		return "view";
 	}
 
@@ -99,9 +97,8 @@ public class KakeiboController {
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
 			Model model) {
-		String view = "selectType";
-		add_View_Data_(model, view, "種別選択");
-		model.addAttribute("page", service.page(view, section, date));
+		add_View_Data_(model, "selectType");
+		model.addAttribute("page", service.page("種別選択", section, date));
 		return "view";
 	}
 
@@ -110,22 +107,19 @@ public class KakeiboController {
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
 			Model model) {
-		String view = "insertAction";
-		add_View_Data_(model,view , "新規入力");
-		model.addAttribute("page", service.page(view, section, date));
-//		model.addAttribute("date", date);
-//		model.addAttribute("japanese_Date", service.japanese_Date(date));
-//		model.addAttribute("name", service.name());
+		add_View_Data_(model, "insertAction");
+		model.addAttribute("page", service.page("新規入力", section, date));
 		model.addAttribute("action", service.new_Action(date));
-//		model.addAttribute("next_id", service.next_Action_Id());
-//		model.addAttribute("label_Set_List", LabelSet.actionInsert_Set);
 		return "view";
 	}
 
-	@GetMapping("/Setting")
+	@PostMapping("/Setting")
 	public String setting(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
 			Model model) {
-		add_View_Data_(model, "setting", "各種設定");
+		add_View_Data_(model, "menu");
+		model.addAttribute("page", service.page("各種設定", section, date));
 		return "view";
 	}
 
@@ -657,6 +651,14 @@ public class KakeiboController {
 		model.addAttribute("library", template + "::library");
 		model.addAttribute("main", template + "::main");
 		model.addAttribute("title", title);
+		model.addAttribute("req", req());
+		System.out.println("template = " + template);
+	}
+
+	/** view 表示に必要な属性データをモデルに登録 */
+	private void add_View_Data_(Model model, String template) {
+		model.addAttribute("library", template + "::library");
+		model.addAttribute("main", template + "::main");
 		model.addAttribute("req", req());
 		System.out.println("template = " + template);
 	}
