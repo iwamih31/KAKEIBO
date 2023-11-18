@@ -17,6 +17,12 @@ public class LabelSet {
 			set("出金",		 7),
 	};
 
+	public static Set[] settingType_Set = {
+			set("種別",	 	7),
+			set("内容",	 	25),
+			set("並び順",	 	5),
+	};
+
 	public static Set[] insertType_Set = {
 			set("種別",	 	7),
 			set("内容",	 	25),

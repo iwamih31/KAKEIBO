@@ -49,20 +49,9 @@
 					</tr>
 				</thead>
 				<tbody>
-				<th:block th:if="${page.table.data.size() &gt; 0}">
-					<th:block th:each="row, status : ${page.table.data}">
-						<tr th:each="value : ${row}">
-							<th:block th:if="${value} &gt; 0">
-								<td class="num3">
-									<form action="@{${page.title.url}}" method="get">
-										<input type="hidden" name="date" th:value="${page.date.text}"/>
-										<input type="hidden" name="section" th:value="${row.get(1)}"/>
-									</form>[[${value}]]
-								</td>
-							</th:block>
-							<th:block th:if="${value} == 0">
-								<td></td>
-							</th:block>
+					<th:block th:if="${page.table.data.size() &gt; 0}">
+						<tr th:each="row, status : ${page.table.data}">
+							<td th:each="value : ${row}">[[${value}]]</td>
 						</tr>
 					</th:block>
 				</tbody>

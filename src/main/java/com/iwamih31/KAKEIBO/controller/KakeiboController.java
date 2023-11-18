@@ -18,6 +18,7 @@ import com.iwamih31.KAKEIBO.Action;
 import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.Owner;
+import com.iwamih31.KAKEIBO.Type;
 import com.iwamih31.KAKEIBO.service.KakeiboService;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -127,6 +128,16 @@ public class KakeiboController {
 	public String settingType(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return "view";
+	}
+
+	@GetMapping("/SettingType")
+	public String settingType(
+			@Param("date")String date,
+			@Param("section")String section,
 			Model model) {
 		add_View_Data_(model, "setting");
 		model.addAttribute("page", service.page("種別設定", section, date));
@@ -142,6 +153,19 @@ public class KakeiboController {
 		model.addAttribute("page", service.page("種別登録", section, date));
 		model.addAttribute("type", service.new_Type());
 		return "view";
+	}
+
+	@PostMapping("/Insert/Type")
+	public String insert_Type(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@ModelAttribute("type")Type type,
+			RedirectAttributes redirectAttributes) {
+		String message = service.type_Insert(type);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addFlashAttribute("date", date);
+		redirectAttributes.addFlashAttribute("section", section);
+		return redirect("/SettingType");
 	}
 
 	@GetMapping("/List")

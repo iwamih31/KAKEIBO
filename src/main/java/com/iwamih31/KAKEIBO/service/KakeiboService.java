@@ -102,6 +102,20 @@ public class KakeiboService {
 		return message;
 	}
 
+	public String type_Insert(Type type) {
+		int id = next_Action_Id();
+		type.setId(id);
+		String message = "ID = " + type.getId() + " の種別データ登録";
+		try {
+			typeRepository.save(type);
+			message += " が完了しました";
+		} catch (Exception e) {
+			message += "が正常に行われませんでした";
+			e.printStackTrace();
+		}
+		return message;
+	}
+
 	public String owner_Update(Owner owner, int id) {
 		owner.setId(id);
 		String message = "ID = " + owner.getId() + " の所有者データ更新";
@@ -709,7 +723,16 @@ public class KakeiboService {
 		case "予算":
 			List<Plan> plan_List = plan_List(date);
 			break;
-		case "種別":
+		case "種別設定":
+			for (Type type : typeList()) {
+				List<String> list = new ArrayList<>();
+				add(list, type.getName());
+				add(list, type.getNote());
+				add(list, type.getRank());
+				data.add(list);
+			}
+			break;
+		case "種別登録":
 			for (Type type : typeList()) {
 				List<String> list = new ArrayList<>();
 				add(list, type.getId());
@@ -767,7 +790,9 @@ public class KakeiboService {
 			case "種別毎内訳":
 				return default_Type();
 			case "種別設定":
-				return "種別";
+				return "種別設定";
+			case "種別登録":
+				return "種別登録";
 			default:
 				break;
 			}
@@ -792,6 +817,8 @@ public class KakeiboService {
 			return LabelSet.type_Set;
 		case "新規入力":
 			return LabelSet.insertAction_Set;
+		case "種別設定":
+			return LabelSet.settingType_Set;
 		case "種別登録":
 			return LabelSet.insertType_Set;
 		default:

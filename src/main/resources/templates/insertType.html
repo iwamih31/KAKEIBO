@@ -62,13 +62,6 @@
 					確定
 				</button>
 			</form>
-			<form id="input" method="post"  th:action="@{${req} + '/ActionInput'}">
-				<input type="hidden" name="post_date" th:value="${date}" />
-				<input type="hidden" th:field="*{id}" />
-				<input type="hidden" th:field="*{name}" />
-				<input type="hidden" th:field="*{note}" />
-				<input type="hidden" th:field="*{rank}" />
-			</form>
 		</div>
 		<br>
 		<a th:href="@{/main}">メインページへ</a>
