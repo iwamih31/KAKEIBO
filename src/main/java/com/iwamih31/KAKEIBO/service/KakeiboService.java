@@ -726,6 +726,7 @@ public class KakeiboService {
 		case "種別設定":
 			for (Type type : typeAll()) {
 				List<String> list = new ArrayList<>();
+				add(list, type.getId());
 				add(list, type.getName());
 				add(list, type.getNote());
 				add(list, type.getRank());

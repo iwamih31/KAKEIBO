@@ -141,6 +141,7 @@ public class KakeiboController {
 			Model model) {
 		add_View_Data_(model, "setting");
 		model.addAttribute("page", service.page("種別設定", section, date));
+		model.addAttribute("url", "/UpdateType");
 		return "view";
 	}
 
@@ -151,6 +152,17 @@ public class KakeiboController {
 			Model model) {
 		add_View_Data_(model, "insertType");
 		model.addAttribute("page", service.page("種別登録", section, date));
+		model.addAttribute("type", service.new_Type());
+		return "view";
+	}
+
+	@PostMapping("/OrderType")
+	public String orderType(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "orderType");
+		model.addAttribute("page", service.page("並び順変更", section, date));
 		model.addAttribute("type", service.new_Type());
 		return "view";
 	}
