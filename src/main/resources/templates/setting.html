@@ -48,12 +48,12 @@
 						</th>
 					</tr>
 				</thead>
-				<tbody>
-					<th:block th:if="${page.table.data.size() &gt; 0}">
-						<tr th:each="row, status : ${page.table.data}">
-							<td th:each="value : ${row}">[[${value}]]</td>
-						</tr>
-					</th:block>
+				<tbody th:if="${page.table.data.size() &gt; 0}">
+					<tr th:each="row, status : ${page.table.data}">
+						<td th:each="value : ${row}">
+							[[${value}]]
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>

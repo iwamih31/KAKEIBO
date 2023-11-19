@@ -161,7 +161,7 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			@ModelAttribute("type")Type type,
 			RedirectAttributes redirectAttributes) {
-		String message = service.type_Insert(type);
+		String message = service.insert_Type(type);
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addFlashAttribute("date", date);
 		redirectAttributes.addFlashAttribute("section", section);

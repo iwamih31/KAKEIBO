@@ -102,8 +102,8 @@ public class KakeiboService {
 		return message;
 	}
 
-	public String type_Insert(Type type) {
-		int id = next_Action_Id();
+	public String insert_Type(Type type) {
+		int id = next_Type_Id();
 		type.setId(id);
 		String message = "ID = " + type.getId() + " の種別データ登録";
 		try {
@@ -724,7 +724,7 @@ public class KakeiboService {
 			List<Plan> plan_List = plan_List(date);
 			break;
 		case "種別設定":
-			for (Type type : typeList()) {
+			for (Type type : typeAll()) {
 				List<String> list = new ArrayList<>();
 				add(list, type.getName());
 				add(list, type.getNote());
@@ -768,6 +768,10 @@ public class KakeiboService {
 
 	private List<Type> typeList() {
 		return typeRepository.list();
+	}
+
+	private List<Type> typeAll() {
+		return typeRepository.asc_Rank();
 	}
 
 	private List<Action> actionList(Integer item_id, String date) {

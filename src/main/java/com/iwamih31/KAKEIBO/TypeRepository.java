@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TypeRepository extends JpaRepository<Type, Integer> {
 
-	/**	表示 Type リスト取得（表示順） */
+	/**	表示 Type リスト取得（非表示抜きrank順） */
 	@Query("select type"
 			+ " from Type type"
 			+ " where type.rank != 0"
@@ -44,5 +44,13 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 			+ " where type.rank = 1"
 			)
 	public Integer max_Rank();
+
+
+	/**	表示 Type リスト取得（rank順） */
+	@Query("select type"
+			+ " from Type type"
+			+ " order by type.rank asc"
+			)
+	public List<Type> asc_Rank();
 
 }
