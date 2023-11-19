@@ -668,10 +668,6 @@ public class KakeiboService {
 		return default_Type;
 	}
 
-	private String default_Summary() {
-		return "実績";
-	}
-
 	private Link section_Link(String section) {
 		String link = "/Result";
 		switch (section) {
@@ -689,39 +685,41 @@ public class KakeiboService {
 	}
 
 	/** Tableのデータ行作成 */
-	private List<List<String>> data(String section, String date) {
+	private List<List<String>> data(String title, String section, String date) {
 		List<List<String>> data = new ArrayList<>();
-		switch (section) {
-		case "実績":
-			String current_Type_Value = "";
-			for (Type type : typeList()) {
-				String type_Value = "";
-				if(current_Type_Value == type.getName()) {
-					type_Value = type.getName();
-				}
-				current_Type_Value = type.getName();
-				String current_Item_Value = "";
-				List<Item> itemList = itemList(type.getId());
-				for (Item item : itemList) {
-					String item_Value = "";
-					if(current_Item_Value == item.getName()) {
-						item_Value = item.getName();
+		switch (title) {
+		case "項目別一覧":
+			if (section == "実績") {
+				String current_Type_Value = "";
+				for (Type type : typeList()) {
+					String type_Value = "";
+					if(current_Type_Value == type.getName()) {
+						type_Value = type.getName();
 					}
-					current_Item_Value = item.getName();
-					List<Action> actionList = actionList(item.getId(), date);
-					for (Action action : actionList) {
-						List<String> list = new ArrayList<>();
-						add(list, type_Value);
-						add(list, item_Value);
-						add(list, action.getIncome());
-						add(list, action.getSpending());
-						data.add(list);
+					current_Type_Value = type.getName();
+					String current_Item_Value = "";
+					List<Item> itemList = itemList(type.getId());
+					for (Item item : itemList) {
+						String item_Value = "";
+						if(current_Item_Value == item.getName()) {
+							item_Value = item.getName();
+						}
+						current_Item_Value = item.getName();
+						List<Action> actionList = actionList(item.getId(), date);
+						for (Action action : actionList) {
+							List<String> list = new ArrayList<>();
+							add(list, type_Value);
+							add(list, item_Value);
+							add(list, action.getIncome());
+							add(list, action.getSpending());
+							data.add(list);
+						}
 					}
 				}
 			}
-			break;
-		case "予算":
-			List<Plan> plan_List = plan_List(date);
+			if (section == "予算") {
+				List<Plan> plan_List = plan_List(date);
+			}
 			break;
 		case "種別設定":
 			for (Type type : typeAll()) {
@@ -753,11 +751,6 @@ public class KakeiboService {
 		list.add(make_String(object));
 	}
 
-	private List<Type> list_Type(String date) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
-
 	private List<Plan> plan_List(String date) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
@@ -783,7 +776,7 @@ public class KakeiboService {
 		section = null_Section(title, section);
 		Link section_Link = section_Link(section);
 		Set[] columns = columns(title);
-		List<List<String>> data = data(section, date);
+		List<List<String>> data = data(title, section, date);
 		return new Table_Data(section_Link, columns, data);
 	}
 
@@ -826,6 +819,8 @@ public class KakeiboService {
 			return LabelSet.settingType_Set;
 		case "種別登録":
 			return LabelSet.insertType_Set;
+		case "種別更新":
+			return LabelSet.updateType_Set;
 		default:
 			return new Set[]{};
 		}
@@ -888,22 +883,8 @@ public class KakeiboService {
 		return new Page(title_Link, date_Link, menu, table);
 	}
 
-	private Table_Data result(String date) {
-		Set[] columns = LabelSet.summary_Set;
-		Link section = link("実績", "/Result");
-		List<List<String>> data = data(section.getText(), date);
-		return new Table_Data(section, columns, data);
-	}
-
 	private Link link(String text, String url) {
 		return new Link(text, url);
-	}
-
-	private Table_Data plan(String date) {
-		// TODO 自動生成されたメソッド・スタブ
-		String[] columns = {"種別","項目","入金","出金"};
-		Link section = link("予算", "/Plan");
-		return null;
 	}
 
 	public Link title(String text) {
@@ -953,6 +934,10 @@ public class KakeiboService {
 	public Object cash_Balance(String date, Cash cash) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
+	}
+
+	public Object type(int id) {
+		return typeRepository.getReferenceById(id);
 	}
 
 }

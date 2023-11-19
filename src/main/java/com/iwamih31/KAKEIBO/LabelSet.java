@@ -109,6 +109,13 @@ public class LabelSet {
 			set("枚数",		10),
 	};
 
+	public static Set[] updateType_Set = {
+			set("ID",	 	5),
+			set("種別",	 	7),
+			set("内容",	 	25),
+			set("並び順",	 	5),
+	};
+
 
 	public static Set set(String label_Name, int width) {
 		return new Set(label_Name, width);

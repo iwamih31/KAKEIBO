@@ -167,6 +167,19 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/UpdateType")
+	public String updateType(
+			@RequestParam("date")String date,
+
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			Model model) {
+		add_View_Data_(model, "updateType");
+		model.addAttribute("page", service.page("種別更新", section, date));
+		model.addAttribute("object", service.type(id));
+		return "view";
+	}
+
 	@PostMapping("/Insert/Type")
 	public String insert_Type(
 			@RequestParam("date")String date,
