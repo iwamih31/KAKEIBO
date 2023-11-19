@@ -722,14 +722,7 @@ public class KakeiboService {
 			}
 			break;
 		case "種別設定":
-			for (Type type : typeAll()) {
-				List<String> list = new ArrayList<>();
-				add(list, type.getId());
-				add(list, type.getName());
-				add(list, type.getNote());
-				add(list, type.getRank());
-				data.add(list);
-			}
+			data = data_Type_All();
 			break;
 		case "種別登録":
 			for (Type type : typeList()) {
@@ -741,9 +734,37 @@ public class KakeiboService {
 				data.add(list);
 			}
 			break;
+		case "種別削除":
+			data = data_Type(section);
+			break;
 		default:
 			break;
 		}
+		return data;
+	}
+
+	private List<List<String>> data_Type_All() {
+		List<List<String>> data = new ArrayList<>();
+		for (Type type : typeAll()) {
+			List<String> list = new ArrayList<>();
+			add(list, type.getId());
+			add(list, type.getName());
+			add(list, type.getNote());
+			add(list, type.getRank());
+			data.add(list);
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Type(String name) {
+		List<List<String>> data = new ArrayList<>();
+		Type type = type(name);
+			List<String> list = new ArrayList<>();
+			add(list, type.getId());
+			add(list, type.getName());
+			add(list, type.getNote());
+			add(list, type.getRank());
+			data.add(list);
 		return data;
 	}
 
@@ -821,6 +842,8 @@ public class KakeiboService {
 			return LabelSet.insertType_Set;
 		case "種別更新":
 			return LabelSet.updateType_Set;
+		case "種別削除":
+			return LabelSet.deleteType_Set;
 		default:
 			return new Set[]{};
 		}
@@ -936,8 +959,12 @@ public class KakeiboService {
 		return null;
 	}
 
-	public Object type(int id) {
+	public Type type(int id) {
 		return typeRepository.getReferenceById(id);
+	}
+
+	public Type type(String name) {
+		return typeRepository.type(name);
 	}
 
 }

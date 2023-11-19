@@ -23,7 +23,7 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 			+ " from Type type"
 			+ " where type.name = :name")
 	public Integer getID(
-			@Param("name") String type
+			@Param("name") String name
 			);
 
 	/**	種別名 一覧取得 */
@@ -31,20 +31,19 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 			+ " from Type type")
 	public List<String> nameList();
 
-	/**	デフォルトType 取得 */
+	/**	デフォルトType名 取得 */
 	@Query("select type.name"
 			+ " from Type type"
 			+ " where type.rank = 1"
 			)
 	public String default_Type();
 
-	/**	デフォルトType 取得 */
+	/**	max_Rank 取得 */
 	@Query("select type.rank"
 			+ " from Type type"
 			+ " where type.rank = 1"
 			)
 	public Integer max_Rank();
-
 
 	/**	表示 Type リスト取得（rank順） */
 	@Query("select type"
@@ -52,5 +51,14 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 			+ " order by type.rank asc"
 			)
 	public List<Type> asc_Rank();
+
+	/**	Type 取得（name 指定） */
+	@Query("select type"
+			+ " from Type type"
+			+ " where type.name = :name"
+			)
+	public Type type(
+			@Param("name") String name
+			);
 
 }

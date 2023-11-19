@@ -39,41 +39,44 @@
 				<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
 			</div>
 			<!-- テーブル表示 -->
-			<form id="update" method="post" th:action="@{${req + '/Update/Type'}}">
+			<table class="table table-striped table-bordered table-hover monthly">
+				<thead class="thead-light">
+					<tr>
+						<th th:each="column, status : ${page.table.columns}"
+						 class="th-width" th:width="${column.value * 1.5} + '%'">
+							[[${column.name}]]
+						</th>
+					</tr>
+				</thead>
+				<tbody th:if="${page.table.data.size() &gt; 0}">
+					<tr th:each="row : ${page.table.data}">
+						<th:block th:each="value, status : ${row}">
+							<th:block  th:if="${status.index != 0}">
+								<td>
+									[[${value}]]
+								</td>
+							</th:block>
+						</th:block>
+					</tr>
+				</tbody>
+			</table>
+			<form id="delete" method="post" th:action="@{${req + '/Delete/Type'}}">
 				<input type="hidden" name="date" th:value="${page.date.text}"/>
 				<input type="hidden" name="section" th:value="${page.table.section.text}"/>
-				<table class="table table-striped table-bordered table-hover monthly">
-					<thead class="thead-light">
-						<tr>
-							<th th:each="column, status : ${page.table.columns}"
-							 class="th-width" th:width="${column.value * 1.5} + '%'">
-								[[${column.name}]]
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>[[*{id}]]
-								<input type="hidden" th:field="*{id}" /></td>
-							<td><input type="text" th:field="*{name}" /></td>
-							<td><input type="text" th:field="*{note}" /></td>
-							<td>[[*{rank}]]
-								<input type="hidden" th:field="*{rank}" /></td>
-						</tr>
-					</tbody>
-				</table>
+				<input type="hidden" name="id" th:value="${id}"/>
 			</form>
-			<form id="delete" method="post" th:action="@{${req + '/DeleteType'}}">
+			<form id="cancel" method="post" th:action="@{${req} + '/UpdateType'}">
 				<input type="hidden" name="date" th:value="${page.date.text}"/>
-				<input type="hidden" name="section" th:value="*{name}"/>
-				<input type="hidden" name="id" th:value="*{id}"/>
+				<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+				<input type="hidden" name="id" th:value="${id}"/>
 			</form>
+			この[[${delete_name}]]を削除しますか？
 			<div class="nav">
-				<button th:form="update" type="submit" class="btn btn-primary">
-					更新する
-				</button>
 				<button th:form="delete" type="submit" class="btn btn-primary bg_red">
-					このデータを削除する
+					削除する
+				</button>
+				<button th:form="cancel" type="submit" class="btn btn-primary">
+					キャンセル
 				</button>
 			</div>
 		</div>
