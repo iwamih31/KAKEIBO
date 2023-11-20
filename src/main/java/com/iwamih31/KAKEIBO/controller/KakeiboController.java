@@ -192,6 +192,19 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/Delete/Type")
+	public String delete_Type(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			RedirectAttributes redirectAttributes) {
+		String message = service.delete_Type(id);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addFlashAttribute("date", date);
+		redirectAttributes.addFlashAttribute("section", section);
+		return redirect("/SettingType");
+	}
+
 	@PostMapping("/Insert/Type")
 	public String insert_Type(
 			@RequestParam("date")String date,

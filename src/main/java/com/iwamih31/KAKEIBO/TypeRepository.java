@@ -22,9 +22,7 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 	@Query("select type.id"
 			+ " from Type type"
 			+ " where type.name = :name")
-	public Integer getID(
-			@Param("name") String name
-			);
+	public Integer getID(@Param("name") String name);
 
 	/**	種別名 一覧取得 */
 	@Query("select distinct type.name"
@@ -57,8 +55,13 @@ public interface TypeRepository extends JpaRepository<Type, Integer> {
 			+ " from Type type"
 			+ " where type.name = :name"
 			)
-	public Type type(
-			@Param("name") String name
-			);
+	public Type type(@Param("name") String name);
+
+	/**	name 取得（id 指定） */
+	@Query("select type.name"
+			+ " from Type type"
+			+ " where type.id = :id"
+			)
+	public String type(@Param("id") int id);
 
 }

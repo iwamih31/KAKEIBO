@@ -19,8 +19,9 @@ public class LabelSet {
 
 	public static Set[] settingType_Set = {
 			set("種別",	 	7),
-			set("内容",	 	25),
+			set("内容",	 	30),
 			set("並び順",	 	5),
+			set("",	 	5),
 	};
 
 	public static Set[] insertType_Set = {

@@ -105,12 +105,12 @@ public class KakeiboService {
 	public String insert_Type(Type type) {
 		int id = next_Type_Id();
 		type.setId(id);
-		String message = "ID = " + type.getId() + " の種別データ登録";
+		String message = type.getName() + " を登録";
 		try {
 			typeRepository.save(type);
-			message += " が完了しました";
+			message += " しました";
 		} catch (Exception e) {
-			message += "が正常に行われませんでした";
+			message += "できませんでした";
 			e.printStackTrace();
 		}
 		return message;
@@ -154,6 +154,19 @@ public class KakeiboService {
 		return message;
 	}
 
+	public String delete_Type(int id) {
+		String type = typeRepository.type(id);
+		String message = type + " を削除";
+		try {
+			typeRepository.deleteById(id);
+			message += "しました";
+		} catch (Exception e) {
+			message += "できませんでした" + e.getMessage();
+		}
+		___consoleOut___(message);
+		return message;
+	}
+
 	public String[] owner_Item_Names() {
 		String[] item_Names = { "所有者名", "部署名" };
 		return item_Names;
@@ -179,7 +192,7 @@ public class KakeiboService {
 	}
 
 	private Integer max_Rank() {
-		int max_Rank = 1;
+		int max_Rank = 0;
 		Type lastElement = getLastElement(typeRepository.list());
 		if (lastElement != null)
 			max_Rank = lastElement.getRank();
