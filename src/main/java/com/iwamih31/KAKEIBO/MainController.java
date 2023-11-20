@@ -17,7 +17,7 @@ public class MainController {
 	private KakeiboService service;
 
 	/** メインページのURL */
-	private final String URL = "/Kakeibo/";
+	private final String URL = "/KAKEIBO/";
 
 	@GetMapping("/")
 	public String accountBook_index() {

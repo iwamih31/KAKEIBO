@@ -98,8 +98,9 @@ public class KakeiboController {
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
 			Model model) {
-		add_View_Data_(model, "selectType");
+		add_View_Data_(model, "select");
 		model.addAttribute("page", service.page("種別選択", section, date));
+		model.addAttribute("url", "/InsertAction");
 		return "view";
 	}
 
@@ -107,10 +108,13 @@ public class KakeiboController {
 	public String insertAction(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
+			@RequestParam("id")int type_id,
 			Model model) {
 		add_View_Data_(model, "insertAction");
 		model.addAttribute("page", service.page("新規入力", section, date));
 		model.addAttribute("action", service.new_Action(date));
+		model.addAttribute("type", service.type_Name(type_id));
+		model.addAttribute("itemList", service.itemList(type_id));
 		return "view";
 	}
 
@@ -203,6 +207,19 @@ public class KakeiboController {
 		redirectAttributes.addFlashAttribute("date", date);
 		redirectAttributes.addFlashAttribute("section", section);
 		return redirect("/SettingType");
+	}
+
+	@PostMapping("/Select/Type")
+	public String select_Type(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			RedirectAttributes redirectAttributes) {
+		String message = service.delete_Type(id);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addFlashAttribute("date", date);
+		redirectAttributes.addFlashAttribute("section", section);
+		return redirect("/Type");
 	}
 
 	@PostMapping("/Insert/Type")

@@ -51,11 +51,11 @@
 					<tr>
 						<td><input type="date" th:field="*{date}" /></td>
 						<td>
-							[[${page.table.section.text}]]
+							[[${type}]]
 						</td>
 						<td>
 							<select th:field="*{item_id}">
-								<option th:each="item : ${items}" value="${item.id}" th:selected="${option == selected_year}">
+								<option th:each="item : ${itemList}" value="${item.id}" th:selected="${option == selected_year}">
 									[[${item.name}]]
 								</option >
 							</select>

@@ -734,6 +734,9 @@ public class KakeiboService {
 				List<Plan> plan_List = plan_List(date);
 			}
 			break;
+		case "種別選択":
+			data = data_Type_All();
+			break;
 		case "種別設定":
 			data = data_Type_All();
 			break;
@@ -790,7 +793,7 @@ public class KakeiboService {
 		return null;
 	}
 
-	private List<Item> itemList(Integer type_id) {
+	public List<Item> itemList(Integer type_id) {
 		return itemRepository.list(type_id);
 	}
 
@@ -849,6 +852,8 @@ public class KakeiboService {
 			return LabelSet.type_Set;
 		case "新規入力":
 			return LabelSet.insertAction_Set;
+		case "種別選択":
+			return LabelSet.selectType_Set;
 		case "種別設定":
 			return LabelSet.settingType_Set;
 		case "種別登録":
@@ -978,6 +983,10 @@ public class KakeiboService {
 
 	public Type type(String name) {
 		return typeRepository.type(name);
+	}
+
+	public String type_Name(int type_id) {
+		return typeRepository.type(type_id);
 	}
 
 }
