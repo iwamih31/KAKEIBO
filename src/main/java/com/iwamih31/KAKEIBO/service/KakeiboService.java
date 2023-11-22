@@ -116,6 +116,20 @@ public class KakeiboService {
 		return message;
 	}
 
+	public String insert_Item(Item item) {
+		int id = next_Item_Id();
+		item.setId(id);
+		String message = item.getName() + " を登録";
+		try {
+			itemRepository.save(item);
+			message += " しました";
+		} catch (Exception e) {
+			message += "できませんでした";
+			e.printStackTrace();
+		}
+		return message;
+	}
+
 	public String owner_Update(Owner owner, int id) {
 		owner.setId(id);
 		String message = "ID = " + owner.getId() + " の所有者データ更新";
@@ -191,6 +205,11 @@ public class KakeiboService {
 		return new Type(next_Type_Id(), "", "", max_Rank() + 1);
 	}
 
+	public Item new_Item(String type_Name) {
+		int type_Id = typeRepository.getID(type_Name);
+		return new Item(next_Item_Id(), type_Id, "", "");
+	}
+
 	private Integer max_Rank() {
 		int max_Rank = 0;
 		Type lastElement = getLastElement(typeRepository.list());
@@ -228,6 +247,15 @@ public class KakeiboService {
 		if (lastElement != null)
 			next_Id = lastElement.getId() + 1;
 		___consoleOut___("next_Type_Id() = " + next_Id);
+		return next_Id;
+	}
+
+	public int next_Item_Id() {
+		int next_Id = 1;
+		Item lastElement = getLastElement(itemRepository.findAll());
+		if (lastElement != null)
+			next_Id = lastElement.getId() + 1;
+		___consoleOut___("next_Item_Id() = " + next_Id);
 		return next_Id;
 	}
 
@@ -759,6 +787,20 @@ public class KakeiboService {
 		return data;
 	}
 
+
+	/** Tableのデータ行作成（id 使用） */
+	private List<List<String>> data(String title, String section, String date, int id) {
+		List<List<String>> data = new ArrayList<>();
+		switch (title) {
+		case "項目選択":
+			data = data_Item_List(id);
+			break;
+		default:
+			break;
+		}
+		return data;
+	}
+
 	private List<List<String>> data_Type_All() {
 		List<List<String>> data = new ArrayList<>();
 		for (Type type : typeAll()) {
@@ -767,6 +809,19 @@ public class KakeiboService {
 			add(list, type.getName());
 			add(list, type.getNote());
 			add(list, type.getRank());
+			data.add(list);
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Item_List(int type_Id) {
+		List<List<String>> data = new ArrayList<>();
+		for (Item item : itemList(type_Id)) {
+			List<String> list = new ArrayList<>();
+			add(list, item.getId());
+			add(list, item.getName());
+			add(list, item.getNote());
+			add(list, type_Id);
 			data.add(list);
 		}
 		return data;
@@ -817,6 +872,14 @@ public class KakeiboService {
 		return new Table_Data(section_Link, columns, data);
 	}
 
+	public Table_Data table(String title, String section, String date, int id) {
+		section = null_Section(title, section);
+		Link section_Link = section_Link(section);
+		Set[] columns = columns(title);
+		List<List<String>> data = data(title, section, date, id);
+		return new Table_Data(section_Link, columns, data);
+	}
+
 	private String null_Section(String title, String section) {
 		if (section == null) {
 			switch (title) {
@@ -828,6 +891,8 @@ public class KakeiboService {
 				return "種別設定";
 			case "種別登録":
 				return "種別登録";
+			case "項目作成":
+				return "実績";
 			default:
 				break;
 			}
@@ -841,6 +906,15 @@ public class KakeiboService {
 		Link date_Link = date_Link(date);
 		List<Link> menu = menu(title);
 		Table_Data table= table(title, section, date);
+		return new Page(title_Link, date_Link, menu, table);
+	}
+
+	public Page page(String title,String section, String date, int id) {
+		Link title_Link = title_Link(title);
+		if (date == null) date = this_Year_Month();
+		Link date_Link = date_Link(date);
+		List<Link> menu = menu(title);
+		Table_Data table= table(title, section, date, id);
 		return new Page(title_Link, date_Link, menu, table);
 	}
 
@@ -858,6 +932,8 @@ public class KakeiboService {
 			return LabelSet.settingType_Set;
 		case "種別登録":
 			return LabelSet.insertType_Set;
+		case "項目作成":
+			return LabelSet.insertItem_Set;
 		case "種別更新":
 			return LabelSet.updateType_Set;
 		case "種別削除":
@@ -891,6 +967,12 @@ public class KakeiboService {
 		case "種別設定":
 			menu.add(new Link("種別登録", "/InsertType"));
 			menu.add(new Link("並べ替え", "/OrderType"));
+			break;
+		case "種別選択":
+			menu.add(new Link("種別登録", "/InsertType"));
+			break;
+		case "項目選択":
+			menu.add(new Link("項目登録", "/InsertItem"));
 			break;
 		default:
 			break;

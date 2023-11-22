@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.iwamih31.KAKEIBO.Action;
 import com.iwamih31.KAKEIBO.Cash;
+import com.iwamih31.KAKEIBO.Item;
 import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.Owner;
 import com.iwamih31.KAKEIBO.Type;
@@ -104,11 +105,36 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/SelectItem")
+	public String selectItem(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int type_id,
+			Model model) {
+		add_View_Data_(model, "select");
+		model.addAttribute("page", service.page("項目選択" , section, date, type_id));
+		model.addAttribute("url", "/InsertAction");
+		return "view";
+	}
+
+	@GetMapping("/InsertAction")
+	public String insertAction(
+			@Param("date")String date,
+			@Param("section")String section,
+			@Param("id")Integer type_id,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("page", service.page("新規入力", section, date));
+		redirectAttributes.addFlashAttribute("action", service.new_Action(date));
+		redirectAttributes.addFlashAttribute("type", service.type_Name(type_id));
+		redirectAttributes.addFlashAttribute("itemList", service.itemList(type_id));
+		return redirect("/InsertAction");
+	}
+
 	@PostMapping("/InsertAction")
 	public String insertAction(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
-			@RequestParam("id")int type_id,
+			@RequestParam("id")Integer type_id,
 			Model model) {
 		add_View_Data_(model, "insertAction");
 		model.addAttribute("page", service.page("新規入力", section, date));
@@ -157,6 +183,19 @@ public class KakeiboController {
 		add_View_Data_(model, "insertType");
 		model.addAttribute("page", service.page("種別登録", section, date));
 		model.addAttribute("type", service.new_Type());
+		return "view";
+	}
+
+	@PostMapping("/InsertItem")
+	public String insertItem(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("type")String type,
+			Model model) {
+		add_View_Data_(model, "insertItem");
+		model.addAttribute("page", service.page("項目作成", section, date));
+		model.addAttribute("item", service.new_Item(type));
+		model.addAttribute("type", type);
 		return "view";
 	}
 
@@ -233,6 +272,20 @@ public class KakeiboController {
 		redirectAttributes.addFlashAttribute("date", date);
 		redirectAttributes.addFlashAttribute("section", section);
 		return redirect("/SettingType");
+	}
+
+	@PostMapping("/Insert/Item")
+	public String insert_Item(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@ModelAttribute("item")Item item,
+			RedirectAttributes redirectAttributes) {
+		String message = service.insert_Item(item);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addFlashAttribute("date", date);
+		redirectAttributes.addFlashAttribute("section", section);
+		redirectAttributes.addFlashAttribute("id", item.getType_id());
+		return redirect("/InsertAction");
 	}
 
 	@GetMapping("/List")

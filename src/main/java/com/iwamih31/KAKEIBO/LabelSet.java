@@ -32,6 +32,12 @@ public class LabelSet {
 			set("内容",	 	25),
 	};
 
+	public static Set[] insertItem_Set = {
+			set("項目",	 	7),
+			set("種別",	 	7),
+			set("内容",	 	25),
+	};
+
 	public static Set[] daily_Set = {
 			set("科目",	 	10),
 			set("適用",	 	25),
