@@ -117,20 +117,19 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@GetMapping("/InsertAction")
+	@PostMapping("/InsertAction")
 	public String insertAction(
-			@Param("date")String date,
-			@Param("section")String section,
-			@Param("id")Integer type_id,
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")Integer type_id,
 			RedirectAttributes redirectAttributes) {
-		redirectAttributes.addFlashAttribute("page", service.page("新規入力", section, date));
-		redirectAttributes.addFlashAttribute("action", service.new_Action(date));
-		redirectAttributes.addFlashAttribute("type", service.type_Name(type_id));
-		redirectAttributes.addFlashAttribute("itemList", service.itemList(type_id));
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		redirectAttributes.addAttribute("id", type_id);
 		return redirect("/InsertAction");
 	}
 
-	@PostMapping("/InsertAction")
+	@GetMapping("/InsertAction")
 	public String insertAction(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
@@ -192,6 +191,7 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			@RequestParam("type")String type,
 			Model model) {
+		service.___consoleOut___("section = " + section);
 		add_View_Data_(model, "insertItem");
 		model.addAttribute("page", service.page("項目作成", section, date));
 		model.addAttribute("item", service.new_Item(type));
@@ -280,11 +280,12 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			@ModelAttribute("item")Item item,
 			RedirectAttributes redirectAttributes) {
+		service.___consoleOut___("section = " + section);
 		String message = service.insert_Item(item);
 		redirectAttributes.addFlashAttribute("message", message);
-		redirectAttributes.addFlashAttribute("date", date);
-		redirectAttributes.addFlashAttribute("section", section);
-		redirectAttributes.addFlashAttribute("id", item.getType_id());
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		redirectAttributes.addAttribute("id", item.getType_id());
 		return redirect("/InsertAction");
 	}
 

@@ -207,6 +207,7 @@ public class KakeiboService {
 
 	public Item new_Item(String type_Name) {
 		int type_Id = typeRepository.getID(type_Name);
+		___consoleOut___("type_id = " + type_Id);
 		return new Item(next_Item_Id(), type_Id, "", "");
 	}
 
@@ -889,6 +890,8 @@ public class KakeiboService {
 				return default_Type();
 			case "種別設定":
 				return "種別設定";
+			case "新規入力":
+				return "実績";
 			case "種別登録":
 				return "種別登録";
 			case "項目作成":

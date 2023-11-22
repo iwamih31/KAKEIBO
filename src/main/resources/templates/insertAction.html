@@ -61,8 +61,8 @@
 								[[${type}]]
 							</td>
 							<td>
-								<select th:field="*{item_id}">
-									<option th:each="item : ${itemList}" value="${item.id}" th:selected="${option == selected_year}">
+								<select th:name="*{item_id}">
+									<option th:each="item : ${itemList}" value="${item.id}">
 										[[${item.name}]]
 									</option >
 								</select>
