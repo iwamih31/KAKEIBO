@@ -75,17 +75,25 @@
 					</tbody>
 				</table>
 			</form>
-			<button form="new_item" type="submit" class="btn btn-primary">
-				項目作成
-			</button>
-			<button form="insert" type="submit" class="btn btn-primary">
-				確定
-			</button>
 			<form id="new_item" method="post" th:action="@{${req} + '/InsertItem'}">
 				<input type="hidden" name="date" th:value="${page.date.text}" />
 				<input type="hidden" name="section" th:value="${page.table.section.text}" />
 				<input type="hidden" name="type" th:value="${type}" />
 			</form>
+			<form id="delete_item" method="post" th:action="@{${req} + '/DeleteItem'}">
+				<input type="hidden" name="date" th:value="${page.date.text}" />
+				<input type="hidden" name="section" th:value="${page.table.section.text}" />
+				<input type="hidden" name="type" th:value="${type}" />
+			</form>
+			<button form="insert" type="submit" class="btn btn-primary">
+				確定
+			</button>
+			<button form="new_item" type="submit" class="btn btn-primary bg_green">
+				項目作成
+			</button>
+			<button form="delete_item" type="submit" class="btn btn-primary bg_red">
+				項目削除
+			</button>
 		</div>
 		<br>
 		<a th:href="@{/main}">メインページへ</a>

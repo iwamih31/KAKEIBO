@@ -160,13 +160,13 @@ public class KakeiboController {
 			RedirectAttributes redirectAttributes) {
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		return "view";
+		return redirect("/SettingType");
 	}
 
 	@GetMapping("/SettingType")
 	public String settingType(
-			@Param("date")String date,
-			@Param("section")String section,
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
 			Model model) {
 		add_View_Data_(model, "setting");
 		model.addAttribute("page", service.page("種別設定", section, date));
@@ -243,8 +243,8 @@ public class KakeiboController {
 			RedirectAttributes redirectAttributes) {
 		String message = service.delete_Type(id);
 		redirectAttributes.addFlashAttribute("message", message);
-		redirectAttributes.addFlashAttribute("date", date);
-		redirectAttributes.addFlashAttribute("section", section);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
 		return redirect("/SettingType");
 	}
 
@@ -269,8 +269,8 @@ public class KakeiboController {
 			RedirectAttributes redirectAttributes) {
 		String message = service.insert_Type(type);
 		redirectAttributes.addFlashAttribute("message", message);
-		redirectAttributes.addFlashAttribute("date", date);
-		redirectAttributes.addFlashAttribute("section", section);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
 		return redirect("/SettingType");
 	}
 
@@ -280,7 +280,6 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			@ModelAttribute("item")Item item,
 			RedirectAttributes redirectAttributes) {
-		service.___consoleOut___("section = " + section);
 		String message = service.insert_Item(item);
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);

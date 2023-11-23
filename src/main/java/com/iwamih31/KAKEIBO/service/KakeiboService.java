@@ -103,6 +103,9 @@ public class KakeiboService {
 	}
 
 	public String insert_Type(Type type) {
+		if(exist_Type_Name(type.getName())) {
+			return type.getName() + " は既に存在します";
+		}
 		int id = next_Type_Id();
 		type.setId(id);
 		String message = type.getName() + " を登録";
@@ -116,7 +119,11 @@ public class KakeiboService {
 		return message;
 	}
 
+	/** 新規項目作成 */
 	public String insert_Item(Item item) {
+		if(exist_Item_Name(item.getType_id(), item.getName())) {
+			return item.getName() + " は既に存在します";
+		}
 		int id = next_Item_Id();
 		item.setId(id);
 		String message = item.getName() + " を登録";
@@ -128,6 +135,18 @@ public class KakeiboService {
 			e.printStackTrace();
 		}
 		return message;
+	}
+
+	/** 項目名の存在確認 */
+	private boolean exist_Item_Name(Integer type_id, String item_name) {
+		if(itemRepository.getID(type_id, item_name) == null) return false;
+		return true;
+	}
+
+	/** 種別名の存在確認 */
+	private boolean exist_Type_Name(String type_name) {
+		if(typeRepository.getID(type_name) == null) return false;
+		return true;
 	}
 
 	public String owner_Update(Owner owner, int id) {
@@ -993,6 +1012,8 @@ public class KakeiboService {
 			return new Link(title, "/Type");
 		case "種別毎内訳":
 			return new Link(title, "/Summary");
+		case "種別設定":
+			return new Link(title, "/SettingType");
 		case "種別登録":
 			return new Link(title, "/SettingType");
 		default:
