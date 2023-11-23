@@ -200,6 +200,19 @@ public class KakeiboService {
 		return message;
 	}
 
+	public String delete_Item(int id) {
+		String item = itemRepository.item(id);
+		String message = item + " を削除";
+		try {
+			itemRepository.deleteById(id);
+			message += "しました";
+		} catch (Exception e) {
+			message += "できませんでした" + e.getMessage();
+		}
+		___consoleOut___(message);
+		return message;
+	}
+
 	public String[] owner_Item_Names() {
 		String[] item_Names = { "所有者名", "部署名" };
 		return item_Names;
@@ -821,6 +834,9 @@ public class KakeiboService {
 		case "項目更新":
 			data = data_Item_List(id);
 			break;
+		case "項目削除":
+			data = data_Item(id);
+			break;
 		default:
 			break;
 		}
@@ -845,23 +861,35 @@ public class KakeiboService {
 		for (Item item : itemList(type_Id)) {
 			List<String> list = new ArrayList<>();
 			add(list, item.getId());
+			add(list, type(type_Id).getName());
 			add(list, item.getName());
 			add(list, item.getNote());
-			add(list, type(type_Id).getName());
 			data.add(list);
 		}
+		return data;
+	}
+
+	private List<List<String>> data_Item(int item_Id) {
+		List<List<String>> data = new ArrayList<>();
+		Item item = item(item_Id);
+		List<String> list = new ArrayList<>();
+		add(list, item.getId());
+		add(list, type(item.getType_id()).getName());
+		add(list, item.getName());
+		add(list, item.getNote());
+		data.add(list);
 		return data;
 	}
 
 	private List<List<String>> data_Type(String name) {
 		List<List<String>> data = new ArrayList<>();
 		Type type = type(name);
-			List<String> list = new ArrayList<>();
-			add(list, type.getId());
-			add(list, type.getName());
-			add(list, type.getNote());
-			add(list, type.getRank());
-			data.add(list);
+		List<String> list = new ArrayList<>();
+		add(list, type.getId());
+		add(list, type.getName());
+		add(list, type.getNote());
+		add(list, type.getRank());
+		data.add(list);
 		return data;
 	}
 
@@ -929,6 +957,7 @@ public class KakeiboService {
 	}
 
 	public Page page(String title,String section, String date) {
+		___consoleOut___("section = " + section);
 		Link title_Link = title_Link(title);
 		if (date == null) date = this_Year_Month();
 		Link date_Link = date_Link(date);
@@ -938,6 +967,7 @@ public class KakeiboService {
 	}
 
 	public Page page(String title,String section, String date, int id) {
+		___consoleOut___("section = " + section);
 		Link title_Link = title_Link(title);
 		if (date == null) date = this_Year_Month();
 		Link date_Link = date_Link(date);
@@ -970,6 +1000,8 @@ public class KakeiboService {
 			return LabelSet.updateItem_Set;
 		case "種別削除":
 			return LabelSet.deleteType_Set;
+		case "項目削除":
+			return LabelSet.deleteItem_Set;
 		default:
 			return new Set[]{};
 		}

@@ -216,7 +216,6 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			@RequestParam("type")String type,
 			Model model) {
-		service.___consoleOut___("section = " + section);
 		add_View_Data_(model, "insertItem");
 		model.addAttribute("page", service.page("項目作成", section, date));
 		model.addAttribute("item", service.new_Item(type));
@@ -255,7 +254,7 @@ public class KakeiboController {
 			Model model) {
 		add_View_Data_(model, "updateItem");
 		Item item = service.item(id);
-		model.addAttribute("page", service.page("項目更新", section, date));
+		model.addAttribute("page", service.page("項目更新", section, date, id));
 		model.addAttribute("object", item);
 		model.addAttribute("type", service.type(item.getType_id()).getName());
 		return "view";
@@ -281,7 +280,7 @@ public class KakeiboController {
 			@RequestParam("id")int id,
 			Model model) {
 		add_View_Data_(model, "deleteItem");
-		model.addAttribute("page", service.page("項目削除", section, date));
+		model.addAttribute("page", service.page("項目削除", section, date, id));
 		model.addAttribute("id", id);
 		model.addAttribute("delete_name", "項目");
 		return "view";
@@ -298,6 +297,21 @@ public class KakeiboController {
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
 		return redirect("/SettingType");
+	}
+
+	@PostMapping("/Delete/Item")
+	public String delete_Item(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			RedirectAttributes redirectAttributes) {
+		int type_id = service.item(id).getType_id();
+		String message = service.delete_Item(id);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		redirectAttributes.addAttribute("type", service.type(type_id).getName());
+		return redirect("/SettingItem");
 	}
 
 	@PostMapping("/Select/Type")
