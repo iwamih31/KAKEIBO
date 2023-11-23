@@ -20,10 +20,18 @@ public class LabelSet {
 	public static Set[] selectType_Set = {
 			set("種別",	 	7),
 	};
+
 	public static Set[] settingType_Set = {
 			set("種別",	 	7),
 			set("内容",	 	30),
 			set("並び順",	 	5),
+			set("",	 	5),
+	};
+
+	public static Set[] settingItem_Set = {
+			set("項目",	 	7),
+			set("内容",	 	30),
+			set("種別",	 	7),
 			set("",	 	5),
 	};
 
@@ -35,6 +43,13 @@ public class LabelSet {
 	public static Set[] insertItem_Set = {
 			set("項目",	 	7),
 			set("種別",	 	7),
+			set("内容",	 	25),
+	};
+
+	public static Set[] updateItem_Set = {
+			set("ID",	 	5),
+			set("種別",	 	7),
+			set("項目",	 	7),
 			set("内容",	 	25),
 	};
 

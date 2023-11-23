@@ -815,6 +815,12 @@ public class KakeiboService {
 		case "項目選択":
 			data = data_Item_List(id);
 			break;
+		case "項目設定":
+			data = data_Item_List(id);
+			break;
+		case "項目更新":
+			data = data_Item_List(id);
+			break;
 		default:
 			break;
 		}
@@ -841,7 +847,7 @@ public class KakeiboService {
 			add(list, item.getId());
 			add(list, item.getName());
 			add(list, item.getNote());
-			add(list, type_Id);
+			add(list, type(type_Id).getName());
 			data.add(list);
 		}
 		return data;
@@ -952,12 +958,16 @@ public class KakeiboService {
 			return LabelSet.selectType_Set;
 		case "種別設定":
 			return LabelSet.settingType_Set;
+		case "項目設定":
+			return LabelSet.settingItem_Set;
 		case "種別登録":
 			return LabelSet.insertType_Set;
 		case "項目作成":
 			return LabelSet.insertItem_Set;
 		case "種別更新":
 			return LabelSet.updateType_Set;
+		case "項目更新":
+			return LabelSet.updateItem_Set;
 		case "種別削除":
 			return LabelSet.deleteType_Set;
 		default:
@@ -980,7 +990,6 @@ public class KakeiboService {
 			break;
 		case "新規入力":
 			menu.add(new Link("種別選択", "/SelectType"));
-			menu.add(new Link("項目作成", "/InsertItem"));
 			break;
 		case "各種設定":
 			menu.add(new Link("所有者設定", "/OwnerSetting"));
@@ -1085,6 +1094,10 @@ public class KakeiboService {
 
 	public Type type(int id) {
 		return typeRepository.getReferenceById(id);
+	}
+
+	public Item item(int id) {
+		return itemRepository.getReferenceById(id);
 	}
 
 	public Type type(String name) {

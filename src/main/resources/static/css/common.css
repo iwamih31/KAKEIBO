@@ -136,6 +136,10 @@ nav button,
 	background-color: red;
 }
 
+.bg_pink {
+	background-color: hotpink;
+}
+
 .bg_white {
 	background-color: white;
 }

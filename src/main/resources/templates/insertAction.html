@@ -80,7 +80,7 @@
 				<input type="hidden" name="section" th:value="${page.table.section.text}" />
 				<input type="hidden" name="type" th:value="${type}" />
 			</form>
-			<form id="delete_item" method="post" th:action="@{${req} + '/DeleteItem'}">
+			<form id="setting_item" method="post" th:action="@{${req} + '/SettingItem'}">
 				<input type="hidden" name="date" th:value="${page.date.text}" />
 				<input type="hidden" name="section" th:value="${page.table.section.text}" />
 				<input type="hidden" name="type" th:value="${type}" />
@@ -91,8 +91,8 @@
 			<button form="new_item" type="submit" class="btn btn-primary bg_green">
 				項目作成
 			</button>
-			<button form="delete_item" type="submit" class="btn btn-primary bg_red">
-				項目削除
+			<button form="setting_item" type="submit" class="btn btn-primary bg_pink">
+				項目編集
 			</button>
 		</div>
 		<br>

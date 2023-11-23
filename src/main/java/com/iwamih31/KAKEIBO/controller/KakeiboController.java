@@ -163,6 +163,18 @@ public class KakeiboController {
 		return redirect("/SettingType");
 	}
 
+	@PostMapping("/SettingItem")
+	public String settingItem(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("type")String type,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		redirectAttributes.addAttribute("type", type);
+		return redirect("/SettingItem");
+	}
+
 	@GetMapping("/SettingType")
 	public String settingType(
 			@RequestParam("date")String date,
@@ -171,6 +183,19 @@ public class KakeiboController {
 		add_View_Data_(model, "setting");
 		model.addAttribute("page", service.page("種別設定", section, date));
 		model.addAttribute("url", "/UpdateType");
+		return "view";
+	}
+
+	@GetMapping("/SettingItem")
+	public String settingItem(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("type")String type,
+			Model model) {
+		add_View_Data_(model, "setting");
+		int type_id = service.type(type).getId();
+		model.addAttribute("page", service.page("項目設定", section, date, type_id));
+		model.addAttribute("url", "/UpdateItem");
 		return "view";
 	}
 
@@ -222,6 +247,20 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/UpdateItem")
+	public String updateItem(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			Model model) {
+		add_View_Data_(model, "updateItem");
+		Item item = service.item(id);
+		model.addAttribute("page", service.page("項目更新", section, date));
+		model.addAttribute("object", item);
+		model.addAttribute("type", service.type(item.getType_id()).getName());
+		return "view";
+	}
+
 	@PostMapping("/DeleteType")
 	public String deleteType(
 			@RequestParam("date")String date,
@@ -229,9 +268,22 @@ public class KakeiboController {
 			@RequestParam("id")int id,
 			Model model) {
 		add_View_Data_(model, "deleteType");
-		model.addAttribute("page", service.page("種別削除", section, date));
+		model.addAttribute("page", service.page("種別削除", section, date, id));
 		model.addAttribute("id", id);
 		model.addAttribute("delete_name", "種別");
+		return "view";
+	}
+
+	@PostMapping("/DeleteItem")
+	public String deleteItem(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			Model model) {
+		add_View_Data_(model, "deleteItem");
+		model.addAttribute("page", service.page("項目削除", section, date));
+		model.addAttribute("id", id);
+		model.addAttribute("delete_name", "項目");
 		return "view";
 	}
 
