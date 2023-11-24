@@ -385,11 +385,13 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@GetMapping("/Owner")
+	@PostMapping("/Owner")
 	public String owner(
-			@Param("date")String date,
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
 			Model model) {
-		add_View_Data_(model, "owner", "所有者情報");
+		add_View_Data_(model, "owner");
+		model.addAttribute("page", service.page("所有者情報", section, date));
 		String[] item_Names = service.owner_Item_Names();
 		model.addAttribute("name", item_Names[0]);
 		model.addAttribute("department", item_Names[1]);
