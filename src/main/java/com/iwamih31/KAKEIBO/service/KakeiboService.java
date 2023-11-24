@@ -181,6 +181,7 @@ public class KakeiboService {
 			actionRepository.deleteById(id);
 			message += "が完了しました";
 		} catch (Exception e) {
+			e.printStackTrace();
 			message += "が正常に行われませんでした" + e.getMessage();
 		}
 		___consoleOut___(message);
@@ -195,7 +196,46 @@ public class KakeiboService {
 			sort_Type();
 			message += "しました";
 		} catch (Exception e) {
+			e.printStackTrace();
 			message += "できませんでした" + e.getMessage();
+		}
+		___consoleOut___(message);
+		return message;
+	}
+
+	public String order_Type(int type_id, String key) {
+		Type type = type(type_id);
+		String message = type.getName() + "を";
+		double rank = type.getRank();
+		switch (key) {
+		case "up":
+			message += "1つ上";
+			rank -= 1.5;
+			break;
+		case "down":
+			message += "1つ下";
+			rank += 1.5;
+			break;
+		case "use":
+			if (rank == 0) {
+				message += "表示";
+				rank = max_Rank() + 1;
+			} else {
+				message += "非表示";
+				rank = 0;
+			}
+			break;
+		default:
+			break;
+		}
+		try {
+			type.setRank(rank);
+			typeRepository.save(type);
+			sort_Type();
+			message += "に変更しました";
+		} catch (Exception e) {
+			e.printStackTrace();
+			message += "に変更出来ませんでした" + e.getMessage();
 		}
 		___consoleOut___(message);
 		return message;
@@ -206,10 +246,9 @@ public class KakeiboService {
 		List<Type> type_List = typeRepository.list();
 		for (int i = 0; i < type_List.size(); i++) {
 			Type type = type_List.get(i);
-			type.setRank(i + 1);
+			type.setRank((double) (i + 1));
 			typeRepository.save(type);
 		}
-
 	}
 
 	public String delete_Item(int id) {
@@ -255,8 +294,8 @@ public class KakeiboService {
 		return new Item(next_Item_Id(), type_Id, "", "");
 	}
 
-	private Integer max_Rank() {
-		int max_Rank = 0;
+	private double max_Rank() {
+		double max_Rank = 0;
 		Type lastElement = getLastElement(typeRepository.list());
 		if (lastElement != null)
 			max_Rank = lastElement.getRank();
@@ -865,7 +904,12 @@ public class KakeiboService {
 			add(list, type.getId());
 			add(list, type.getName());
 			add(list, type.getNote());
-			add(list, type.getRank());
+			int rank = (int)type.getRank();
+			if (rank == 0) {
+				add(list, "非表示");
+			} else {
+				add(list, (int)type.getRank());
+			}
 			data.add(list);
 		}
 		return data;

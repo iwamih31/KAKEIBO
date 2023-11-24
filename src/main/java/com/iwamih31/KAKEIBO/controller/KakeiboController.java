@@ -227,6 +227,16 @@ public class KakeiboController {
 	public String orderType(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/OrderType");
+	}
+
+	@GetMapping("/OrderType")
+	public String orderType(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
 			Model model) {
 		add_View_Data_(model, "order");
 		model.addAttribute("page", service.page("並び順変更", section, date));
@@ -297,6 +307,20 @@ public class KakeiboController {
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
 		return redirect("/SettingType");
+	}
+
+	@PostMapping("/Order/Type")
+	public String order_Type(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			@RequestParam("move")String move,
+			RedirectAttributes redirectAttributes) {
+		String message = service.order_Type(id, move);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/OrderType");
 	}
 
 	@PostMapping("/Delete/Item")

@@ -32,6 +32,6 @@ public class Type {
 
   // 並び順　0は非表示
   @Column(name = "rank", nullable = false)
-  private Integer rank;
+  private double rank;
 
 }

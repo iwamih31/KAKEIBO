@@ -64,7 +64,7 @@
 								<input type="hidden" name="id" th:value="${row[0]}"/>
 								<input type="hidden" name="move" th:value="up"/>
 								<button th:form="'up' + ${row[0]}" type="submit" class="btn btn-primary">
-									↑
+									▲
 								</button>
 							</form>
 						</td>
@@ -73,9 +73,9 @@
 								<input type="hidden" name="date" th:value="${page.date.text}"/>
 								<input type="hidden" name="section" th:value="${page.table.section.text}"/>
 								<input type="hidden" name="id" th:value="${row[0]}"/>
-								<input type="hidden" name="move" th:value="doun"/>
+								<input type="hidden" name="move" th:value="down"/>
 								<button th:form="'down' + ${row[0]}" type="submit" class="btn btn-primary">
-									↓
+									▼
 								</button>
 							</form>
 						</td>
@@ -85,7 +85,7 @@
 								<input type="hidden" name="section" th:value="${page.table.section.text}"/>
 								<input type="hidden" name="id" th:value="${row[0]}"/>
 								<input type="hidden" name="move" th:value="use"/>
-								<button th:form="'use' + ${row[0]}" type="submit" class="btn btn-primary">
+								<button th:form="'use' + ${row[0]}" type="submit" class="btn btn-primary bg_yellow">
 									変更
 								</button>
 							</form>

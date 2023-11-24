@@ -31,7 +31,7 @@ public class LabelSet {
 	public static Set[] orderType_Set = {
 			set("種別",	 	 7),
 			set("内容",	 	30),
-			set("並び順",	 5),
+			set("並び順",	 4),
 			set("上げる",	 2),
 			set("下げる",	 2),
 			set("表示",	 	 4),
