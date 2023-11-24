@@ -826,6 +826,9 @@ public class KakeiboService {
 		case "種別削除":
 			data = data_Type(section);
 			break;
+		case "並び順変更":
+			data = data_Type_All();
+			break;
 		default:
 			break;
 		}
@@ -1014,6 +1017,8 @@ public class KakeiboService {
 			return LabelSet.deleteType_Set;
 		case "項目削除":
 			return LabelSet.deleteItem_Set;
+		case "並び順変更":
+			return LabelSet.orderType_Set;
 		default:
 			return new Set[]{};
 		}

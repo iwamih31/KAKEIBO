@@ -228,9 +228,9 @@ public class KakeiboController {
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
 			Model model) {
-		add_View_Data_(model, "orderType");
+		add_View_Data_(model, "order");
 		model.addAttribute("page", service.page("並び順変更", section, date));
-		model.addAttribute("type", service.new_Type());
+		model.addAttribute("url", "/Order/Type");
 		return "view";
 	}
 

@@ -22,17 +22,26 @@ public class LabelSet {
 	};
 
 	public static Set[] settingType_Set = {
-			set("種別",	 	7),
+			set("種別",	 	 7),
 			set("内容",	 	30),
-			set("並び順",	 	5),
-			set("",	 	5),
+			set("並び順",	 5),
+			set("",	 		 5),
+	};
+
+	public static Set[] orderType_Set = {
+			set("種別",	 	 7),
+			set("内容",	 	30),
+			set("並び順",	 5),
+			set("上げる",	 2),
+			set("下げる",	 2),
+			set("表示",	 	 4),
 	};
 
 	public static Set[] settingItem_Set = {
-			set("種別",	 	7),
-			set("項目",	 	7),
+			set("種別",	 	 7),
+			set("項目",	 	 7),
 			set("内容",	 	30),
-			set("",	 	5),
+			set("",	 		 5),
 	};
 
 	public static Set[] insertType_Set = {
