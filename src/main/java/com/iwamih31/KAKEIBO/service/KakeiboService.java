@@ -192,12 +192,24 @@ public class KakeiboService {
 		String message = type + " を削除";
 		try {
 			typeRepository.deleteById(id);
+			sort_Type();
 			message += "しました";
 		} catch (Exception e) {
 			message += "できませんでした" + e.getMessage();
 		}
 		___consoleOut___(message);
 		return message;
+	}
+
+	/* Type の rank を1から順番になるように揃える */
+	private void sort_Type() {
+		List<Type> type_List = typeRepository.list();
+		for (int i = 0; i < type_List.size(); i++) {
+			Type type = type_List.get(i);
+			type.setRank(i + 1);
+			typeRepository.save(type);
+		}
+
 	}
 
 	public String delete_Item(int id) {
