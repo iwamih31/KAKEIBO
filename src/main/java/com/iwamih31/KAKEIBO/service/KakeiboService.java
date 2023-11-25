@@ -1085,7 +1085,6 @@ public class KakeiboService {
 		switch (title) {
 		case "項目別一覧":
 			menu.add(new Link("新規入力", "/SelectType"));
-			menu.add(new Link("設定", "/Setting"));
 			menu.add(new Link("Excel出力", "/Output/Excel"));
 			break;
 		case "種別毎内訳":
