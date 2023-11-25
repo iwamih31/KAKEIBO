@@ -42,6 +42,7 @@
 			<form id="update" method="post" th:action="@{${req + '/Update/Type'}}">
 				<input type="hidden" name="date" th:value="${page.date.text}"/>
 				<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+				<input type="hidden" th:field="*{id}" />
 				<table class="table table-striped table-bordered table-hover monthly">
 					<thead class="thead-light">
 						<tr>
@@ -53,11 +54,9 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td>[[*{id}]]
-								<input type="hidden" th:field="*{id}" /></td>
 							<td><input type="text" th:field="*{name}" /></td>
 							<td><input type="text" th:field="*{note}" /></td>
-							<td>[[*{rank}]]
+							<td>[[${rank}]]
 								<input type="hidden" th:field="*{rank}" /></td>
 						</tr>
 					</tbody>

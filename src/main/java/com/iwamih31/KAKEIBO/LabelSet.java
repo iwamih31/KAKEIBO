@@ -150,7 +150,6 @@ public class LabelSet {
 	};
 
 	public static Set[] updateType_Set = {
-			set("ID",	 	5),
 			set("種別",	 	7),
 			set("内容",	 	25),
 			set("並び順",	 	5),

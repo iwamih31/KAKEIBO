@@ -175,6 +175,18 @@ public class KakeiboService {
 		return message;
 	}
 
+	public String update_Type(Type type) {
+		String message = type.getName() + " の更新";
+		try {
+			typeRepository.save(type);
+			message += "が完了しました";
+		} catch (Exception e) {
+			message += "が正常に行われませんでした";
+			e.printStackTrace();
+		}
+		return message;
+	}
+
 	public String action_Delete(int id) {
 		String message = "ID = " + id + " のデータ削除";
 		try {
@@ -1199,6 +1211,11 @@ public class KakeiboService {
 
 	public String type_Name(int type_id) {
 		return typeRepository.type(type_id);
+	}
+
+	/* rank を int にして返す */
+	public int rank(Type type) {
+		return (int)type.getRank();
 	}
 
 }

@@ -48,9 +48,14 @@ public class KakeiboController {
 		return req() + path;
 	}
 
-	/** このクラスの@GetMapping(req() + path)にredirect */
+	/** このクラス内の@GetMapping(req() + path)へredirect */
 	public String redirect(String path) {
 		return "redirect:" + req() + path;
+	}
+
+	/** このクラス内の@GetMapping(req() + path)へforward */
+	public String forward(String path) {
+		return "forward:" + req() + path;
 	}
 
 	@GetMapping("/")
@@ -252,7 +257,9 @@ public class KakeiboController {
 			Model model) {
 		add_View_Data_(model, "updateType");
 		model.addAttribute("page", service.page("種別更新", section, date));
-		model.addAttribute("object", service.type(id));
+		Type type = service.type(id);
+		model.addAttribute("object", type);
+		model.addAttribute("rank", service.rank(type));
 		return "view";
 	}
 
@@ -358,6 +365,19 @@ public class KakeiboController {
 			@ModelAttribute("type")Type type,
 			RedirectAttributes redirectAttributes) {
 		String message = service.insert_Type(type);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/SettingType");
+	}
+
+	@PostMapping("/Update/Type")
+	public String update_Type(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@ModelAttribute("type")Type type,
+			RedirectAttributes redirectAttributes) {
+		String message = service.update_Type(type);
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
