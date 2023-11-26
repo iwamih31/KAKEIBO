@@ -1,6 +1,7 @@
 package com.iwamih31.KAKEIBO.controller;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +87,10 @@ public class KakeiboController {
 			Model model) {
 		add_View_Data_(model, "summary");
 		model.addAttribute("page", service.page("項目別一覧", section, date));
+		HashMap<String, Integer> sum_Set = service.sum_Set(service.action_List(date));
+		model.addAttribute("sum_income",  sum_Set.get("income"));
+		model.addAttribute("sum_spending",  sum_Set.get("spending"));
+		model.addAttribute("total",  sum_Set.get("total"));
 		return "view";
 	}
 
@@ -140,6 +145,7 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			@RequestParam("id")Integer type_id,
 			Model model) {
+		service.___consoleOut___("date = " + date);
 		add_View_Data_(model, "insertAction");
 		model.addAttribute("page", service.page("新規入力", section, date));
 		model.addAttribute("action", service.new_Action(date));
@@ -273,7 +279,7 @@ public class KakeiboController {
 		Item item = service.item(id);
 		model.addAttribute("page", service.page("項目更新", section, date, id));
 		model.addAttribute("object", item);
-		model.addAttribute("type", service.type(item.getType_id()).getName());
+		model.addAttribute("type", service.type_Name(item));
 		return "view";
 	}
 
@@ -358,6 +364,21 @@ public class KakeiboController {
 		return redirect("/Type");
 	}
 
+	@PostMapping("/Insert/Action")
+	public String insert_Action(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("income")String income,
+			@RequestParam("spending")String spending,
+			@ModelAttribute("action")Action action,
+			RedirectAttributes redirectAttributes) {
+		String message = service.insert_Action(action);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/Summary");
+	}
+
 	@PostMapping("/Insert/Type")
 	public String insert_Type(
 			@RequestParam("date")String date,
@@ -382,6 +403,21 @@ public class KakeiboController {
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
 		return redirect("/SettingType");
+	}
+
+	@PostMapping("/Update/Item")
+	public String update_Item(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@ModelAttribute("item")Item item,
+			RedirectAttributes redirectAttributes) {
+		String message = service.update_Item(item);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		String type = service.type_Name(item);
+		redirectAttributes.addAttribute("type", type);
+		return redirect("/SettingItem");
 	}
 
 	@PostMapping("/Insert/Item")
@@ -575,16 +611,6 @@ public class KakeiboController {
 		return redirect("/OwnerSetting");
 	}
 
-	@PostMapping("/Insert/Action")
-	public String insert_Action(
-			@RequestParam("date")String date,
-			@ModelAttribute("action")Action action,
-			RedirectAttributes redirectAttributes) {
-		String message = service.action_Insert(action);
-		redirectAttributes.addFlashAttribute("message", message);
-		return redirect("/Daily?date=" + date);
-	}
-
 	@PostMapping("/ActionIncome/Insert")
 	public String actionIncome_Insert(
 			@RequestParam("post_date")String date,
@@ -593,7 +619,7 @@ public class KakeiboController {
 			RedirectAttributes redirectAttributes) {
 		action.setIncome(income);
 		action.setSpending(0);
-		String message = service.action_Insert(action);
+		String message = service.insert_Action(action);
 		redirectAttributes.addFlashAttribute("message", message);
 		return redirect("/Daily?date=" + date);
 	}
@@ -607,7 +633,7 @@ public class KakeiboController {
 		action.setIncome(0);
 		action.setSpending(spending);
 		service.___consoleOut___(action.toString());
-		String message = service.action_Insert(action);
+		String message = service.insert_Action(action);
 		redirectAttributes.addFlashAttribute("message", message);
 		return redirect("/Daily?date=" + date);
 	}

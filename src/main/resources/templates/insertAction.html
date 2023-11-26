@@ -42,7 +42,7 @@
 				<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
 			</div>
 
-			<form id="insert" method="post" th:action="@{${req} + '/Action/Insert'}">
+			<form id="insert" method="post" th:action="@{${req} + '/Insert/Action'}">
 				<input type="hidden" name="date" th:value="${page.date.text}" />
 				<input type="hidden" name="section" th:value="${page.table.section.text}" />
 				<table class="table table-striped table-bordered table-hover">
@@ -56,20 +56,36 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><input type="date" th:field="*{date}" /></td>
+							<td><input type="date" th:field="*{the_day}" /></td>
 							<td>
 								[[${type}]]
 							</td>
 							<td>
-								<select th:name="*{item_id}">
-									<option th:each="item : ${itemList}" value="${item.id}">
+								<select th:field="*{item_id}">
+									<option th:each="item : ${itemList}" th:value="${item.id}">
 										[[${item.name}]]
 									</option >
 								</select>
 							</td>
 							<td><input type="text" th:field="*{detail}" /></td>
-							<td><input type="text" th:field="*{income}" /></td>
-							<td><input type="text" th:field="*{spending}" /></td>
+							<td>
+								<th:block th:if="*{income == 0}">
+									<input type="text" name="income" value="" />
+								</th:block>
+								<th:block th:if="*{income != 0}">
+									<input type="text" name="income" th:value="*{income}" />
+								</th:block>
+								<input type="hidden" th:field="*{income}" />
+							</td>
+							<td>
+								<th:block th:if="*{spending == 0}">
+									<input type="text" name="spending" value="" />
+								</th:block>
+								<th:block th:if="*{spending != 0}">
+									<input type="text" name="spending" th:value="*{spending}" />
+								</th:block>
+								<input type="hidden" th:field="*{spending}" />
+							</td>
 							<td><input type="text" th:field="*{note}" /></td>
 						</tr>
 					</tbody>
@@ -92,7 +108,7 @@
 				項目作成
 			</button>
 			<button form="setting_item" type="submit" class="btn btn-primary bg_green">
-				項目編集
+				項目確認
 			</button>
 		</div>
 		<br>

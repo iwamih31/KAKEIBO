@@ -7,6 +7,7 @@ public class LabelSet {
 			set("項目",	 	25),
 			set("入金",	 	 7),
 			set("出金",		 7),
+			set("収支",		 10),
 	};
 
 	public static Set[] type_Set = {

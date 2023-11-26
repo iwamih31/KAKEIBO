@@ -10,14 +10,22 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ActionRepository extends JpaRepository<Action, Integer> {
 
+	/**	Action リスト取得（date 指定 date 順） */
+	@Query("select action"
+			+ " from Action action"
+			+ " where action.the_day like CONCAT(:the_day, '%')"
+			+ " order by action.the_day asc")
+	public List<Action> list(
+			@Param("the_day") String the_day);
+
 	/**	Action リスト取得（item_id, date 指定 date 順） */
 	@Query("select action"
 			+ " from Action action"
 			+ " where action.item_id = :item_id"
-			+ " and action.date like CONCAT(:date, '%')"
-			+ " order by action.date asc")
+			+ " and action.the_day like CONCAT(:the_day, '%')"
+			+ " order by action.the_day asc")
 	public List<Action> list(
 			@Param("item_id") Integer item_id,
-			@Param("date") String date);
+			@Param("the_day") String the_day);
 
 }

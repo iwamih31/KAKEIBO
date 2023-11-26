@@ -19,7 +19,7 @@ public class ActionForm {
   private String detail;
 
   // 日付
-  private LocalDate date;
+  private LocalDate the_day;
 
   // 入金
   private Integer income;

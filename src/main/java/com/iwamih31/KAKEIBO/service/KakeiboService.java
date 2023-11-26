@@ -7,6 +7,7 @@ import java.time.chrono.JapaneseDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -88,9 +89,12 @@ public class KakeiboService {
 		return message;
 	}
 
-	public String action_Insert(Action action) {
+	public String insert_Action(Action action) {
 		int id = next_Action_Id();
 		action.setId(id);
+		if(action.getIncome() == null) action.setIncome(0);
+		if(action.getSpending() == null) action.setSpending(0);
+		___consoleOut___("action = " + action);
 		String message = "ID = " + action.getId() + " の出納データ登録";
 		try {
 			actionRepository.save(action);
@@ -179,6 +183,18 @@ public class KakeiboService {
 		String message = type.getName() + " の更新";
 		try {
 			typeRepository.save(type);
+			message += "が完了しました";
+		} catch (Exception e) {
+			message += "が正常に行われませんでした";
+			e.printStackTrace();
+		}
+		return message;
+	}
+
+	public String update_Item(Item item) {
+		String message = item.getName() + " の更新";
+		try {
+			itemRepository.save(item);
 			message += "が完了しました";
 		} catch (Exception e) {
 			message += "が正常に行われませんでした";
@@ -475,7 +491,7 @@ public class KakeiboService {
 
 	private String[] 	data_Row_Monthly(Action action, Integer remainder) {
 		return new String[] {
-				japanese_Date(action.getDate().toString(), "M月d日"),
+				japanese_Date(action.getThe_day().toString(), "M月d日"),
 				make_String(action.getItem_id()),
 				make_String(action.getDetail()),
 				make_String(Zero_Blank(action.getIncome())),
@@ -486,7 +502,7 @@ public class KakeiboService {
 
 	private String[] 	data_Row_Year(Action action, Integer remainder) {
 		return new String[] {
-				japanese_Date(action.getDate().toString(), "Gy/M/d"),
+				japanese_Date(action.getThe_day().toString(), "Gy/M/d"),
 				make_String(action.getItem_id()),
 				make_String(action.getDetail()),
 				make_String(Zero_Blank(action.getIncome())),
@@ -737,7 +753,7 @@ public class KakeiboService {
 		// 今日の日付を取得
 		LocalDateTime now = LocalDateTime.now();
 		// 表示形式を指定
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
 		return dateTimeFormatter.format(now);
 	}
 
@@ -827,30 +843,31 @@ public class KakeiboService {
 		switch (title) {
 		case "項目別一覧":
 			if (section == "実績") {
-				String current_Type_Value = "";
+				String current_Type_Value = "0";
 				for (Type type : typeList()) {
-					String type_Value = "";
-					if(current_Type_Value == type.getName()) {
-						type_Value = type.getName();
-					}
-					current_Type_Value = type.getName();
-					String current_Item_Value = "";
+					String type_Value = type.getName();
 					List<Item> itemList = itemList(type.getId());
 					for (Item item : itemList) {
-						String item_Value = "";
-						if(current_Item_Value == item.getName()) {
-							item_Value = item.getName();
+						if(current_Type_Value == type.getName()) {
+							type_Value = "0";
+						} else {
+							current_Type_Value = type.getName();
 						}
-						current_Item_Value = item.getName();
+						String item_Value = item.getName();
 						List<Action> actionList = actionList(item.getId(), date);
+						int income = 0;
+						int spending = 0;
 						for (Action action : actionList) {
-							List<String> list = new ArrayList<>();
-							add(list, type_Value);
-							add(list, item_Value);
-							add(list, action.getIncome());
-							add(list, action.getSpending());
-							data.add(list);
+							income += action.getIncome();
+							spending += action.getSpending();
 						}
+						List<String> list = new ArrayList<>();
+						add(list, type_Value);
+						add(list, item_Value);
+						add(list, income);
+						add(list, spending);
+						add(list, income - spending);
+						data.add(list);
 					}
 				}
 			}
@@ -1028,7 +1045,9 @@ public class KakeiboService {
 	}
 
 	public Page page(String title,String section, String date) {
+		___consoleOut___("title = " + title);
 		___consoleOut___("section = " + section);
+		___consoleOut___("date = " + date);
 		Link title_Link = title_Link(title);
 		if (date == null) date = this_Year_Month();
 		Link date_Link = date_Link(date);
@@ -1038,7 +1057,9 @@ public class KakeiboService {
 	}
 
 	public Page page(String title,String section, String date, int id) {
+		___consoleOut___("title = " + title);
 		___consoleOut___("section = " + section);
+		___consoleOut___("date = " + date);
 		Link title_Link = title_Link(title);
 		if (date == null) date = this_Year_Month();
 		Link date_Link = date_Link(date);
@@ -1181,9 +1202,9 @@ public class KakeiboService {
 		return null;
 	}
 
-	public Object action_List(String date) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+	public List<Action> action_List(String date) {
+		if (date == null) date = this_Year_Month();
+		return actionRepository.list(date);
 	}
 
 	public Object account_Monthly(String date) {
@@ -1194,6 +1215,20 @@ public class KakeiboService {
 	public Object cash_Balance(String date, Cash cash) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
+	}
+
+	public HashMap<String, Integer> sum_Set(List<Action> action_List) {
+		HashMap<String, Integer> sum_Set = new HashMap<String, Integer>();
+		int sum_income = 0;
+		int sum_spending = 0;
+		for (Action action : action_List) {
+			sum_income += action.getIncome();
+			sum_spending += action.getSpending();
+		}
+		sum_Set.put("income",sum_income );
+		sum_Set.put("spending", sum_spending);
+		sum_Set.put("total", sum_income - sum_spending);
+		return sum_Set;
 	}
 
 	public Type type(int id) {
@@ -1210,6 +1245,10 @@ public class KakeiboService {
 
 	public String type_Name(int type_id) {
 		return typeRepository.type(type_id);
+	}
+
+	public String type_Name(Item item) {
+		return type_Name(item.getType_id());
 	}
 
 	/* rank を int にして返す */
