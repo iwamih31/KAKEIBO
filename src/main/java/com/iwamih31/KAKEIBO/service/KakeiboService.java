@@ -875,6 +875,9 @@ public class KakeiboService {
 				List<Plan> plan_List = plan_List(date);
 			}
 			break;
+		case "種別毎内訳":
+			data = data_Action(section);
+			break;
 		case "種別選択":
 			data = data_Type_All();
 			break;
@@ -903,6 +906,11 @@ public class KakeiboService {
 		return data;
 	}
 
+	private List<List<String>> data_Action(String type) {
+		// TODO 自動生成されたメソッド・スタブ
+
+		return null;
+	}
 
 	/** Tableのデータ行作成（id 使用） */
 	private List<List<String>> data(String title, String section, String date, int id) {
@@ -1207,9 +1215,21 @@ public class KakeiboService {
 		return actionRepository.list(date);
 	}
 
-	public List<Action> action_List(String Type, String date) {
+
+public List<Action> action_List(int item_id, String date) {
 		if (date == null) date = this_Year_Month();
-		return actionRepository.list(date);
+		return actionRepository.list(item_id, date);
+	}
+
+	public List<Action> action_List(String Type, String date) {
+		List<Action> action_List = new ArrayList<>();
+		if (date == null) date = this_Year_Month();
+		Integer type_id = typeRepository.type(Type).getId();
+		List<Item> item_List = itemRepository.list(type_id);
+		for (Item item : item_List) {
+			action_List.addAll(action_List(item.getId(), date));
+		}
+		return action_List;
 	}
 
 	public Object account_Monthly(String date) {
