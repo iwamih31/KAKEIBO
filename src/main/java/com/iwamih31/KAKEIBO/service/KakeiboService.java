@@ -876,7 +876,7 @@ public class KakeiboService {
 			}
 			break;
 		case "種別毎内訳":
-			data = data_Action(section);
+			data = data_Action(section, date);
 			break;
 		case "種別選択":
 			data = data_Type_All();
@@ -906,10 +906,29 @@ public class KakeiboService {
 		return data;
 	}
 
-	private List<List<String>> data_Action(String type) {
-		// TODO 自動生成されたメソッド・スタブ
-
-		return null;
+	private List<List<String>> data_Action(String type_Name, String date) {
+		List<List<String>> data_Action = new ArrayList<>();
+		Type type = type(type_Name);
+		String type_Value = type(type_Name).getName();
+		List<Item> itemList = itemList(type.getId());
+		for (Item item : itemList) {
+			String item_Value = item.getName();
+			List<Action> actionList = actionList(item.getId(), date);
+			int income = 0;
+			int spending = 0;
+			for (Action action : actionList) {
+				income += action.getIncome();
+				spending += action.getSpending();
+			}
+			List<String> list = new ArrayList<>();
+			add(list, type_Value);
+			add(list, item_Value);
+			add(list, income);
+			add(list, spending);
+			add(list, income - spending);
+			data_Action.add(list);
+		}
+		return data_Action;
 	}
 
 	/** Tableのデータ行作成（id 使用） */
