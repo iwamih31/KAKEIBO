@@ -1207,6 +1207,11 @@ public class KakeiboService {
 		return actionRepository.list(date);
 	}
 
+	public List<Action> action_List(String Type, String date) {
+		if (date == null) date = this_Year_Month();
+		return actionRepository.list(date);
+	}
+
 	public Object account_Monthly(String date) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;

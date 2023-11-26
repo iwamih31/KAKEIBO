@@ -62,10 +62,13 @@
 								<th:block th:each="value : ${row}">
 									<th:block th:if="${value} != '0'">
 										<td class="num3">
-											<form action="@{${page.title.url}}" method="get">
+											<form th:id="'row' + ${status.index}" th:action="@{${req + row_url}}" method="get">
 												<input type="hidden" name="date" th:value="${page.date.text}"/>
-												<input type="hidden" name="section" th:value="${row[1]}"/>
-											</form>[[${value}]]
+												<input type="hidden" name="section" th:value="${row[0]}"/>
+											</form>
+											<button th:form="'row' + ${status.index}" type="submit" class="btn btn_inherit">
+												[[${value}]]
+											</button>
 										</td>
 									</th:block>
 									<th:block th:if="${value} == '0'">

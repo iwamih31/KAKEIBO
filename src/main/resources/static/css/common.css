@@ -222,7 +222,8 @@ nav button,
 	width: 100%;
 }
 
-.btn-title {
+.btn-title,
+btn_inherit {
 	border: none;
 	background-color: inherit;
 }
