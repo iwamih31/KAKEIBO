@@ -113,7 +113,7 @@ public class LabelSet {
 			set("残高",		 8),
 	};
 
-	public static Set[] insertAction_Set = {
+	public static Set[] action_Set = {
 			set("日付",	 	10),
 			set("種別",	 	 7),
 			set("項目",	 	 7),

@@ -1136,7 +1136,8 @@ public class KakeiboService {
 		case "種別毎内訳":
 			return LabelSet.type_Set;
 		case "新規入力":
-			return LabelSet.insertAction_Set;
+		case "データ修正":
+			return LabelSet.action_Set;
 		case "種別選択":
 			return LabelSet.selectType_Set;
 		case "種別設定":
