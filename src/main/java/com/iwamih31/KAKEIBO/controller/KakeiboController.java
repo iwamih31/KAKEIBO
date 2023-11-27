@@ -452,7 +452,7 @@ public class KakeiboController {
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		redirectAttributes.addAttribute("type_id", item.getType_id());
+		redirectAttributes.addAttribute("id", item.getType_id());
 		return redirect("/InsertAction");
 	}
 
