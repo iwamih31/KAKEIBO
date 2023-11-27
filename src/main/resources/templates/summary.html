@@ -60,18 +60,18 @@
 						<th:block th:each="row, status : ${page.table.data}">
 							<tr>
 								<th:block th:each="value : ${row}">
-									<th:block th:if="${value} != '0'">
+									<th:block th:if="${value} != '0' and ${value} != ''">
 										<td class="num3">
 											<form th:id="'row' + ${status.index}" th:action="@{${req + row_url}}" method="get">
 												<input type="hidden" name="date" th:value="${page.date.text}"/>
 												<input type="hidden" name="section" th:value="${row[0]}"/>
+												<button th:form="'row' + ${status.index}" type="submit" class="btn btn_inherit">
+													[[${value}]]
+												</button>
 											</form>
-											<button th:form="'row' + ${status.index}" type="submit" class="btn btn_inherit">
-												[[${value}]]
-											</button>
 										</td>
 									</th:block>
-									<th:block th:if="${value} == '0'">
+									<th:block th:if="${value} == '0' or ${value} == ''">
 										<td></td>
 									</th:block>
 								</th:block>

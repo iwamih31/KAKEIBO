@@ -1,5 +1,6 @@
 package com.iwamih31.KAKEIBO.service;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.JapaneseChronology;
@@ -909,26 +910,54 @@ public class KakeiboService {
 	private List<List<String>> data_Action(String type_Name, String date) {
 		List<List<String>> data_Action = new ArrayList<>();
 		Type type = type(type_Name);
-		String type_Value = type(type_Name).getName();
 		List<Item> itemList = itemList(type.getId());
 		for (Item item : itemList) {
 			String item_Value = item.getName();
 			List<Action> actionList = actionList(item.getId(), date);
-			int income = 0;
-			int spending = 0;
 			for (Action action : actionList) {
-				income += action.getIncome();
-				spending += action.getSpending();
+				int id = action.getId();
+				int income = action.getIncome();
+				int spending = action.getSpending();
+				String the_day = date(action.getThe_day());
+				String detail = action.getDetail();
+				List<String> list = new ArrayList<>();
+				add(list, id);
+				add(list, item_Value);
+				add(list, the_day);
+				add(list, detail);
+				add(list, income);
+				add(list, spending);
+				add(list, income - spending);
+				___consoleOut___(list);
+				data_Action.add(list);
 			}
-			List<String> list = new ArrayList<>();
-			add(list, type_Value);
-			add(list, item_Value);
-			add(list, income);
-			add(list, spending);
-			add(list, income - spending);
-			data_Action.add(list);
 		}
 		return data_Action;
+	}
+
+    private void ___consoleOut___(List<String> text_List) {
+    	for (String text : text_List) {
+			___consoleOut___(text);
+		}
+	}
+
+	public static String num3(int number) {
+        NumberFormat formatter = NumberFormat.getNumberInstance(Locale.JAPAN);
+        return "￥" + formatter.format(number);
+    }
+
+	private String blank_Null(String text) {
+		if (text.equals("")) text = null;
+		return text;
+	}
+
+	private String null_Space(String text) {
+		if (text == null) text = "　";
+		return text;
+	}
+
+	private String date(LocalDate localDate) {
+		return localDate.toString().replace("-", "/");
 	}
 
 	/** Tableのデータ行作成（id 使用） */
@@ -1018,6 +1047,11 @@ public class KakeiboService {
 	}
 
 	public List<Item> itemList(Integer type_id) {
+		return itemRepository.list(type_id);
+	}
+
+	public List<Item> itemList(String type_Name) {
+		Integer type_id = type(type_Name).getId();
 		return itemRepository.list(type_id);
 	}
 

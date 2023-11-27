@@ -16,6 +16,7 @@ public class LabelSet {
 			set("詳細",	 	10),
 			set("入金",	 	 7),
 			set("出金",		 7),
+			set("合計",		10),
 	};
 
 	public static Set[] selectType_Set = {

@@ -100,13 +100,13 @@ public class KakeiboController {
 			@Param("date")String date,
 			@Param("section")String section,
 			Model model) {
-		add_View_Data_(model, "summary");
+		add_View_Data_(model, "type");
 		model.addAttribute("page", service.page("種別毎内訳", section, date));
 		HashMap<String, Integer> sum_Set = service.sum_Set(service.action_List(section, date));
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
-		model.addAttribute("row_url", "/Update/Action");
+		model.addAttribute("row_url", "/UpdateAction");
 		return "view";
 	}
 
@@ -157,6 +157,22 @@ public class KakeiboController {
 		model.addAttribute("action", service.new_Action(date));
 		model.addAttribute("type", service.type_Name(type_id));
 		model.addAttribute("itemList", service.itemList(type_id));
+		return "view";
+	}
+
+	@GetMapping("/UpdateAction")
+	public String updateAction(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")Integer id,
+			Model model) {
+		service.___consoleOut___("date = " + date);
+		add_View_Data_(model, "updateAction");
+		model.addAttribute("page", service.page("データ修正", section, date));
+		Action action = service.action(id);
+		model.addAttribute("action", action);
+		model.addAttribute("type", section);
+		model.addAttribute("itemList", service.itemList(section));
 		return "view";
 	}
 
@@ -436,7 +452,7 @@ public class KakeiboController {
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		redirectAttributes.addAttribute("id", item.getType_id());
+		redirectAttributes.addAttribute("type_id", item.getType_id());
 		return redirect("/InsertAction");
 	}
 
