@@ -318,6 +318,20 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/DeleteAction")
+	public String deleteAction(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			Model model) {
+		add_View_Data_(model, "delete");
+		model.addAttribute("page", service.page("データ削除", section, date, id));
+		model.addAttribute("id", id);
+		model.addAttribute("delete_name", "種別");
+		model.addAttribute("target", "Action");
+		return "view";
+	}
+
 	@PostMapping("/DeleteItem")
 	public String deleteItem(
 			@RequestParam("date")String date,
