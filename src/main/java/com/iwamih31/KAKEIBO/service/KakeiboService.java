@@ -169,8 +169,10 @@ public class KakeiboService {
 
 	public String update_Action(Action action, String income, String spending) {
 		if (income.equals("")) action.setIncome(0);
+		else action.setIncome(Integer.valueOf(income));
 		if (spending.equals("")) action.setSpending(0);
-		String message = action.getDetail() + " を更新";
+		else action.setSpending(Integer.valueOf(spending));
+		String message = action.getDetail() + " データを更新";
 		try {
 			actionRepository.save(action);
 			message += "しました";
