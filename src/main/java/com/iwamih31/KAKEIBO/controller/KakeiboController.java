@@ -427,6 +427,21 @@ public class KakeiboController {
 		return redirect("/SettingType");
 	}
 
+	@PostMapping("/Update/Action")
+	public String update_Action(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("income")String income,
+			@RequestParam("spending")String spending,
+			@ModelAttribute("action")Action action,
+			RedirectAttributes redirectAttributes) {
+		String message = service.update_Action(action, income, spending);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/Type");
+	}
+
 	@PostMapping("/Update/Item")
 	public String update_Item(
 			@RequestParam("date")String date,
@@ -685,18 +700,6 @@ public class KakeiboController {
 		model.addAttribute("object", service.action(id));
 		model.addAttribute("label_Set_List", LabelSet.actionUpdate_Set);
 		return "view";
-	}
-
-	@PostMapping("/Action/Update")
-	public String action_Update(
-			@RequestParam("post_id")int id,
-			@RequestParam("post_date")String date,
-			@ModelAttribute("action")Action action,
-			RedirectAttributes redirectAttributes) {
-		String message = service.action_Update(action, id);
-		redirectAttributes.addFlashAttribute("message", message);
-		LocalDate localDate = service.to_LocalDate(date);
-		return redirect("/Daily?date=" + localDate);
 	}
 
 	@PostMapping("/Owner/Update")

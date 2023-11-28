@@ -167,14 +167,15 @@ public class KakeiboService {
 		return message;
 	}
 
-	public String action_Update(Action action, int id) {
-		action.setId(id);
-		String message = "ID = " + action.getId() + " の出納データ更新";
+	public String update_Action(Action action, String income, String spending) {
+		if (income.equals("")) action.setIncome(0);
+		if (spending.equals("")) action.setSpending(0);
+		String message = action.getDetail() + " を更新";
 		try {
 			actionRepository.save(action);
-			message += "が完了しました";
+			message += "しました";
 		} catch (Exception e) {
-			message += "が正常に行われませんでした";
+			message += "することがきませんでした";
 			e.printStackTrace();
 		}
 		return message;
