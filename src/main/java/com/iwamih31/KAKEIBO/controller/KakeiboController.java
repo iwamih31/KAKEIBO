@@ -327,7 +327,7 @@ public class KakeiboController {
 		add_View_Data_(model, "delete");
 		model.addAttribute("page", service.page("データ削除", section, date, id));
 		model.addAttribute("id", id);
-		model.addAttribute("delete_name", "種別");
+		model.addAttribute("delete_name", "データ");
 		model.addAttribute("target", "Action");
 		return "view";
 	}
@@ -356,6 +356,19 @@ public class KakeiboController {
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
 		return redirect("/SettingType");
+	}
+
+	@PostMapping("/Delete/Action")
+	public String delete_Action(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			RedirectAttributes redirectAttributes) {
+		String message = service.delete_Action(id);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/Type");
 	}
 
 	@PostMapping("/Order/Type")
@@ -725,33 +738,6 @@ public class KakeiboController {
 		redirectAttributes.addFlashAttribute("message", message);
 		return redirect("/OwnerSetting");
 	}
-
-	@PostMapping("/ActionDelete")
-	public String actionDelete(
-			@RequestParam("id")int id,
-			@RequestParam("date")String date,
-			Model model) {
-		add_View_Data_(model, "delete", "出納情報削除");
-		model.addAttribute("guide", "この行を削除してもよろしいですか？");
-		model.addAttribute("cancel_url", req("/Daily"));
-		model.addAttribute("delete_url", req("/Action/Delete"));
-		model.addAttribute("id", id);
-		model.addAttribute("date", date);
-		model.addAttribute("object", service.action(id));
-		model.addAttribute("label_Set_List", LabelSet.actionDelete_Set);
-		return "view";
-	}
-
-	@PostMapping("/Action/Delete")
-	public String action_Delete(
-			@RequestParam("id")int id,
-			@RequestParam("date")String date,
-			RedirectAttributes redirectAttributes) {
-		String message = service.action_Delete(id);
-		redirectAttributes.addFlashAttribute("message", message);
-		return redirect("/Daily?date=" + date);
-	}
-
 
 	@PostMapping("/OwnerReport")
 	public String ownerReport() {

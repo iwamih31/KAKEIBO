@@ -52,9 +52,17 @@
 					<tr th:each="row : ${page.table.data}">
 						<th:block th:each="value, status : ${row}">
 							<th:block  th:if="${status.index != 0}">
-								<td>
-									[[${value}]]
-								</td>
+								<th:block  th:if="${value != ''}">
+									<td class="num3">
+										[[${value}]]
+									</td>
+								</th:block>
+								<th:block  th:if="${value == ''}">
+									<td>
+
+									</td>
+								</th:block>
+
 							</th:block>
 						</th:block>
 					</tr>

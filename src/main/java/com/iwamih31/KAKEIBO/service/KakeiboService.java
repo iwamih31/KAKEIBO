@@ -207,14 +207,15 @@ public class KakeiboService {
 		return message;
 	}
 
-	public String action_Delete(int id) {
-		String message = "ID = " + id + " のデータ削除";
+	public String delete_Action(int id) {
+		Action action = action(id);
+		String message = action.getDetail() + " データを削除";
 		try {
 			actionRepository.deleteById(id);
-			message += "が完了しました";
+			message += "しました";
 		} catch (Exception e) {
 			e.printStackTrace();
-			message += "が正常に行われませんでした" + e.getMessage();
+			message += "できませんでした" + e.getMessage();
 		}
 		___consoleOut___(message);
 		return message;
@@ -949,16 +950,6 @@ public class KakeiboService {
         return "￥" + formatter.format(number);
     }
 
-	private String blank_Null(String text) {
-		if (text.equals("")) text = null;
-		return text;
-	}
-
-	private String null_Space(String text) {
-		if (text == null) text = "　";
-		return text;
-	}
-
 	private String date(LocalDate localDate) {
 		return localDate.toString().replace("-", "/");
 	}
@@ -978,6 +969,9 @@ public class KakeiboService {
 			break;
 		case "項目削除":
 			data = data_Item(id);
+			break;
+		case "データ削除":
+			data = data_Action(id);
 			break;
 		default:
 			break;
@@ -1026,6 +1020,28 @@ public class KakeiboService {
 		add(list, item.getNote());
 		data.add(list);
 		return data;
+	}
+
+	private List<List<String>> data_Action(int action_Id) {
+		List<List<String>> data = new ArrayList<>();
+		Action action = action(action_Id);
+		List<String> list = new ArrayList<>();
+		add(list, action.getId());
+		add(list, date(action.getThe_day()));
+		Item item = item(action.getItem_id());
+		add(list, type(item.getType_id()).getName());
+		add(list, item.getName());
+		add(list, action.getDetail());
+		add(list, to_Space(action.getIncome()));
+		add(list, to_Space(action.getSpending()));
+		add(list, action.getNote());
+		data.add(list);
+		return data;
+	}
+
+	private String to_Space(int number) {
+		if (number == 0) return "";
+		return String.valueOf(number);
 	}
 
 	private List<List<String>> data_Type(String name) {
@@ -1140,6 +1156,7 @@ public class KakeiboService {
 			return LabelSet.type_Set;
 		case "新規入力":
 		case "データ修正":
+		case "データ削除":
 			return LabelSet.action_Set;
 		case "種別選択":
 			return LabelSet.selectType_Set;
