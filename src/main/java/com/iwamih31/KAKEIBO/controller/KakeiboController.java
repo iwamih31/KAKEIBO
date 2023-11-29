@@ -74,9 +74,9 @@ public class KakeiboController {
 
 	@GetMapping("/Start")
 	public String start(
-			Model model) {
-		model.addAttribute("date", service.today());
-		model.addAttribute("section", "実績");
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", service.this_Year_Month());
+		redirectAttributes.addAttribute("section", "実績");
 		return redirect("/Summary");
 	}
 

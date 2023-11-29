@@ -126,12 +126,13 @@ public class KakeiboService {
 
 	/** 新規項目作成 */
 	public String insert_Item(Item item) {
+		if (item.getName().equals(""))  item.setName("その他");;
 		if(exist_Item_Name(item.getType_id(), item.getName())) {
 			return item.getName() + " は既に存在します";
 		}
 		int id = next_Item_Id();
 		item.setId(id);
-		String message = item.getName() + " 登録";
+		String message = item.getName() + " の登録";
 		try {
 			itemRepository.save(item);
 			message += " が完了しました";
@@ -859,7 +860,7 @@ public class KakeiboService {
 							current_Type_Value = type.getName();
 						}
 						String item_Value = item.getName();
-						List<Action> actionList = actionList(item.getId(), date);
+						List<Action> actionList = action_List_Item(item.getId(), date);
 						int income = 0;
 						int spending = 0;
 						for (Action action : actionList) {
@@ -1300,7 +1301,7 @@ public class KakeiboService {
 	}
 
 
-public List<Action> actionList_Item(int item_id, String date) {
+public List<Action> action_List_Item(int item_id, String date) {
 		if (date == null) date = this_Year_Month();
 		return actionRepository.list(item_id, date);
 	}
@@ -1310,7 +1311,7 @@ public List<Action> actionList_Item(int item_id, String date) {
 		if (date == null) date = this_Year_Month();
 		List<Item> item_List = itemRepository.list(type_id);
 		for (Item item : item_List) {
-			action_List.addAll(actionList_Item(item.getId(), date));
+			action_List.addAll(action_List_Item(item.getId(), date));
 		}
 		return action_List;
 	}
