@@ -131,12 +131,12 @@ public class KakeiboService {
 		}
 		int id = next_Item_Id();
 		item.setId(id);
-		String message = item.getName() + " を登録";
+		String message = item.getName() + " 登録";
 		try {
 			itemRepository.save(item);
-			message += " しました";
+			message += " が完了しました";
 		} catch (Exception e) {
-			message += "できませんでした";
+			message += "ができませんでした";
 			e.printStackTrace();
 		}
 		return message;
