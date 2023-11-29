@@ -867,6 +867,7 @@ public class KakeiboService {
 							spending += action.getSpending();
 						}
 						List<String> list = new ArrayList<>();
+						add(list, type.getId());
 						add(list, type_Value);
 						add(list, item_Value);
 						add(list, income);
@@ -879,9 +880,6 @@ public class KakeiboService {
 			if (section == "予算") {
 				List<Plan> plan_List = plan_List(date);
 			}
-			break;
-		case "種別毎内訳":
-			data = data_Action(section, date);
 			break;
 		case "種別選択":
 			data = data_Type_All();
@@ -911,9 +909,9 @@ public class KakeiboService {
 		return data;
 	}
 
-	private List<List<String>> data_Action(String type_Name, String date) {
+	private List<List<String>> data_Action(int type_id, String date) {
 		List<List<String>> data_Action = new ArrayList<>();
-		Type type = type(type_Name);
+		Type type = type(type_id);
 		List<Item> itemList = itemList(type.getId());
 		for (Item item : itemList) {
 			String item_Value = item.getName();
@@ -972,6 +970,9 @@ public class KakeiboService {
 			break;
 		case "データ削除":
 			data = data_Action(id);
+			break;
+		case "種別毎内訳":
+			data = data_Action(id, date);
 			break;
 		default:
 			break;
@@ -1094,9 +1095,16 @@ public class KakeiboService {
 		return new Table_Data(section_Link, columns, data);
 	}
 
-	public Table_Data table(String title, String section, String date, int id) {
-		section = null_Section(title, section);
-		Link section_Link = section_Link(section);
+	public Table_Data table(String title, String date, int id) {
+		String section = "";
+		switch (title) {
+		case "種別毎内訳":
+			section = type_Name(id);
+			break;
+		default:
+			break;
+		}
+		Link section_Link = section_Link(section );
 		Set[] columns = columns(title);
 		List<List<String>> data = data(title, section, date, id);
 		return new Table_Data(section_Link, columns, data);
@@ -1144,7 +1152,7 @@ public class KakeiboService {
 		if (date == null) date = this_Year_Month();
 		Link date_Link = date_Link(date);
 		List<Link> menu = menu(title);
-		Table_Data table= table(title, section, date, id);
+		Table_Data table= table(title, date, id);
 		return new Page(title_Link, date_Link, menu, table);
 	}
 
@@ -1290,18 +1298,17 @@ public class KakeiboService {
 	}
 
 
-public List<Action> action_List(int item_id, String date) {
+public List<Action> actionList_Item(int item_id, String date) {
 		if (date == null) date = this_Year_Month();
 		return actionRepository.list(item_id, date);
 	}
 
-	public List<Action> action_List(String Type, String date) {
+	public List<Action> action_List_Type(int type_id, String date) {
 		List<Action> action_List = new ArrayList<>();
 		if (date == null) date = this_Year_Month();
-		Integer type_id = typeRepository.type(Type).getId();
 		List<Item> item_List = itemRepository.list(type_id);
 		for (Item item : item_List) {
-			action_List.addAll(action_List(item.getId(), date));
+			action_List.addAll(actionList_Item(item.getId(), date));
 		}
 		return action_List;
 	}
