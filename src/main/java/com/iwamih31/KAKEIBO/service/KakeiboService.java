@@ -674,10 +674,10 @@ public class KakeiboService {
 
 	private Integer[] split_Date(String date) {
 		Integer[] split_Date = null;
-		LocalDateTime localDateTime = LocalDateTime.now();
+		LocalDate localDate = LocalDate.now();
 		if (date != null) {
-			int year = localDateTime.getYear();
-			int month = localDateTime.getMonthValue();
+			int year = localDate.getYear();
+			int month = localDate.getMonthValue();
 			int day = 1;
 			date = date.trim();
 			date = date.split(" ")[0];
@@ -689,6 +689,8 @@ public class KakeiboService {
 			String[] array = date.split("-");
 			if (array.length > 0 && is_Int(array[0]))
 				year = Integer.parseInt(array[0]);
+			if (array.length == 1)
+				month = 1;
 			if (array.length > 1)
 				month = Integer.parseInt(array[1]);
 			if (array.length > 2)
@@ -848,7 +850,8 @@ public class KakeiboService {
 		List<List<String>> data = new ArrayList<>();
 		switch (title) {
 		case "項目別一覧":
-			if (section == "実績") {
+			if (section.equals("実績")) {
+
 				String current_Type_Value = "0";
 				for (Type type : typeList()) {
 					String type_Value = type.getName();
@@ -861,24 +864,26 @@ public class KakeiboService {
 						}
 						String item_Value = item.getName();
 						List<Action> actionList = action_List_Item(item.getId(), date);
-						int income = 0;
-						int spending = 0;
-						for (Action action : actionList) {
-							income += action.getIncome();
-							spending += action.getSpending();
+						if (actionList.size() > 0) {
+							int income = 0;
+							int spending = 0;
+							for (Action action : actionList) {
+								income += action.getIncome();
+								spending += action.getSpending();
+							}
+							List<String> list = new ArrayList<>();
+							add(list, type.getId());
+							add(list, type_Value);
+							add(list, item_Value);
+							add(list, income);
+							add(list, spending);
+							add(list, income - spending);
+							data.add(list);
 						}
-						List<String> list = new ArrayList<>();
-						add(list, type.getId());
-						add(list, type_Value);
-						add(list, item_Value);
-						add(list, income);
-						add(list, spending);
-						add(list, income - spending);
-						data.add(list);
 					}
 				}
 			}
-			if (section == "予算") {
+			if (section.equals("予算")) {
 				List<Plan> plan_List = plan_List(date);
 			}
 			break;
@@ -905,7 +910,27 @@ public class KakeiboService {
 			data = data_Type_All();
 			break;
 		default:
+			data = data_Action_All();
 			break;
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Action_All() {
+		List<List<String>> data = new ArrayList<>();
+		for (Action action : action_List_All()) {
+			Item item = item(action.getItem_id());
+			Type type = type(item.getType_id());
+			List<String> list = new ArrayList<>();
+			add(list, action.getId());
+			add(list, date(action.getThe_day()));
+			add(list, type.getName());
+			add(list, item.getName());
+			add(list, action.getDetail());
+			add(list, action.getIncome());
+			add(list, action.getSpending());
+			add(list, action.getNote());
+			data.add(list);
 		}
 		return data;
 	}
@@ -916,7 +941,7 @@ public class KakeiboService {
 		List<Item> itemList = itemList(type.getId());
 		for (Item item : itemList) {
 			String item_Value = item.getName();
-			List<Action> actionList = actionList(item.getId(), date);
+			List<Action> actionList = action_List_Item(item.getId(), date);
 			for (Action action : actionList) {
 				int id = action.getId();
 				int income = action.getIncome();
@@ -1084,10 +1109,6 @@ public class KakeiboService {
 		return typeRepository.asc_Rank();
 	}
 
-	private List<Action> actionList(Integer item_id, String date) {
-		return actionRepository.list(item_id, date);
-	}
-
 	public Table_Data table(String title, String section, String date) {
 		section = null_Section(title, section);
 		Link section_Link = section_Link(section);
@@ -1127,7 +1148,7 @@ public class KakeiboService {
 			case "項目作成":
 				return "実績";
 			default:
-				break;
+				return "実績";
 			}
 		}
 		return section;
@@ -1138,7 +1159,7 @@ public class KakeiboService {
 		___consoleOut___("section = " + section);
 		___consoleOut___("date = " + date);
 		Link title_Link = title_Link(title);
-		if (date == null) date = this_Year_Month();
+		if (date == null) date = this_Year();
 		Link date_Link = date_Link(date);
 		List<Link> menu = menu(title);
 		Table_Data table= table(title, section, date);
@@ -1163,6 +1184,7 @@ public class KakeiboService {
 			return LabelSet.summary_Set;
 		case "種別毎内訳":
 			return LabelSet.type_Set;
+		case "全データ一覧":
 		case "新規入力":
 		case "データ修正":
 		case "データ削除":
@@ -1296,15 +1318,46 @@ public class KakeiboService {
 	}
 
 	public List<Action> action_List(String date) {
-		if (date == null) date = this_Year_Month();
+		if (date == null) date = this_Year();
 		return actionRepository.list(date);
 	}
 
 
-public List<Action> action_List_Item(int item_id, String date) {
-		if (date == null) date = this_Year_Month();
-		return actionRepository.list(item_id, date);
+public List<Action> action_List_All() {
+		return actionRepository.all();
 	}
+
+public List<Action> action_List_Item(int item_id, String date) {
+	LocalDate start_date;
+	LocalDate last_date;
+	if (date == null) date = this_Year();
+	date = date.replace("/", "-");
+	int datePattern = date.split("-").length;
+	switch (datePattern) {
+	case 1: // 年数のみ
+		start_date = to_LocalDate(date);
+		last_date = start_date.plusYears(1).minusDays(1);
+		break;
+	case 2: // 年/月のみ
+		start_date = to_LocalDate(date);
+		last_date = start_date.plusMonths(1).minusDays(1);
+		break;
+	case 3: // 年/月/日
+		start_date = to_LocalDate(date);
+		last_date = start_date;
+		break;
+	default: // その他（今日から1か月分）
+		start_date = to_LocalDate(today());
+		last_date = start_date.plusMonths(1).minusDays(1);
+		break;
+	}
+
+	___consoleOut___("item_id = " + item_id);
+	___consoleOut___("start_date = " + start_date);
+	___consoleOut___("last_date = " + last_date);
+
+	return actionRepository.list(item_id, start_date, last_date);
+}
 
 	public List<Action> action_List_Type(int type_id, String date) {
 		List<Action> action_List = new ArrayList<>();
@@ -1363,6 +1416,11 @@ public List<Action> action_List_Item(int item_id, String date) {
 	/* rank を int にして返す */
 	public int rank(Type type) {
 		return (int)type.getRank();
+	}
+
+	public Type type(Action action) {
+		Item item = item(action.getItem_id());
+		return type(item.getType_id());
 	}
 
 }

@@ -74,7 +74,7 @@ nav button,
 	text-align: left;
 }
 
-.vertical button { 
+.vertical button {
 	display: table;
 	margin: auto;
 	width: auto;
@@ -228,9 +228,9 @@ nav button,
 }
 
 .btn_inherit {
-	position: fixed;
-	margin:auto;
-	padding: 0px; 
+	width: fit-content;
+	margin:0;
+	padding: 0;
 	border: none;
 	background-color: inherit;
 }
