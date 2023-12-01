@@ -27,6 +27,11 @@
 				<img src="/image/logo.png" title="ロゴ" class="padding_s">
 			</a>
 			<nav class="header_nav flex_space_between">
+				<form method="post" th:action="@{${req} + '/SelectType'}">
+					<input type="hidden" name="date" th:value="${page.date.text}"/>
+					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+					<button type="submit" class="btn btn-primary bg_pink">新規入力</button>
+				</form>
 				<a th:href="@{${req} + '/Plan'}">
 					<button type="button" class="btn btn-primary">予算</button>
 				</a>

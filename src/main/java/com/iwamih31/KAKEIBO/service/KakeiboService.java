@@ -1218,13 +1218,11 @@ public class KakeiboService {
 		List<Link> menu = new ArrayList<>();
 		switch (title) {
 		case "項目別一覧":
-			menu.add(new Link("新規入力", "/SelectType"));
 			menu.add(new Link("Excel出力", "/Output/Excel"));
 			menu.add(new Link("種別毎", "/Summary_Type"));
 			menu.add(new Link("データ毎", "/Summary_Action"));
 			break;
 		case "種別毎内訳":
-			menu.add(new Link("新規入力", "/InsertAction"));
 			menu.add(new Link("全種別", "/Setting"));
 			menu.add(new Link("Excel出力", "/Output/Excel"));
 			break;
