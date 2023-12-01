@@ -95,10 +95,10 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@GetMapping("/Summary_Action")
+	@PostMapping("/Summary_Action")
 	public String summary_Action(
-			@Param("date")String date,
-			@Param("section")String section,
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
 			Model model) {
 		add_View_Data_(model, "summary");
 		model.addAttribute("page", service.page("データ毎一覧", section, date));

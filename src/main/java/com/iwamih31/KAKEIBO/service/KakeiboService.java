@@ -1185,6 +1185,7 @@ public class KakeiboService {
 		case "種別毎内訳":
 			return LabelSet.type_Set;
 		case "全データ一覧":
+		case "データ毎一覧":
 		case "新規入力":
 		case "データ修正":
 		case "データ削除":
