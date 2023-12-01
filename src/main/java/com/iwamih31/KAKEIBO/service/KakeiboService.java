@@ -1328,36 +1328,41 @@ public List<Action> action_List_All() {
 	}
 
 public List<Action> action_List_Item(int item_id, String date) {
-	LocalDate start_date;
-	LocalDate last_date;
 	if (date == null) date = this_Year();
-	date = date.replace("/", "-");
-	int datePattern = date.split("-").length;
-	switch (datePattern) {
-	case 1: // 年数のみ
-		start_date = to_LocalDate(date);
-		last_date = start_date.plusYears(1).minusDays(1);
-		break;
-	case 2: // 年/月のみ
-		start_date = to_LocalDate(date);
-		last_date = start_date.plusMonths(1).minusDays(1);
-		break;
-	case 3: // 年/月/日
-		start_date = to_LocalDate(date);
-		last_date = start_date;
-		break;
-	default: // その他（今日から1か月分）
-		start_date = to_LocalDate(today());
-		last_date = start_date.plusMonths(1).minusDays(1);
-		break;
-	}
-
-	___consoleOut___("item_id = " + item_id);
-	___consoleOut___("start_date = " + start_date);
-	___consoleOut___("last_date = " + last_date);
-
-	return actionRepository.list(item_id, start_date, last_date);
+	return actionRepository.list(item_id, date);
 }
+
+//public List<Action> action_List_Item(int item_id, String date) {
+//	LocalDate start_date;
+//	LocalDate last_date;
+//	if (date == null) date = this_Year();
+//	date = date.replace("/", "-");
+//	int datePattern = date.split("-").length;
+//	switch (datePattern) {
+//	case 1: // 年数のみ
+//		start_date = to_LocalDate(date);
+//		last_date = start_date.plusYears(1).minusDays(1);
+//		break;
+//	case 2: // 年/月のみ
+//		start_date = to_LocalDate(date);
+//		last_date = start_date.plusMonths(1).minusDays(1);
+//		break;
+//	case 3: // 年/月/日
+//		start_date = to_LocalDate(date);
+//		last_date = start_date;
+//		break;
+//	default: // その他（今日から1か月分）
+//		start_date = to_LocalDate(today());
+//		last_date = start_date.plusMonths(1).minusDays(1);
+//		break;
+//	}
+//
+//	___consoleOut___("item_id = " + item_id);
+//	___consoleOut___("start_date = " + start_date);
+//	___consoleOut___("last_date = " + last_date);
+//
+//	return actionRepository.list(item_id, start_date, last_date);
+//}
 
 	public List<Action> action_List_Type(int type_id, String date) {
 		List<Action> action_List = new ArrayList<>();
