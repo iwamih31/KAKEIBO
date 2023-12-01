@@ -80,10 +80,20 @@ public class KakeiboController {
 		return redirect("/Summary");
 	}
 
+	@PostMapping("/Summary")
+	public String summary(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/Summary");
+	}
+
 	@GetMapping("/Summary")
 	public String summary(
-			@Param("date")String date,
-			@Param("section")String section,
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
 			Model model) {
 		add_View_Data_(model, "summary");
 		model.addAttribute("page", service.page("項目別一覧", section, date));

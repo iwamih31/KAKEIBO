@@ -851,7 +851,6 @@ public class KakeiboService {
 		switch (title) {
 		case "項目別一覧":
 			if (section.equals("実績")) {
-
 				String current_Type_Value = "0";
 				for (Type type : typeList()) {
 					String type_Value = type.getName();
@@ -882,6 +881,14 @@ public class KakeiboService {
 						}
 					}
 				}
+			}
+			if (section.equals("予算")) {
+				List<Plan> plan_List = plan_List(date);
+			}
+			break;
+		case "データ毎一覧":
+			if (section.equals("実績")) {
+				data = data_Action_List(date);
 			}
 			if (section.equals("予算")) {
 				List<Plan> plan_List = plan_List(date);
@@ -933,6 +940,27 @@ public class KakeiboService {
 			data.add(list);
 		}
 		return data;
+	}
+
+	private List<List<String>> data_Action_List(String date) {
+		List<List<String>> data_Action = new ArrayList<>();
+		List<Action> actionList = action_List(date);
+		for (Action action : actionList) {
+			Item item = item(action.getItem_id());
+			Type type = type(item.getType_id());
+			List<String> list = new ArrayList<>();
+			add(list, action.getId());
+			add(list, date(action.getThe_day()));
+			add(list, type.getName());
+			add(list, item.getName());
+			add(list, action.getDetail());
+			add(list, action.getIncome());
+			add(list, action.getSpending());
+			add(list, action.getNote());
+			___consoleOut___(list);
+			data_Action.add(list);
+		}
+		return data_Action;
 	}
 
 	private List<List<String>> data_Action(int type_id, String date) {
@@ -1222,6 +1250,11 @@ public class KakeiboService {
 			menu.add(new Link("Excel出力", "/Output/Excel"));
 			menu.add(new Link("種別毎", "/Summary_Type"));
 			menu.add(new Link("データ毎", "/Summary_Action"));
+			break;
+		case "データ毎一覧":
+			menu.add(new Link("Excel出力", "/Output/Excel"));
+			menu.add(new Link("種別毎", "/Summary_Type"));
+			menu.add(new Link("項目毎", "/Summary"));
 			break;
 		case "種別毎内訳":
 			menu.add(new Link("全種別", "/Setting"));
