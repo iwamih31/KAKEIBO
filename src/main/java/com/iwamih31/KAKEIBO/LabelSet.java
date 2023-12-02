@@ -4,7 +4,8 @@ public class LabelSet {
 
 	public static Set[] summary_Set = {
 			set("種別",	 	10),
-			set("項目",	 	25),
+			set("項目",	 	10),
+			set("説明",	 	20),
 			set("入金",	 	 7),
 			set("出金",		 7),
 			set("収支",		 10),

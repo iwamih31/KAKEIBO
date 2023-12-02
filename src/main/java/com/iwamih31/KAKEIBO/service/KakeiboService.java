@@ -861,7 +861,6 @@ public class KakeiboService {
 						} else {
 							current_Type_Value = type.getName();
 						}
-						String item_Value = item.getName();
 						List<Action> actionList = action_List_Item(item.getId(), date);
 						if (actionList.size() > 0) {
 							int income = 0;
@@ -873,7 +872,8 @@ public class KakeiboService {
 							List<String> list = new ArrayList<>();
 							add(list, type.getId());
 							add(list, type_Value);
-							add(list, item_Value);
+							add(list, item.getName());
+							add(list, item.getNote());
 							add(list, income);
 							add(list, spending);
 							add(list, income - spending);
