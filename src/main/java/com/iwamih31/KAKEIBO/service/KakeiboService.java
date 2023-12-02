@@ -1010,8 +1010,8 @@ public class KakeiboService {
 				String detail = action.getDetail();
 				List<String> list = new ArrayList<>();
 				add(list, id);
-				add(list, item_Value);
 				add(list, the_day);
+				add(list, item_Value);
 				add(list, detail);
 				add(list, income);
 				add(list, spending);
