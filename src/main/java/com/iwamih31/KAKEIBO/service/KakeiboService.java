@@ -1143,11 +1143,6 @@ public class KakeiboService {
 		list.add(make_String(object));
 	}
 
-	private List<Plan> plan_List(String date) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
-
 	public List<Item> itemList(Integer type_id) {
 		return itemRepository.list(type_id);
 	}
@@ -1389,6 +1384,11 @@ public class KakeiboService {
 		return actionRepository.list(date);
 	}
 
+	public List<Plan> plan_List(String date) {
+		if (date == null) date = this_Year();
+		return planRepository.list(date);
+	}
+
 
 public List<Action> action_List_All() {
 		return actionRepository.all();
@@ -1398,38 +1398,6 @@ public List<Action> action_List_Item(int item_id, String date) {
 	if (date == null) date = this_Year();
 	return actionRepository.list(item_id, date);
 }
-
-//public List<Action> action_List_Item(int item_id, String date) {
-//	LocalDate start_date;
-//	LocalDate last_date;
-//	if (date == null) date = this_Year();
-//	date = date.replace("/", "-");
-//	int datePattern = date.split("-").length;
-//	switch (datePattern) {
-//	case 1: // 年数のみ
-//		start_date = to_LocalDate(date);
-//		last_date = start_date.plusYears(1).minusDays(1);
-//		break;
-//	case 2: // 年/月のみ
-//		start_date = to_LocalDate(date);
-//		last_date = start_date.plusMonths(1).minusDays(1);
-//		break;
-//	case 3: // 年/月/日
-//		start_date = to_LocalDate(date);
-//		last_date = start_date;
-//		break;
-//	default: // その他（今日から1か月分）
-//		start_date = to_LocalDate(today());
-//		last_date = start_date.plusMonths(1).minusDays(1);
-//		break;
-//	}
-//
-//	___consoleOut___("item_id = " + item_id);
-//	___consoleOut___("start_date = " + start_date);
-//	___consoleOut___("last_date = " + last_date);
-//
-//	return actionRepository.list(item_id, start_date, last_date);
-//}
 
 	public List<Action> action_List_Type(int type_id, String date) {
 		List<Action> action_List = new ArrayList<>();
@@ -1465,6 +1433,20 @@ public List<Action> action_List_Item(int item_id, String date) {
 		return sum_Set;
 	}
 
+	public HashMap<String, Integer> sum_Set_Plan(List<Plan> plan_List) {
+		HashMap<String, Integer> sum_Set = new HashMap<String, Integer>();
+		int sum_income = 0;
+		int sum_spending = 0;
+		for (Plan plan : plan_List) {
+			sum_income += plan.getIncome();
+			sum_spending += plan.getSpending();
+		}
+		sum_Set.put("income",sum_income );
+		sum_Set.put("spending", sum_spending);
+		sum_Set.put("total", sum_income - sum_spending);
+		return sum_Set;
+	}
+
 	public Type type(int id) {
 		return typeRepository.getReferenceById(id);
 	}
@@ -1493,6 +1475,17 @@ public List<Action> action_List_Item(int item_id, String date) {
 	public Type type(Action action) {
 		Item item = item(action.getItem_id());
 		return type(item.getType_id());
+	}
+
+	public Object insert＿URL(String section) {
+		switch (section) {
+		case "実績":
+			return "/InsertAction";
+		case "予算":
+			return "/InsertPlan";
+		default:
+			return "/Start";
+		}
 	}
 
 }

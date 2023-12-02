@@ -39,8 +39,8 @@ public class Plan {
   // 日付
   @DateTimeFormat(pattern = "yyyy-MM-dd")   // 入力時の期待フォーマット
   @JsonFormat(pattern = "yyyy/MM/dd")   // 出力時の期待フォーマット
-  @Column(name = "date", nullable = true)
-  private LocalDate date;
+  @Column(name = "the_day", nullable = true)
+  private LocalDate the_day;
 
   // 入金
   @Column(name = "income", nullable = false)

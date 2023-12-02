@@ -90,6 +90,16 @@ public class KakeiboController {
 		return redirect("/Summary");
 	}
 
+	@PostMapping("/Plan")
+	public String plan(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/Plan");
+	}
+
 	@GetMapping("/Summary")
 	public String summary(
 			@RequestParam("date")String date,
@@ -98,6 +108,21 @@ public class KakeiboController {
 		add_View_Data_(model, "summary");
 		model.addAttribute("page", service.page("項目別一覧", section, date));
 		HashMap<String, Integer> sum_Set = service.sum_Set(service.action_List(date));
+		model.addAttribute("sum_income", sum_Set.get("income"));
+		model.addAttribute("sum_spending", sum_Set.get("spending"));
+		model.addAttribute("total", sum_Set.get("total"));
+		model.addAttribute("row_url", "/Type");
+		return "view";
+	}
+
+	@GetMapping("/Plan")
+	public String plan(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "summary");
+		model.addAttribute("page", service.page("項目別一覧", section, date));
+		HashMap<String, Integer> sum_Set = service.sum_Set_Plan(service.plan_List(date));
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
@@ -187,7 +212,7 @@ public class KakeiboController {
 			Model model) {
 		add_View_Data_(model, "select");
 		model.addAttribute("page", service.page("種別選択", section, date));
-		model.addAttribute("url", "/InsertAction");
+		model.addAttribute("url", service.insert＿URL(section));
 		return "view";
 	}
 

@@ -32,9 +32,11 @@
 					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
 					<button type="submit" class="btn btn-primary bg_pink">新規入力</button>
 				</form>
-				<a th:href="@{${req} + '/Plan'}">
-					<button type="button" class="btn btn-primary">予算</button>
-				</a>
+				<form method="post" th:action="@{${req} + '/Plan'}">
+					<input type="hidden" name="date" th:value="${page.date.text}"/>
+					<input type="hidden" name="section" value="予算"/>
+					<button type="submit" class="btn btn-primary">予算</button>
+				</form>
 				<a th:href="@{${req} + '/Start'}">
 					<button type="button" class="btn btn-primary">実績</button>
 				</a>
