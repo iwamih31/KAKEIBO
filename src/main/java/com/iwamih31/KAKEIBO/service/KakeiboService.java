@@ -894,6 +894,14 @@ public class KakeiboService {
 				List<Plan> plan_List = plan_List(date);
 			}
 			break;
+		case "種別毎一覧":
+			if (section.equals("実績")) {
+				data = data_Type_List(date);
+			}
+			if (section.equals("予算")) {
+				List<Plan> plan_List = plan_List(date);
+			}
+			break;
 		case "種別選択":
 			data = data_Type_All();
 			break;
@@ -943,9 +951,8 @@ public class KakeiboService {
 	}
 
 	private List<List<String>> data_Action_List(String date) {
-		List<List<String>> data_Action = new ArrayList<>();
-		List<Action> actionList = action_List(date);
-		for (Action action : actionList) {
+		List<List<String>> data = new ArrayList<>();
+		for (Action action : action_List(date)) {
 			Item item = item(action.getItem_id());
 			Type type = type(item.getType_id());
 			List<String> list = new ArrayList<>();
@@ -958,13 +965,37 @@ public class KakeiboService {
 			add(list, action.getSpending());
 			add(list, action.getNote());
 			___consoleOut___(list);
-			data_Action.add(list);
+			data.add(list);
 		}
-		return data_Action;
+		return data;
+	}
+
+	private List<List<String>> data_Type_List(String date) {
+		List<List<String>> data = new ArrayList<>();
+		for (Type type : typeList()) {
+			int income = 0;
+			int spending = 0;
+			for (Item item : itemList(type.getId())) {
+				int item_id = item.getId();
+				for (Action action : action_List_Item(item_id, date)) {
+					income += action.getIncome();
+					spending += action.getSpending();
+				}
+			}
+			List<String> list = new ArrayList<>();
+			add(list, type.getId());
+			add(list, type.getName());
+			add(list, income);
+			add(list, spending);
+			add(list, income + spending);
+			___consoleOut___(list);
+			data.add(list);
+		}
+		return data;
 	}
 
 	private List<List<String>> data_Action(int type_id, String date) {
-		List<List<String>> data_Action = new ArrayList<>();
+		List<List<String>> data = new ArrayList<>();
 		Type type = type(type_id);
 		List<Item> itemList = itemList(type.getId());
 		for (Item item : itemList) {
@@ -985,10 +1016,10 @@ public class KakeiboService {
 				add(list, spending);
 				add(list, income - spending);
 				___consoleOut___(list);
-				data_Action.add(list);
+				data.add(list);
 			}
 		}
-		return data_Action;
+		return data;
 	}
 
     private void ___consoleOut___(List<String> text_List) {
