@@ -1289,7 +1289,7 @@ public class KakeiboService {
 		case "種別毎一覧":
 			menu.add(new Link("Excel出力", "/Output/Excel"));
 			menu.add(new Link("項目毎", "/Summary"));
-			menu.add(new Link("データ毎", "/Summary_Type"));
+			menu.add(new Link("データ毎", "/Summary_Action"));
 			break;
 		case "種別毎内訳":
 			menu.add(new Link("Excel出力", "/Output/Excel"));
