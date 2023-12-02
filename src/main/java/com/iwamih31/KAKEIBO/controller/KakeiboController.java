@@ -150,6 +150,20 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/All")
+	public String all(
+			@RequestParam("date")String date,
+			Model model) {
+		add_View_Data_(model, "summary");
+		model.addAttribute("page", service.page("全データ一覧", "実績", date));
+		HashMap<String, Integer> sum_Set = service.sum_Set(service.action_List_All());
+		model.addAttribute("sum_income", sum_Set.get("income"));
+		model.addAttribute("sum_spending", sum_Set.get("spending"));
+		model.addAttribute("total", sum_Set.get("total"));
+		model.addAttribute("row_url", "/UpdateAction");
+		return "view";
+	}
+
 	@GetMapping("/Type")
 	public String type(
 			@RequestParam("date")String date,

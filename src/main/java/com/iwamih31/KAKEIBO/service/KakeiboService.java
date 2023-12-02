@@ -985,6 +985,7 @@ public class KakeiboService {
 			List<String> list = new ArrayList<>();
 			add(list, type.getId());
 			add(list, type.getName());
+			add(list, type.getNote());
 			add(list, income);
 			add(list, spending);
 			add(list, income + spending);
@@ -1241,6 +1242,8 @@ public class KakeiboService {
 		switch (title) {
 		case "項目別一覧":
 			return LabelSet.summary_Set;
+		case "種別毎一覧":
+			return LabelSet.summary_Type_Set;
 		case "種別毎内訳":
 			return LabelSet.type_Set;
 		case "全データ一覧":
@@ -1287,9 +1290,14 @@ public class KakeiboService {
 			menu.add(new Link("種別毎", "/Summary_Type"));
 			menu.add(new Link("項目毎", "/Summary"));
 			break;
-		case "種別毎内訳":
-			menu.add(new Link("全種別", "/Setting"));
+		case "種別毎一覧":
 			menu.add(new Link("Excel出力", "/Output/Excel"));
+			menu.add(new Link("項目毎", "/Summary"));
+			menu.add(new Link("データ毎", "/Summary_Type"));
+			break;
+		case "種別毎内訳":
+			menu.add(new Link("Excel出力", "/Output/Excel"));
+			menu.add(new Link("全種別", "/All"));
 			break;
 		case "新規入力":
 			menu.add(new Link("種別選択", "/SelectType"));

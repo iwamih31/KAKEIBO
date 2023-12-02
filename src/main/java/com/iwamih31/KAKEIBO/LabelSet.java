@@ -10,6 +10,14 @@ public class LabelSet {
 			set("収支",		 10),
 	};
 
+	public static Set[] summary_Type_Set = {
+			set("種別",	 	10),
+			set("説明",	 	25),
+			set("入金",	 	 7),
+			set("出金",		 7),
+			set("収支",		 10),
+	};
+
 	public static Set[] type_Set = {
 			set("項目",	 	25),
 			set("日付",	 	10),
