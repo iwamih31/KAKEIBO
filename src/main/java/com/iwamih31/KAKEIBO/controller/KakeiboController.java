@@ -37,8 +37,6 @@ public class KakeiboController {
 	@Autowired
 	private HttpSession session;
 
-//	private String type = "";//////////////////// 仮
-
 	/** RequestMappingのURL */
 	public String req() {
 		return "/KAKEIBO";
