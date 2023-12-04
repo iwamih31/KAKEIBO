@@ -96,12 +96,29 @@ public class KakeiboService {
 		if(action.getIncome() == null) action.setIncome(0);
 		if(action.getSpending() == null) action.setSpending(0);
 		___consoleOut___("action = " + action);
-		String message = "ID = " + action.getId() + " の出納データ登録";
+		String message = date(action.getThe_day()) + action.getDetail() + " の実績データを登録";
 		try {
 			actionRepository.save(action);
-			message += " が完了しました";
+			message += " しました";
 		} catch (Exception e) {
-			message += "が正常に行われませんでした";
+			message += "出来ませんでした";
+			e.printStackTrace();
+		}
+		return message;
+	}
+
+	public String insert_Plan(Plan plan) {
+		int id = next_Action_Id();
+		plan.setId(id);
+		if(plan.getIncome() == null) plan.setIncome(0);
+		if(plan.getSpending() == null) plan.setSpending(0);
+		___consoleOut___("plan = " + plan);
+		String message = year_Month(plan.getThe_day()) + item(plan.getItem_id()) + " の予算データを登録";
+		try {
+			planRepository.save(plan);
+			message += " しました";
+		} catch (Exception e) {
+			message += "出来ませんでした";
 			e.printStackTrace();
 		}
 		return message;
@@ -767,6 +784,12 @@ public class KakeiboService {
 		// 表示形式を指定
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
 		return dateTimeFormatter.format(now);
+	}
+
+	public String year_Month(LocalDate localDate) {
+		// 表示形式を指定
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM");
+		return dateTimeFormatter.format(localDate);
 	}
 
 	public String this_Year() {

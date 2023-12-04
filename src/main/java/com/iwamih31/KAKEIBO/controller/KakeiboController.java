@@ -20,6 +20,7 @@ import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.Item;
 import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.Owner;
+import com.iwamih31.KAKEIBO.Plan;
 import com.iwamih31.KAKEIBO.Type;
 import com.iwamih31.KAKEIBO.service.KakeiboService;
 
@@ -528,12 +529,24 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			@ModelAttribute("action")Action action,
 			RedirectAttributes redirectAttributes) {
-
 		String message = service.insert_Action(action);
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
 		return redirect("/Summary");
+	}
+
+	@PostMapping("/Insert/Plan")
+	public String insert_Plan(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@ModelAttribute("plan")Plan plan,
+			RedirectAttributes redirectAttributes) {
+		String message = service.insert_Plan(plan);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/Plan");
 	}
 
 	@PostMapping("/Insert/Type")
