@@ -254,6 +254,18 @@ public class KakeiboController {
 		return redirect("/InsertAction");
 	}
 
+	@PostMapping("/InsertPlan")
+	public String insertPlan(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")Integer type_id,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		redirectAttributes.addAttribute("id", type_id);
+		return redirect("/InsertPlan");
+	}
+
 	@GetMapping("/InsertAction")
 	public String insertAction(
 			@RequestParam("date")String date,
@@ -269,7 +281,7 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@PostMapping("/InsertPlan")
+	@GetMapping("/InsertPlan")
 	public String insertPlan(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
