@@ -132,6 +132,15 @@ public class LabelSet {
 			set("備考",	 	25),
 	};
 
+	public static Set[] plan_Set = {
+			set("日付",	 	10),
+			set("種別",	 	 7),
+			set("項目",	 	 7),
+			set("入金",	 	 7),
+			set("出金",	 	 7),
+			set("備考",	 	25),
+	};
+
 	public static Set[] actionUpdate_Set = {
 			set("ID",		 4),
 			set("日付",		 6),

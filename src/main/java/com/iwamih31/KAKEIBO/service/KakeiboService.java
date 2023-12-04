@@ -341,6 +341,10 @@ public class KakeiboService {
 		return new Action(next_Action_Id(), 0, "", to_LocalDate(date), 0, 0, "");
 	}
 
+	public Plan new_Plan(String date) {
+		return new Plan(next_Action_Id(), 0, to_LocalDate(date), 0, 0, "");
+	}
+
 	public int next_Owner_Id() {
 		int nextId = 1;
 		Owner lastElement = getLastElement(ownerRepository.findAll());
@@ -1163,7 +1167,7 @@ public class KakeiboService {
 	public Table_Data table(String title, String section, String date) {
 		section = null_Section(title, section);
 		Link section_Link = section_Link(section);
-		Set[] columns = columns(title);
+		Set[] columns = columns(title, section);
 		List<List<String>> data = data(title, section, date);
 		return new Table_Data(section_Link, columns, data);
 	}
@@ -1178,7 +1182,7 @@ public class KakeiboService {
 			break;
 		}
 		Link section_Link = section_Link(section );
-		Set[] columns = columns(title);
+		Set[] columns = columns(title, section);
 		List<List<String>> data = data(title, section, date, id);
 		return new Table_Data(section_Link, columns, data);
 	}
@@ -1229,7 +1233,7 @@ public class KakeiboService {
 		return new Page(title_Link, date_Link, menu, table);
 	}
 
-	private Set[] columns(String title) {
+	private Set[] columns(String title, String section) {
 		switch (title) {
 		case "項目別一覧":
 			return LabelSet.summary_Set;
@@ -1239,10 +1243,12 @@ public class KakeiboService {
 			return LabelSet.type_Set;
 		case "全データ一覧":
 		case "データ毎一覧":
-		case "新規入力":
 		case "データ修正":
 		case "データ削除":
 			return LabelSet.action_Set;
+		case "新規入力":
+			if (section.equals("実績")) return LabelSet.action_Set;
+			if (section.equals("予算")) return LabelSet.plan_Set;
 		case "種別選択":
 			return LabelSet.selectType_Set;
 		case "種別設定":
@@ -1477,7 +1483,7 @@ public List<Action> action_List_Item(int item_id, String date) {
 		return type(item.getType_id());
 	}
 
-	public Object insert＿URL(String section) {
+	public Object insert_URL(String section) {
 		switch (section) {
 		case "実績":
 			return "/InsertAction";

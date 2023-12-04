@@ -210,7 +210,7 @@ public class KakeiboController {
 			Model model) {
 		add_View_Data_(model, "select");
 		model.addAttribute("page", service.page("種別選択", section, date));
-		model.addAttribute("url", service.insert＿URL(section));
+		model.addAttribute("url", service.insert_URL(section));
 		return "view";
 	}
 
@@ -248,6 +248,21 @@ public class KakeiboController {
 		add_View_Data_(model, "insertAction");
 		model.addAttribute("page", service.page("新規入力", section, date));
 		model.addAttribute("action", service.new_Action(date));
+		model.addAttribute("type", service.type_Name(type_id));
+		model.addAttribute("itemList", service.itemList(type_id));
+		return "view";
+	}
+
+	@PostMapping("/InsertPlan")
+	public String insertPlan(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")Integer type_id,
+			Model model) {
+		service.___consoleOut___("date = " + date);
+		add_View_Data_(model, "insertPlan");
+		model.addAttribute("page", service.page("新規入力", section, date));
+		model.addAttribute("plan", service.new_Plan(date));
 		model.addAttribute("type", service.type_Name(type_id));
 		model.addAttribute("itemList", service.itemList(type_id));
 		return "view";

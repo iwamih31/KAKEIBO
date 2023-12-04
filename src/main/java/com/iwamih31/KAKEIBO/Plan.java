@@ -32,10 +32,6 @@ public class Plan {
   @Column(name = "item_id", nullable = false)
   private Integer item_id;
 
-  // 詳細
-  @Column(name = "detail", nullable = true)
-  private String detail;
-
   // 日付
   @DateTimeFormat(pattern = "yyyy-MM-dd")   // 入力時の期待フォーマット
   @JsonFormat(pattern = "yyyy/MM/dd")   // 出力時の期待フォーマット
