@@ -1568,7 +1568,7 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 		return type(item.getType_id());
 	}
 
-	public Object insert_URL(String section) {
+	public String insert_URL(String section) {
 		switch (section) {
 		case "実績":
 			return "/InsertAction";

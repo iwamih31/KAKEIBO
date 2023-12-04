@@ -631,7 +631,7 @@ public class KakeiboController {
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
 		redirectAttributes.addAttribute("id", item.getType_id());
-		return redirect("/InsertAction");
+		return redirect(service.insert_URL(section));
 	}
 
 	@GetMapping("/List")
