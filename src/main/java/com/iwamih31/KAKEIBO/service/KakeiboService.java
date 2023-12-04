@@ -897,7 +897,7 @@ public class KakeiboService {
 				data = data_Type_List(date);
 			}
 			if (section.equals("予算")) {
-				List<Plan> plan_List = plan_List(date);
+				data = data_Plan_List_Type(date);
 			}
 			break;
 		case "種別選択":
@@ -1022,6 +1022,31 @@ public class KakeiboService {
 			add(list, action.getIncome());
 			add(list, action.getSpending());
 			add(list, action.getNote());
+			___consoleOut___(list);
+			data.add(list);
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Plan_List_Type(String date) {
+		List<List<String>> data = new ArrayList<>();
+		for (Type type : typeList()) {
+			int income = 0;
+			int spending = 0;
+			for (Item item : itemList(type.getId())) {
+				int item_id = item.getId();
+				for (Plan plan : plan_List_Item(item_id, date)) {
+					income += plan.getIncome();
+					spending += plan.getSpending();
+				}
+			}
+			List<String> list = new ArrayList<>();
+			add(list, type.getId());
+			add(list, type.getName());
+			add(list, type.getNote());
+			add(list, income);
+			add(list, spending);
+			add(list, income + spending);
 			___consoleOut___(list);
 			data.add(list);
 		}
@@ -1274,7 +1299,7 @@ public class KakeiboService {
 		Link title_Link = title_Link(title);
 		if (date == null) date = this_Year();
 		Link date_Link = date_Link(date);
-		List<Link> menu = menu(title);
+		List<Link> menu = menu(title, section);
 		Table_Data table= table(title, section, date);
 		return new Page(title_Link, date_Link, menu, table);
 	}
@@ -1286,7 +1311,7 @@ public class KakeiboService {
 		Link title_Link = title_Link(title);
 		if (date == null) date = this_Year_Month();
 		Link date_Link = date_Link(date);
-		List<Link> menu = menu(title);
+		List<Link> menu = menu(title, section);
 		Table_Data table= table(title, date, id);
 		return new Page(title_Link, date_Link, menu, table);
 	}
@@ -1332,13 +1357,19 @@ public class KakeiboService {
 		}
 	}
 
-	public List<Link> menu(String title) {
+	public List<Link> menu(String title, String section) {
 		List<Link> menu = new ArrayList<>();
 		switch (title) {
 		case "項目別一覧":
-			menu.add(new Link("Excel出力", "/Output/Excel"));
-			menu.add(new Link("種別毎", "/Summary_Type"));
-			menu.add(new Link("データ毎", "/Summary_Action"));
+			if (section.equals("実績")) {
+				menu.add(new Link("Excel出力", "/Output/Excel"));
+				menu.add(new Link("種別毎", "/Summary_Type"));
+				menu.add(new Link("データ毎", "/Summary_Action"));
+			}
+			if (section.equals("予算")) {
+				menu.add(new Link("Excel出力", "/Output/Excel"));
+				menu.add(new Link("種別毎", "/Plan_Type"));
+			}
 			break;
 		case "データ毎一覧":
 			menu.add(new Link("Excel出力", "/Output/Excel"));
@@ -1394,15 +1425,6 @@ public class KakeiboService {
 		default:
 			return new Link(title, "/");
 		}
-	}
-
-	public Page type(String section, String date) {
-		String view = "Type";
-		Link title_Link = link("項目別一覧", "/View");
-		Link date_Link = link(date, "/Date");
-		List<Link> menu = menu(view);
-		Table_Data table= table(view, section, date);;
-		return new Page(title_Link, date_Link, menu, table);
 	}
 
 	private Link link(String text, String url) {
