@@ -881,7 +881,7 @@ public class KakeiboService {
 				data = data_Item_List(date);
 			}
 			if (section.equals("予算")) {
-				List<Plan> plan_List = plan_List(date);
+				data = data_Plan_List_Item(date);
 			}
 			break;
 		case "データ毎一覧":
@@ -938,6 +938,41 @@ public class KakeiboService {
 					for (Action action : actionList) {
 						income += action.getIncome();
 						spending += action.getSpending();
+					}
+					List<String> list = new ArrayList<>();
+					add(list, type.getId());
+					add(list, type_Value);
+					add(list, item.getName());
+					add(list, item.getNote());
+					add(list, income);
+					add(list, spending);
+					add(list, income - spending);
+					data.add(list);
+				}
+			}
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Plan_List_Item(String date) {
+		List<List<String>> data = new ArrayList<>();
+		String current_Type_Value = "0";
+		for (Type type : typeList()) {
+			String type_Value = type.getName();
+			List<Item> itemList = itemList(type.getId());
+			for (Item item : itemList) {
+				if(current_Type_Value == type.getName()) {
+					type_Value = "0";
+				} else {
+					current_Type_Value = type.getName();
+				}
+				List<Plan> planList = plan_List_Item(item.getId(), date);
+				if (planList.size() > 0) {
+					int income = 0;
+					int spending = 0;
+					for (Plan plan : planList) {
+						income += plan.getIncome();
+						spending += plan.getSpending();
 					}
 					List<String> list = new ArrayList<>();
 					add(list, type.getId());
@@ -1426,6 +1461,11 @@ public List<Action> action_List_All() {
 public List<Action> action_List_Item(int item_id, String date) {
 	if (date == null) date = this_Year();
 	return actionRepository.list(item_id, date);
+}
+
+public List<Plan> plan_List_Item(int item_id, String date) {
+	if (date == null) date = this_Year();
+	return planRepository.list(item_id, date);
 }
 
 	public List<Action> action_List_Type(int type_id, String date) {
