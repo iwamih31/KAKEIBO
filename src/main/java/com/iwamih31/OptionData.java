@@ -30,7 +30,7 @@ public class OptionData {
   public static String[] day_of_week = {"月", "火", "水", "木", "金", "土", "日"};
 
   // 年
-  public static Integer[] year = nums(this_Year() - 50, this_Year() , 1);
+  public static Integer[] year = nums(this_Year() - 50, this_Year() + 1 , 1);
 
   // 年/月
   public static String[] year_month = year_month((50 * 12), 1);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.iwamih31.OptionData;
 import com.iwamih31.KAKEIBO.Action;
 import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.Item;
@@ -136,6 +137,18 @@ public class KakeiboController {
 			Model model) {
 		add_View_Data_(model, "date");
 		model.addAttribute("page", service.page("期間選択", section, date));
+		return "view";
+	}
+
+	@PostMapping("/Year")
+	public String year(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "year");
+		model.addAttribute("page", service.page("年度選択", section, date));
+		model.addAttribute("options", OptionData.year);
+		model.addAttribute("selected_year", service.year(date));
 		return "view";
 	}
 
@@ -958,38 +971,6 @@ public class KakeiboController {
 		model.addAttribute("income", service.income_List(action_List));
 		model.addAttribute("spending",service.spending_List(action_List));
 		model.addAttribute("label_Set_List", LabelSet.action_List_Set);
-		return "view";
-	}
-
-	@PostMapping("/Year")
-	public String year(
-			@RequestParam("year")String year,
-			@RequestParam("subject")String subject,
-			RedirectAttributes redirectAttributes) {
-		redirectAttributes.addAttribute("subject", subject);
-		year = service.year(year + " 1 月 1 日", "G y 年 M 月 d 日");
-		return redirect("/Year?year=" + year);
-	}
-
-	@GetMapping("/Year")
-	public String year(
-			@Param("year")String year,
-			@Param("subject")String subject,
-			Model model) {
-		add_View_Data_(model, "year", "年度別出納一覧");
-		if(year  == null) year = service.this_Year();
-		model.addAttribute("name", service.name());
-		model.addAttribute("year", service.japanese_Date(year, "G y 年"));
-		year += "/01";
-		model.addAttribute("carryover", service.carryover(year));
-		List<Action> action_List = service.year_List(year, 1, subject);
-		model.addAttribute("action_List", action_List);
-		model.addAttribute("income", service.income_List(action_List));
-		model.addAttribute("spending", service.spending_List(action_List));
-		model.addAttribute("label_Set_List", LabelSet.action_List_Set);
-		if(subject  == null) subject = "全科目";
-		if(subject.equals("")) subject = "全科目";
-		model.addAttribute("subject", subject);
 		return "view";
 	}
 

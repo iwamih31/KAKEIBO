@@ -244,3 +244,12 @@ nav button,
 	border: none;
 	background-color: inherit;
 }
+
+.form {
+	font-size: x-large;
+}
+
+.form select {
+	margin:0.2em;
+	padding: 0.2em;
+}

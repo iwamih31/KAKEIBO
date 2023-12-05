@@ -842,6 +842,13 @@ public class KakeiboService {
 		return years;
 	}
 
+	public int year(String date) {
+		LocalDate localDate = to_LocalDate(date);
+		Integer year = Integer.valueOf(localDate.getYear());
+		___consoleOut___("year = " + year);
+		return year;
+	}
+
 	public String year(String year, String format_Pattern) {
 		___consoleOut___("year = " + year + "format_Pattern = " + format_Pattern );
 		LocalDate localDate = to_LocalDate(year, format_Pattern);
