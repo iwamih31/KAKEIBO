@@ -1444,6 +1444,11 @@ public class KakeiboService {
 		case "項目選択":
 			menu.add(new Link("項目登録", "/InsertItem"));
 			break;
+		case "期間選択":
+			menu.add(new Link("年間", "/Year"));
+			menu.add(new Link("月間", "/Month"));
+			menu.add(new Link("日別", "/Day"));
+			break;
 		default:
 			break;
 		}

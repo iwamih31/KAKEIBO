@@ -129,6 +129,16 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@GetMapping("/Date")
+	public String date(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "date");
+		model.addAttribute("page", service.page("期間選択", section, date));
+		return "view";
+	}
+
 	@PostMapping("/Summary_Action")
 	public String summary_Action(
 			@RequestParam("date")String date,

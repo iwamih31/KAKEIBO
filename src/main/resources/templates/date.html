@@ -3,24 +3,60 @@
 
 	<!-- library フラグメントの定義（JavaScript／CSS） -->
 	<th:block th:fragment="library">
-		<link rel="stylesheet" th:href="@{/css/user.css}">
+		<link rel="stylesheet" th:href="@{/css/list.css}">
 	</th:block>
 
-	<!--	main フラグメントの定義（メインコンテンツ）	-->
+	<!-- main フラグメントの定義（メインコンテンツ） -->
 	<div th:fragment="main">
-		<div class="header border-bottom">
-			<h1 class="h2">[[${title}]]</h1>
-		</div>
-		<!--	一覧表示	-->
-		<div class="center">
-			<div class="flex margin_1em">
-				<form id="input" method="post" th:action="@{${url}}">
-					<label for="date">[[${label}]]</label>
-					<input type="date" name="date" th:value="${date}">
-					<button form="input" type="submit" class="btn btn-primary parts">
-						決定
+		<!-- ヘッダー部分 -->
+		<div class="header bg_skyblue">
+			<!-- タイトル表示 -->
+			<form id="title" th:action="@{${req + page.title.url}}" method="get">
+				<input type="hidden" name="date" th:value="${page.date.text}"/>
+				<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+				<button type="submit" class="btn-title">
+					<h1 class="h2">[[${page.title.text}]]</h1>
+				</button>
+			</form>
+			<!-- 日付表示 -->
+			<div class="date">
+				<form id="date" th:action="@{${req + page.date.url}}" method="get">
+					<input type="hidden" name="date" th:value="${page.date.text}"/>
+					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+					<button type="submit" class="btn_inherit">
+						<h3>[[${page.date.text}]]</h3>
 					</button>
 				</form>
+			</div>
+		</div>
+		<!-- 本体部分 -->
+		<div>
+			<!-- 操作系表示 -->
+			<div class="flex-end margin_1em">
+				<div class="name">
+					<form id="section" th:action="@{${req + page.table.section.url}}" method="get">
+						<input type="hidden" name="date" th:value="${page.date.text}"/>
+						<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+						<button type="submit" class="btn_inherit">
+							[[${page.table.section.text}]]
+						</button>
+					</form>
+				</div>
+				<div class="nav">
+					<th:block th:each="button, status : ${page.menu}">
+						<form th:id="'button' + ${status.index}" method="post" th:action="@{${req + button.url}}">
+							<input type="hidden" name="date" th:value="${page.date.text}"/>
+							<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+							<button th:form="'button' + ${status.index}" type="submit" class="btn btn-primary">
+								[[${button.text}]]
+							</button>
+						</form>
+					</th:block>
+				</div>
+			</div>
+			<!-- メッセージ表示	-->
+			<div class="flex">
+				<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
 			</div>
 		</div>
 		<br>
