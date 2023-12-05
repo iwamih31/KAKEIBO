@@ -1633,4 +1633,15 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 		}
 	}
 
+	public String date_URL(String section) {
+		switch (section) {
+		case "実績":
+			return "/Summary";
+		case "予算":
+			return "/Plan";
+		default:
+			return "/Start";
+		}
+	}
+
 }

@@ -612,6 +612,17 @@ public class KakeiboController {
 		return redirect("/SettingType");
 	}
 
+	@PostMapping("/Set/Year")
+	public String set_Year(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@ModelAttribute("year")String year,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", year);
+		redirectAttributes.addAttribute("section", section);
+		return redirect(service.date_URL(section));
+	}
+
 	@PostMapping("/Update/Type")
 	public String update_Type(
 			@RequestParam("date")String date,
