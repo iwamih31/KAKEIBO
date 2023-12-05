@@ -225,6 +225,8 @@ nav button,
 .btn-title {
 	border: none;
 	background-color: inherit;
+	margin:0.2em;
+	padding: 0.2em;
 }
 
 .btn-date {
