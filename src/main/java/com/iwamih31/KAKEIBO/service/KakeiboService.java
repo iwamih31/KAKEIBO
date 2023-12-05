@@ -928,12 +928,12 @@ public class KakeiboService {
 		for (Type type : typeList()) {
 			String type_Value = type.getName();
 			List<Item> itemList = itemList(type.getId());
+			if(current_Type_Value.equals(type.getName())) {
+				type_Value = "0";
+			} else {
+				current_Type_Value = type.getName();
+			}
 			for (Item item : itemList) {
-				if(current_Type_Value == type.getName()) {
-					type_Value = "0";
-				} else {
-					current_Type_Value = type.getName();
-				}
 				List<Action> actionList = action_List_Item(item.getId(), date);
 				if (actionList.size() > 0) {
 					int income = 0;
