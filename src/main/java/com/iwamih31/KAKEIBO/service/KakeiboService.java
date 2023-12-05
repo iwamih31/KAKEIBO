@@ -113,7 +113,10 @@ public class KakeiboService {
 		if(plan.getIncome() == null) plan.setIncome(0);
 		if(plan.getSpending() == null) plan.setSpending(0);
 		___consoleOut___("plan = " + plan);
-		String message = year_Month(plan.getThe_day()) + item(plan.getItem_id()) + " の予算データを登録";
+		String year_Month = year_Month(plan.getThe_day());
+		String item_Name = item(plan.getItem_id()).getName();
+
+		String message = year_Month + item_Name + " の予算データを登録";
 		try {
 			planRepository.save(plan);
 			message += " しました";
