@@ -152,6 +152,17 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/Day")
+	public String day(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "day");
+		model.addAttribute("page", service.page("日付選択", section, date));
+		model.addAttribute("day", service.to_LocalDate(date));
+		return "view";
+	}
+
 	@PostMapping("/Month")
 	public String month(
 			@RequestParam("date")String date,
