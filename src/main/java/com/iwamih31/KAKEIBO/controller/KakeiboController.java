@@ -152,6 +152,20 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/Month")
+	public String month(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "month");
+		model.addAttribute("page", service.page("月次選択", section, date));
+		model.addAttribute("year_List", OptionData.year);
+		model.addAttribute("month_List", OptionData.month);
+		model.addAttribute("selected_year", service.year(date));
+		model.addAttribute("selected_month", service.month(date));
+		return "view";
+	}
+
 	@PostMapping("/Summary_Action")
 	public String summary_Action(
 			@RequestParam("date")String date,
