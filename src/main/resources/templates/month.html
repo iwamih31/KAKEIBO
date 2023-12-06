@@ -56,7 +56,7 @@
 			</div>
 			<!-- 入力フォーム	-->
 			<div class="form">
-				年度を選択してください
+				表示する月を選択してください
 				<form id="year" th:action="@{${req + '/Set/Month'}}" method="post">
 					<input type="hidden" name="date" th:value="${page.date.text}"/>
 					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
@@ -71,7 +71,7 @@
 							[[${month}]]
 						</option >
 					</select>
-						年
+						月
 					<button type="submit" class="btn btn-primary">
 						確定
 					</button>

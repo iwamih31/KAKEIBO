@@ -33,7 +33,7 @@ public class OptionData {
   public static Integer[] year = nums(this_Year() - 50, this_Year() + 1 , 1);
 
   // 月
-  public static Integer[] month = nums(1, 12 , 1);
+  public static String[] month = month();
 
   // 年/月
   public static String[] year_month = year_month((50 * 12), 1);

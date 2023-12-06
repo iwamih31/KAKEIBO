@@ -637,6 +637,18 @@ public class KakeiboController {
 		return redirect(service.date_URL(section));
 	}
 
+	@PostMapping("/Set/Month")
+	public String set_Month(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@ModelAttribute("year")String year,
+			@ModelAttribute("month")String month,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", service.date(year, month));
+		redirectAttributes.addAttribute("section", section);
+		return redirect(service.date_URL(section));
+	}
+
 	@PostMapping("/Update/Type")
 	public String update_Type(
 			@RequestParam("date")String date,

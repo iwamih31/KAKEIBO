@@ -1175,6 +1175,10 @@ public class KakeiboService {
 		return date.replace("-", "/");
 	}
 
+	public String date(String year, String month) {
+		return year + "-" + month;
+	}
+
 	/** Tableのデータ行作成（id 使用） */
 	private List<List<String>> data(String title, String section, String date, int id) {
 		List<List<String>> data = new ArrayList<>();
