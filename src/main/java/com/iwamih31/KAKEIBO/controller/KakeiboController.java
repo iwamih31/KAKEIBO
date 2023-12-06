@@ -222,6 +222,16 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/All")
+	public String all(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/All");
+	}
+
 	@GetMapping("/All")
 	public String all(
 			@Param("date")String date,
@@ -233,21 +243,24 @@ public class KakeiboController {
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
-		model.addAttribute("row_url", "/UpdateAction");
+		model.addAttribute("row_url", "/Action");
 		return "view";
 	}
 
-	@PostMapping("/All")
-	public String all(
+	@PostMapping("/Action")
+	public String action(
 			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
 			Model model) {
-		add_View_Data_(model, "summary");
-		model.addAttribute("page", service.page("全データ一覧", "実績", date));
-		HashMap<String, Integer> sum_Set = service.sum_Set(service.action_List_All());
-		model.addAttribute("sum_income", sum_Set.get("income"));
-		model.addAttribute("sum_spending", sum_Set.get("spending"));
-		model.addAttribute("total", sum_Set.get("total"));
-		model.addAttribute("row_url", "/UpdateAction");
+		add_View_Data_(model, "action");
+		model.addAttribute("page", service.page("入出金データ", section, date));
+		Action action = service.action(id);
+		model.addAttribute("action", action);
+		String typeName = service.type(action).getName();
+		model.addAttribute("type", typeName);
+		String itemName = service.item(action).getName();
+		model.addAttribute("item", itemName);
 		return "view";
 	}
 

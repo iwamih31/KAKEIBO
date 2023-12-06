@@ -1351,6 +1351,7 @@ public class KakeiboService {
 		case "データ毎一覧":
 		case "データ修正":
 		case "データ削除":
+		case "入出金データ":
 			return LabelSet.action_Set;
 		case "新規入力":
 			if (section.equals("実績")) return LabelSet.action_Set;
@@ -1594,6 +1595,10 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 	public Type type(Action action) {
 		Item item = item(action.getItem_id());
 		return type(item.getType_id());
+	}
+
+	public Item item(Action action) {
+		return item(action.getItem_id());
 	}
 
 	public String insert_URL(String section) {
