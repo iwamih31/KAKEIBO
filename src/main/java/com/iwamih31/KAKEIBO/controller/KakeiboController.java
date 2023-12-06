@@ -75,7 +75,7 @@ public class KakeiboController {
 	@GetMapping("/Start")
 	public String start(
 			RedirectAttributes redirectAttributes) {
-		redirectAttributes.addAttribute("date", service.this_Year_Month());
+		redirectAttributes.addAttribute("date", service.this_Year());
 		redirectAttributes.addAttribute("section", "実績");
 		return redirect("/Summary");
 	}
