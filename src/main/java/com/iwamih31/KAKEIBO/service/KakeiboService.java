@@ -877,10 +877,10 @@ public class KakeiboService {
 		String link = "/Result";
 		switch (section) {
 		case "実績":
-			link = "/Plan";
+			link = "/To/Plan";
 			break;
 		case "予算":
-			link = "/Result";
+			link = "/To/Summary";
 			break;
 		default:
 			link = "/";
@@ -915,6 +915,14 @@ public class KakeiboService {
 			}
 			if (section.equals("予算")) {
 				data = data_Plan_List_Type(date);
+			}
+			break;
+		case "全データ一覧":
+			if (section.equals("実績")) {
+				data = data_Action_All();
+			}
+			if (section.equals("予算")) {
+				data = data_Plan_All();
 			}
 			break;
 		case "種別選択":
@@ -1018,6 +1026,25 @@ public class KakeiboService {
 			add(list, action.getIncome());
 			add(list, action.getSpending());
 			add(list, action.getNote());
+			data.add(list);
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Plan_All() {
+		List<List<String>> data = new ArrayList<>();
+		for (Plan plan : plan_List_All()) {
+			Item item = item(plan.getItem_id());
+			Type type = type(item.getType_id());
+			List<String> list = new ArrayList<>();
+			add(list, plan.getId());
+			add(list, date(plan.getThe_day()));
+			add(list, type.getName());
+			add(list, item.getName());
+			add(list, item.getNote());
+			add(list, plan.getIncome());
+			add(list, plan.getSpending());
+			add(list, plan.getNote());
 			data.add(list);
 		}
 		return data;
@@ -1401,9 +1428,15 @@ public class KakeiboService {
 			menu.add(new Link("項目毎", "/Summary"));
 			break;
 		case "種別毎一覧":
-			menu.add(new Link("Excel出力", "/Output/Excel"));
-			menu.add(new Link("項目毎", "/Summary"));
-			menu.add(new Link("データ毎", "/Summary_Action"));
+			if (section.equals("実績")) {
+				menu.add(new Link("Excel出力", "/Output/Excel"));
+				menu.add(new Link("項目毎", "/Summary"));
+				menu.add(new Link("データ毎", "/Summary_Action"));
+			}
+			if (section.equals("予算")) {
+				menu.add(new Link("Excel出力", "/Output/Excel"));
+				menu.add(new Link("項目毎", "/Summary"));
+			}
 			break;
 		case "種別毎内訳":
 			menu.add(new Link("Excel出力", "/Output/Excel"));
@@ -1504,9 +1537,12 @@ public class KakeiboService {
 		return planRepository.list(date);
 	}
 
-
-public List<Action> action_List_All() {
+	public List<Action> action_List_All() {
 		return actionRepository.all();
+	}
+
+	public List<Plan> plan_List_All() {
+		return planRepository.all();
 	}
 
 public List<Action> action_List_Item(int item_id, String date) {

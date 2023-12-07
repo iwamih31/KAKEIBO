@@ -357,6 +357,25 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@GetMapping("/To/Plan")
+	public String to_Plan(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", "予算");
+		return redirect("/Plan");
+	}
+
+	@GetMapping("/To/Summary")
+	public String to_Summary(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", "実績");
+		return redirect("/Summary");
+	}
 
 	@PostMapping("/UpdateAction")
 	public String updateAction(
