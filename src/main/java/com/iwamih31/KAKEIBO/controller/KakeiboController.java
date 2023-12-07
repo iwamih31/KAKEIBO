@@ -357,6 +357,19 @@ public class KakeiboController {
 		return "view";
 	}
 
+
+	@PostMapping("/UpdateAction")
+	public String updateAction(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")Integer id,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		redirectAttributes.addAttribute("id", id);
+		return redirect("/UpdateAction");
+	}
+
 	@GetMapping("/UpdateAction")
 	public String updateAction(
 			@RequestParam("date")String date,
