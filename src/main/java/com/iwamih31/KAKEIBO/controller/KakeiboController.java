@@ -192,6 +192,21 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/Summary_Plan")
+	public String summary_Plan(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "summary");
+		model.addAttribute("page", service.page("月毎一覧", section, date));
+		HashMap<String, Integer> sum_Set = service.sum_Set_Plan(service.plan_List(date));
+		model.addAttribute("sum_income", sum_Set.get("income"));
+		model.addAttribute("sum_spending", sum_Set.get("spending"));
+		model.addAttribute("total", sum_Set.get("total"));
+		model.addAttribute("row_url", "/UpdatePlan");
+		return "view";
+	}
+
 	@PostMapping("/Summary_Type")
 	public String summary_Type(
 			@RequestParam("date")String date,

@@ -902,12 +902,10 @@ public class KakeiboService {
 			}
 			break;
 		case "データ毎一覧":
-			if (section.equals("実績")) {
-				data = data_Action_List(date);
-			}
-			if (section.equals("予算")) {
-				List<Plan> plan_List = plan_List(date);
-			}
+			data = data_Action_List(date);
+			break;
+		case "月毎一覧":
+			data = data_Plan_List(date);
 			break;
 		case "種別毎一覧":
 			if (section.equals("実績")) {
@@ -1065,6 +1063,39 @@ public class KakeiboService {
 			add(list, action.getNote());
 			___consoleOut___(list);
 			data.add(list);
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Plan_List(String date) {
+		List<List<String>> data = new ArrayList<>();
+		String current_Type_Value = "0";
+		for (Type type : typeList()) {
+			String type_Value = type.getName();
+			List<Item> itemList = itemList(type.getId());
+			for (Item item : itemList) {
+				if(current_Type_Value.equals(type.getName())) {
+					type_Value = "0";
+				} else {
+					current_Type_Value = type.getName();
+				}
+				List<Plan> planList = plan_List_Item(item.getId(), date);
+				for (Plan plan : planList) {
+					int income = plan.getIncome();
+					int spending = plan.getSpending();
+					List<String> list = new ArrayList<>();
+					if(date.split("-").length > 1) add(list, type.getId());
+					if(date.split("-").length == 1) add(list, plan.getId());
+					add(list, type_Value);
+					add(list, item.getName());
+					if(date.split("-").length > 1) add(list, item.getNote());
+					if(date.split("-").length == 1) add(list, plan.getThe_day());
+					add(list, income);
+					add(list, spending);
+					add(list, income - spending);
+					data.add(list);
+				}
+			}
 		}
 		return data;
 	}
@@ -1299,7 +1330,7 @@ public class KakeiboService {
 	public Table_Data table(String title, String section, String date) {
 		section = null_Section(title, section);
 		Link section_Link = section_Link(section);
-		Set[] columns = columns(title, section);
+		Set[] columns = columns(title, section, date);
 		List<List<String>> data = data(title, section, date);
 		return new Table_Data(section_Link, columns, data);
 	}
@@ -1314,7 +1345,7 @@ public class KakeiboService {
 			break;
 		}
 		Link section_Link = section_Link(section );
-		Set[] columns = columns(title, section);
+		Set[] columns = columns(title, section, date);
 		List<List<String>> data = data(title, section, date, id);
 		return new Table_Data(section_Link, columns, data);
 	}
@@ -1365,7 +1396,7 @@ public class KakeiboService {
 		return new Page(title_Link, date_Link, menu, table);
 	}
 
-	private Set[] columns(String title, String section) {
+	private Set[] columns(String title, String section, String date) {
 		switch (title) {
 		case "項目別一覧":
 			return LabelSet.summary_Set;
@@ -1378,6 +1409,9 @@ public class KakeiboService {
 		case "データ修正":
 		case "データ削除":
 		case "入出金データ":
+			return LabelSet.action_Set;
+		case "月毎一覧":
+			if (date.split("-").length == 1) return LabelSet.plan_month_Set;
 			return LabelSet.action_Set;
 		case "新規入力":
 			if (section.equals("実績")) return LabelSet.action_Set;
