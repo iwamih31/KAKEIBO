@@ -150,6 +150,15 @@ public class LabelSet {
 			set("説明",	 	25),
 	};
 
+	public static Set[] plan_Note_Set = {
+			set("種別",	 	 7),
+			set("項目",	 	 7),
+			set("説明",	 	25),
+			set("入金",	 	 7),
+			set("出金",	 	 7),
+			set("収支",		 10),
+	};
+
 	public static Set[] actionUpdate_Set = {
 			set("ID",		 4),
 			set("日付",		 6),

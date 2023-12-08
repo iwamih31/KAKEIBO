@@ -980,6 +980,7 @@ public class KakeiboService {
 	}
 
 	private List<List<String>> data_Plan_List_Item(String date) {
+		date = plan_Date(date);
 		List<List<String>> data = new ArrayList<>();
 		String current_Type_Value = "0";
 		for (Type type : typeList()) {
@@ -1072,6 +1073,7 @@ public class KakeiboService {
 	}
 
 	private List<List<String>> data_Plan_List(String date) {
+		date = plan_Date(date);
 		List<List<String>> data = new ArrayList<>();
 		String current_Type_Value = "0";
 		for (Type type : typeList()) {
@@ -1102,6 +1104,12 @@ public class KakeiboService {
 			}
 		}
 		return data;
+	}
+
+	private String plan_Date(String date) {
+		String[] ymd = date.split("-");
+		if (ymd.length > 2) date = ymd[0] + "-" + ymd[1];
+		return date;
 	}
 
 	private List<List<String>> data_Plan_List_Type(String date) {
@@ -1415,7 +1423,7 @@ public class KakeiboService {
 			return LabelSet.action_Set;
 		case "月毎一覧":
 			if (date.split("-").length == 1) return LabelSet.plan_month_Set;
-			return LabelSet.action_Set;
+			return LabelSet.plan_Note_Set;
 		case "新規入力":
 		case "データ修正":
 			if (section.equals("実績")) return LabelSet.action_Set;
