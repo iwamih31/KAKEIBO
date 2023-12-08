@@ -29,10 +29,20 @@ public interface PlanRepository extends JpaRepository<Plan, Integer> {
 			@Param("item_id") Integer item_id,
 			@Param("the_day") String the_day);
 
-	/**	Action リスト取得（date 順） */
+	/**	Plan リスト取得（date 順） */
 	@Query("select plan"
 			+ " from Plan plan"
 			+ " order by plan.the_day asc")
 	public List<Plan> all();
+
+
+	/**	Plan取得（item_id, date 指定） */
+	@Query("select plan"
+		    + " from Plan plan"
+		    + " where plan.item_id = :item_id"
+		    + " and plan.the_day like CONCAT(:the_day, '%')")
+	public Plan plan(
+			@Param("item_id") Integer item_id,
+			@Param("the_day") String the_day);
 
 }

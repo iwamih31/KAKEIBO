@@ -895,7 +895,7 @@ public class KakeiboService {
 		switch (title) {
 		case "項目別一覧":
 			if (section.equals("実績")) {
-				data = data_Item_List(date);
+				data = data_Action_List_Item(date);
 			}
 			if (section.equals("予算")) {
 				data = data_Plan_List_Item(date);
@@ -944,7 +944,7 @@ public class KakeiboService {
 		return data;
 	}
 
-	private List<List<String>> data_Item_List(String date) {
+	private List<List<String>> data_Action_List_Item(String date) {
 		List<List<String>> data = new ArrayList<>();
 		for (Type type : typeList()) {
 			String current_Type_Value = "0";
@@ -984,30 +984,29 @@ public class KakeiboService {
 			String type_Value = type.getName();
 			List<Item> itemList = itemList(type.getId());
 			for (Item item : itemList) {
-				if(current_Type_Value == type.getName()) {
+				if(current_Type_Value.equals(type.getName())) {
 					type_Value = "0";
 				} else {
 					current_Type_Value = type.getName();
 				}
 				List<Plan> planList = plan_List_Item(item.getId(), date);
-				if (planList.size() > 0) {
-					int income = 0;
-					int spending = 0;
-					for (Plan plan : planList) {
-						income += plan.getIncome();
-						spending += plan.getSpending();
-					}
-					List<String> list = new ArrayList<>();
-					add(list, type.getId());
-					add(list, type_Value);
-					add(list, item.getName());
-					add(list, item.getNote());
-					add(list, income);
-					add(list, spending);
-					add(list, income - spending);
-					data.add(list);
+				int income = 0;
+				int spending = 0;
+				for (Plan plan : planList) {
+					income += plan.getIncome();
+					spending += plan.getSpending();
 				}
+				List<String> list = new ArrayList<>();
+				add(list, type.getId());
+				add(list, type_Value);
+				add(list, item.getName());
+				add(list, item.getNote());
+				add(list, income);
+				add(list, spending);
+				add(list, income - spending);
+				data.add(list);
 			}
+
 		}
 		return data;
 	}
