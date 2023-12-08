@@ -895,7 +895,7 @@ public class KakeiboService {
 		switch (title) {
 		case "項目別一覧":
 			if (section.equals("実績")) {
-				data = data_Action_List_Item(date);
+				data = data_Item_List(date);
 			}
 			if (section.equals("予算")) {
 				data = data_Plan_List_Item(date);
@@ -944,7 +944,7 @@ public class KakeiboService {
 		return data;
 	}
 
-	private List<List<String>> data_Action_List_Item(String date) {
+	private List<List<String>> data_Item_List(String date) {
 		List<List<String>> data = new ArrayList<>();
 		for (Type type : typeList()) {
 			String current_Type_Value = "0";
@@ -1419,12 +1419,20 @@ public class KakeiboService {
 			if (section.equals("予算")) {
 				menu.add(new Link("Excel出力", "/Output/Excel"));
 				menu.add(new Link("種別毎", "/Plan_Type"));
+				menu.add(new Link("月毎", "/Summary_Plan"));
 			}
 			break;
 		case "データ毎一覧":
-			menu.add(new Link("Excel出力", "/Output/Excel"));
-			menu.add(new Link("種別毎", "/Summary_Type"));
-			menu.add(new Link("項目毎", "/Summary"));
+			if (section.equals("実績")) {
+				menu.add(new Link("Excel出力", "/Output/Excel"));
+				menu.add(new Link("種別毎", "/Summary_Type"));
+				menu.add(new Link("項目毎", "/Summary"));
+			}
+			if (section.equals("予算")) {
+				menu.add(new Link("Excel出力", "/Output/Excel"));
+				menu.add(new Link("種別毎", "/Plan_Type"));
+				menu.add(new Link("項目毎", "/Plan"));
+			}
 			break;
 		case "種別毎一覧":
 			if (section.equals("実績")) {
@@ -1434,7 +1442,8 @@ public class KakeiboService {
 			}
 			if (section.equals("予算")) {
 				menu.add(new Link("Excel出力", "/Output/Excel"));
-				menu.add(new Link("項目毎", "/Summary"));
+				menu.add(new Link("項目毎", "/Plan"));
+				menu.add(new Link("月毎", "/Summary_Plan"));
 			}
 			break;
 		case "種別毎内訳":
