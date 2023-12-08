@@ -410,12 +410,27 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			@RequestParam("id")Integer id,
 			Model model) {
-		service.___consoleOut___("date = " + date);
 		add_View_Data_(model, "updateAction");
 		model.addAttribute("page", service.page("データ修正", section, date));
 		Action action = service.action(id);
 		model.addAttribute("action", action);
 		String typeName = service.type(action).getName();
+		model.addAttribute("type", typeName);
+		model.addAttribute("itemList", service.itemList(typeName));
+		return "view";
+	}
+
+	@GetMapping("/UpdatePlan")
+	public String updatePlan(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")Integer id,
+			Model model) {
+		add_View_Data_(model, "updatePlan");
+		model.addAttribute("page", service.page("データ修正", section, date));
+		Plan plan = service.plan(id);
+		model.addAttribute("action", plan);
+		String typeName = service.type(plan).getName();
 		model.addAttribute("type", typeName);
 		model.addAttribute("itemList", service.itemList(typeName));
 		return "view";

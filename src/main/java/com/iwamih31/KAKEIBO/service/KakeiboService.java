@@ -67,6 +67,10 @@ public class KakeiboService {
 		return actionRepository.getReferenceById(id);
 	}
 
+	public Plan plan(int id) {
+		return planRepository.getReferenceById(id);
+	}
+
 	public Owner owner(int id) {
 		return ownerRepository.getReferenceById(id);
 	}
@@ -1672,6 +1676,11 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 
 	public Type type(Action action) {
 		Item item = item(action.getItem_id());
+		return type(item.getType_id());
+	}
+
+	public Type type(Plan plan) {
+		Item item = item(plan.getItem_id());
 		return type(item.getType_id());
 	}
 
