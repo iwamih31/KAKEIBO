@@ -1410,7 +1410,6 @@ public class KakeiboService {
 			return LabelSet.type_Set;
 		case "全データ一覧":
 		case "データ毎一覧":
-		case "データ修正":
 		case "データ削除":
 		case "入出金データ":
 			return LabelSet.action_Set;
@@ -1418,6 +1417,7 @@ public class KakeiboService {
 			if (date.split("-").length == 1) return LabelSet.plan_month_Set;
 			return LabelSet.action_Set;
 		case "新規入力":
+		case "データ修正":
 			if (section.equals("実績")) return LabelSet.action_Set;
 			if (section.equals("予算")) return LabelSet.plan_Set;
 		case "種別選択":

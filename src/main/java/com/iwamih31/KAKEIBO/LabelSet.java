@@ -147,7 +147,7 @@ public class LabelSet {
 			set("項目",	 	 7),
 			set("入金",	 	 7),
 			set("出金",	 	 7),
-			set("備考",	 	25),
+			set("説明",	 	25),
 	};
 
 	public static Set[] actionUpdate_Set = {

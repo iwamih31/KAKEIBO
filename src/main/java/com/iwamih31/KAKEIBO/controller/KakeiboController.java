@@ -420,7 +420,7 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@GetMapping("/UpdatePlan")
+	@PostMapping("/UpdatePlan")
 	public String updatePlan(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
