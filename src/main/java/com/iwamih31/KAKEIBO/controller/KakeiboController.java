@@ -286,12 +286,14 @@ public class KakeiboController {
 			@RequestParam("id")int id,
 			Model model) {
 		add_View_Data_(model, "type");
-		model.addAttribute("page", service.page("種別毎内訳", section, date, id));
+		String title = "種別毎内訳";
+		model.addAttribute("page", service.page(title, section, date, id));
 		HashMap<String, Integer> sum_Set = service.sum_Set(service.action_List_Type(id, date));
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
 		model.addAttribute("row_url", "/UpdateAction");
+		model.addAttribute("row_url", service.row_url(title, section));
 		return "view";
 	}
 

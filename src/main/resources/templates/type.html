@@ -62,7 +62,7 @@
 								<th:block th:each="value, col_status : ${row}" th:if="${col_status.index &gt; 0}">
 									<th:block th:if="${value} != '0' and ${value} != ''">
 										<td class="num3">
-											<form th:id="'row' + ${row_status.index}" th:action="@{${req + row_url}}" method="get">
+											<form th:id="'row' + ${row_status.index}" th:action="@{${req + row_url}}" method="post">
 												<input type="hidden" name="date" th:value="${page.date.text}"/>
 												<input type="hidden" name="section" th:value="${page.table.section.text}"/>
 												<input type="hidden" name="id" th:value="${row[0]}"/>

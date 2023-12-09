@@ -1190,6 +1190,34 @@ public class KakeiboService {
 		return data;
 	}
 
+	private List<List<String>> data_Plan(int type_id, String date) {
+		List<List<String>> data = new ArrayList<>();
+		Type type = type(type_id);
+		List<Item> itemList = itemList(type.getId());
+		for (Item item : itemList) {
+			String item_Value = item.getName();
+			List<Plan> planList = plan_List_Item(item.getId(), date);
+			for (Plan plan : planList) {
+				int id = plan.getId();
+				int income = plan.getIncome();
+				int spending = plan.getSpending();
+				String the_day = date(plan.getThe_day());
+				String note = plan.getNote();
+				List<String> list = new ArrayList<>();
+				add(list, id);
+				add(list, the_day);
+				add(list, item_Value);
+				add(list, note);
+				add(list, income);
+				add(list, spending);
+				add(list, income - spending);
+				___consoleOut___(list);
+				data.add(list);
+			}
+		}
+		return data;
+	}
+
     private void ___consoleOut___(List<String> text_List) {
     	for (String text : text_List) {
 			___consoleOut___(text);
@@ -1233,7 +1261,13 @@ public class KakeiboService {
 			data = data_Action(id);
 			break;
 		case "種別毎内訳":
-			data = data_Action(id, date);
+			if (section.equals("実績")) {
+				data = data_Action(id, date);
+			}
+			if (section.equals("予算")) {
+				data = data_Plan(id, date);
+			}
+
 			break;
 		default:
 			break;
@@ -1347,15 +1381,7 @@ public class KakeiboService {
 		return new Table_Data(section_Link, columns, data);
 	}
 
-	public Table_Data table(String title, String date, int id) {
-		String section = "";
-		switch (title) {
-		case "種別毎内訳":
-			section = type_Name(id);
-			break;
-		default:
-			break;
-		}
+	public Table_Data table(String title, String section, String date, int id) {
 		Link section_Link = section_Link(section );
 		Set[] columns = columns(title, section, date);
 		List<List<String>> data = data(title, section, date, id);
@@ -1404,7 +1430,7 @@ public class KakeiboService {
 		if (date == null) date = this_Year_Month();
 		Link date_Link = date_Link(date);
 		List<Link> menu = menu(title, section);
-		Table_Data table= table(title, date, id);
+		Table_Data table= table(title, section, date, id);
 		return new Page(title_Link, date_Link, menu, table);
 	}
 
@@ -1716,6 +1742,18 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 		default:
 			return "/Start";
 		}
+	}
+
+	public String row_url(String title, String section) {
+		switch (title) {
+		case "種別毎内訳":
+			if (section.equals("実績")) return "/UpdateAction";
+			if (section.equals("予算")) return "/UpdatePlan";
+			break;
+		default:
+			return "/";
+		}
+		return "/";
 	}
 
 }
