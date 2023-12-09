@@ -288,7 +288,8 @@ public class KakeiboController {
 		add_View_Data_(model, "type");
 		String title = "種別毎内訳";
 		model.addAttribute("page", service.page(title, section, date, id));
-		HashMap<String, Integer> sum_Set = service.sum_Set(service.action_List_Type(id, date));
+		HashMap<String, Integer> sum_Set = service.sum_Set(title, section, date, id);
+//		HashMap<String, Integer> sum_Set = service.sum_Set(service.action_List_Type(id, date));
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));

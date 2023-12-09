@@ -1645,6 +1645,16 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 		return action_List;
 	}
 
+	public List<Plan> plan_List_Type(int type_id, String date) {
+		List<Plan> plan_List = new ArrayList<>();
+		if (date == null) date = this_Year_Month();
+		List<Item> item_List = itemRepository.list(type_id);
+		for (Item item : item_List) {
+			plan_List.addAll(plan_List_Item(item.getId(), date));
+		}
+		return plan_List;
+	}
+
 	public Object account_Monthly(String date) {
 		// TODO 自動生成されたメソッド・スタブ
 		return null;
@@ -1667,6 +1677,12 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 		sum_Set.put("spending", sum_spending);
 		sum_Set.put("total", sum_income - sum_spending);
 		return sum_Set;
+	}
+
+	public HashMap<String, Integer> sum_Set(String title, String section, String date, int id) {
+		if (section.equals("実績")) return sum_Set(action_List_Type(id, date));
+		if (section.equals("予算")) return sum_Set_Plan(plan_List_Type(id, date));
+		return null;
 	}
 
 	public HashMap<String, Integer> sum_Set_Plan(List<Plan> plan_List) {
