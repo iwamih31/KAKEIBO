@@ -23,7 +23,13 @@
 			<!-- 操作系表示 -->
 			<div class="flex-end margin_1em">
 				<div class="name">
-					 [[${page.table.section.text}]]
+					<form id="section" th:action="@{${req + page.table.section.url}}" method="get">
+						<input type="hidden" name="date" th:value="${page.date.text}"/>
+						<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+						<button type="submit" class="btn_inherit">
+							[[${page.table.section.text}]]
+						</button>
+					</form>
 				</div>
 				<div class="nav">
 					<th:block th:each="button, status : ${page.menu}">

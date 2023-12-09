@@ -19,7 +19,15 @@
 			</form>
 			<!-- 日付表示 -->
 			<div class="date">
-				 [[${page.date.text}]]
+				 <form id="date" th:action="@{${req + page.date.url}}" method="get">
+					<input type="hidden" name="date" th:value="${page.date.text}"/>
+					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+					<button type="submit" class="btn_inherit">
+						<h3 >
+							[[${page.date.text}]]
+						</h3>
+					</button>
+				</form>
 			</div>
 		</div>
 		<!-- 本体部分 -->
@@ -27,7 +35,23 @@
 			<!-- 操作系表示 -->
 			<div class="flex-end margin_1em">
 				<div class="name">
-					 [[${page.table.section.text}]]
+					<form id="type" th:action="@{${req + '/ChangeType'}}" method="post">
+						<input type="hidden" name="date" th:value="${page.date.text}"/>
+						<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+						<input type="hidden" name="id" th:value="${type.id}"/>
+						<button type="submit" class="btn_inherit">
+							[[${type.name}]]
+						</button>
+					</form>
+				</div>
+				<div class="name">
+					<form id="section" th:action="@{${req + page.table.section.url}}" method="get">
+						<input type="hidden" name="date" th:value="${page.date.text}"/>
+						<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+						<button type="submit" class="btn_inherit">
+							[[${page.table.section.text}]]
+						</button>
+					</form>
 				</div>
 				<div class="nav">
 					<th:block th:each="button, status : ${page.menu}">
@@ -83,15 +107,15 @@
 			</table>
 			<div class="right">
 				入金計
-				<div class="name">
+				<div class="result num3">
 					[[${sum_income}]]
 				</div>
 				－　出金計
-				<div class="name">
+				<div class="result num3">
 					 [[${sum_spending}]]
 				</div>
 				＝　収支
-				<div class="name">
+				<div class="result num3">
 					 [[${total}]]
 				</div>
 			</div>

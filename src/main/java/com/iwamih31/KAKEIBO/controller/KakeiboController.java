@@ -126,7 +126,7 @@ public class KakeiboController {
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
-		model.addAttribute("row_url", "/Plan");
+		model.addAttribute("row_url", "/Type");
 		return "view";
 	}
 
@@ -283,13 +283,13 @@ public class KakeiboController {
 	public String type(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
-			@RequestParam("id")int id,
+			@RequestParam("id")int type_id,
 			Model model) {
 		add_View_Data_(model, "type");
 		String title = "種別毎内訳";
-		model.addAttribute("page", service.page(title, section, date, id));
-		HashMap<String, Integer> sum_Set = service.sum_Set(title, section, date, id);
-//		HashMap<String, Integer> sum_Set = service.sum_Set(service.action_List_Type(id, date));
+		model.addAttribute("page", service.page(title, section, date, type_id));
+		model.addAttribute("type", service.type(type_id));
+		HashMap<String, Integer> sum_Set = service.sum_Set(title, section, date, type_id);
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
