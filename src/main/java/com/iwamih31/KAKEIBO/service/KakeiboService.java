@@ -928,9 +928,8 @@ public class KakeiboService {
 			}
 			break;
 		case "種別選択":
-			data = data_Type_All();
-			break;
 		case "種別設定":
+		case "種別変更":
 			data = data_Type_All();
 			break;
 		case "種別削除":
