@@ -301,3 +301,87 @@ The object is already closed [90007-214]
 2023-12-10 13:58:38 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
 The object is already closed [90007-214]
+2023-12-10 14:44:01 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 14:44:18 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 14:46:13 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 14:46:32 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 14:48:47 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 14:51:23 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 14:57:47 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 14:58:23 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 14:59:59 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:02:17 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:03:20 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:04:03 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:04:34 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:05:40 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:08:22 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:10:32 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:12:40 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:15:03 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:17:50 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:18:17 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:18:41 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:21:01 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:23:16 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:23:36 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:24:31 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:25:36 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:27:41 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]
+2023-12-10 15:46:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientException: オブジェクトはすでに閉じられています
+The object is already closed [90007-214]

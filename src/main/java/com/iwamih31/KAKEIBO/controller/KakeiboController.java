@@ -111,6 +111,9 @@ public class KakeiboController {
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
+		int carryover = service.carryover(date);
+		model.addAttribute("carryover", carryover);
+		model.addAttribute("asset", carryover + sum_Set.get("total"));
 		model.addAttribute("row_url", "/Type");
 		return "view";
 	}
@@ -642,7 +645,7 @@ public class KakeiboController {
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		return redirect("/Type");
+		return redirect("/Summary");
 	}
 
 	@PostMapping("/Order/Type")

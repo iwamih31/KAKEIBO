@@ -1581,9 +1581,9 @@ public class KakeiboService {
 		return null;
 	}
 
-	public Object carryover(String date) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+	public int carryover(String date) {
+		HashMap<String, Integer> sum_Set = sum_Set(action_List_All(date));
+		return sum_Set.get("total");
 	}
 
 	public List<Action> year_List(String year, int i, String subject) {
@@ -1618,6 +1618,10 @@ public class KakeiboService {
 
 	public List<Action> action_List_All() {
 		return actionRepository.all();
+	}
+
+	public List<Action> action_List_All(String date) {
+		return actionRepository.all(to_LocalDate(date));
 	}
 
 	public List<Plan> plan_List_All() {
