@@ -132,6 +132,10 @@ nav button,
 	background-color: green;
 }
 
+.bg_lightgreen {
+	background-color: lightgreen;
+}
+
 .bg_red {
 	background-color: red;
 }

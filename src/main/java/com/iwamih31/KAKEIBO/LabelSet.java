@@ -135,10 +135,10 @@ public class LabelSet {
 			set("日付",	 	10),
 			set("種別",	 	 7),
 			set("項目",	 	 7),
-			set("詳細",	 	10),
+			set("詳細",	 	15),
 			set("入金",	 	 7),
 			set("出金",	 	 7),
-			set("備考",	 	25),
+			set("備考",	 	15),
 	};
 
 	public static Set[] plan_Set = {
