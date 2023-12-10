@@ -2,7 +2,6 @@ package com.iwamih31.KAKEIBO.controller;
 
 import java.time.LocalDate;
 import java.util.HashMap;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -111,7 +110,7 @@ public class KakeiboController {
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
-		int carryover = service.carryover(date);
+		int carryover = service.carryover(section, date);
 		model.addAttribute("carryover", carryover);
 		model.addAttribute("asset", carryover + sum_Set.get("total"));
 		model.addAttribute("row_url", "/Type");
@@ -129,6 +128,9 @@ public class KakeiboController {
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
+		int carryover = service.carryover(section, date);
+		model.addAttribute("carryover", carryover);
+		model.addAttribute("asset", carryover + sum_Set.get("total"));
 		model.addAttribute("row_url", "/Type");
 		return "view";
 	}
@@ -191,6 +193,9 @@ public class KakeiboController {
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
+		int carryover = service.carryover(section, date);
+		model.addAttribute("carryover", carryover);
+		model.addAttribute("asset", carryover + sum_Set.get("total"));
 		model.addAttribute("row_url", "/UpdateAction");
 		return "view";
 	}
@@ -206,6 +211,9 @@ public class KakeiboController {
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
+		int carryover = service.carryover(section, date);
+		model.addAttribute("carryover", carryover);
+		model.addAttribute("asset", carryover + sum_Set.get("total"));
 		model.addAttribute("row_url", "/UpdatePlan");
 		return "view";
 	}
@@ -221,6 +229,9 @@ public class KakeiboController {
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
+		int carryover = service.carryover(section, date);
+		model.addAttribute("carryover", carryover);
+		model.addAttribute("asset", carryover + sum_Set.get("total"));
 		model.addAttribute("row_url", "/Type");
 		return "view";
 	}
@@ -236,6 +247,9 @@ public class KakeiboController {
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
+		int carryover = service.carryover(section, date);
+		model.addAttribute("carryover", carryover);
+		model.addAttribute("asset", carryover + sum_Set.get("total"));
 		model.addAttribute("row_url", "/Plan_Type");
 		return "view";
 	}
@@ -296,7 +310,9 @@ public class KakeiboController {
 		model.addAttribute("sum_income", sum_Set.get("income"));
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
-		model.addAttribute("row_url", "/UpdateAction");
+		int carryover = service.carryover(title, section, date, type_id);
+		model.addAttribute("carryover", carryover);
+		model.addAttribute("asset", carryover + sum_Set.get("total"));
 		model.addAttribute("row_url", service.row_url(title, section));
 		return "view";
 	}
@@ -1094,24 +1110,6 @@ public class KakeiboController {
 			@RequestParam("date")String date,
 			RedirectAttributes redirectAttributes) {
 		return redirect("/Monthly?date=" + date);
-	}
-
-	@GetMapping("/Monthly")
-	public String monthly(
-			@Param("year_month")String date,
-			Model model) {
-		add_View_Data_(model, "monthly", "月別出納一覧");
-		if(date  == null) date = service.this_Year_Month();
-		model.addAttribute("name", service.name());
-		model.addAttribute("date", date);
-		model.addAttribute("japanese_Date", service.japanese_Date(date, "G y 年 M 月"));
-		model.addAttribute("carryover", service.carryover(date));
-		List<Action> action_List = service.monthly_List(date, 1);
-		model.addAttribute("action_List", action_List);
-		model.addAttribute("income", service.income_List(action_List));
-		model.addAttribute("spending",service.spending_List(action_List));
-		model.addAttribute("label_Set_List", LabelSet.action_List_Set);
-		return "view";
 	}
 
 	@PostMapping("/Subject")

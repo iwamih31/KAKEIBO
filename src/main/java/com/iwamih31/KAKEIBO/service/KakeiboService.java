@@ -1169,16 +1169,14 @@ public class KakeiboService {
 			String item_Value = item.getName();
 			List<Action> actionList = action_List_Item(item.getId(), date);
 			for (Action action : actionList) {
-				int id = action.getId();
 				int income = action.getIncome();
 				int spending = action.getSpending();
-				String the_day = date(action.getThe_day());
-				String detail = action.getDetail();
 				List<String> list = new ArrayList<>();
-				add(list, id);
-				add(list, the_day);
+				add(list, action.getId());
+				add(list, date(action.getThe_day()));
 				add(list, item_Value);
-				add(list, detail);
+				add(list, action.getDetail());
+				add(list, action.getNote());
 				add(list, income);
 				add(list, spending);
 				add(list, income - spending);
@@ -1581,9 +1579,30 @@ public class KakeiboService {
 		return null;
 	}
 
-	public int carryover(String date) {
-		HashMap<String, Integer> sum_Set = sum_Set(action_List_All(date));
+	public int carryover(String section, String date) {
+		HashMap<String, Integer> sum_Set = null;
+		if (section.equals("実績")) sum_Set = sum_Set(action_List_All(date));
+		if (section.equals("予算")) sum_Set = sum_Set_Plan(plan_List_All(date));
 		return sum_Set.get("total");
+	}
+
+
+	public int carryover(String title, String section, String date, int id) {
+		int carryover = 0;
+		switch (title) {
+		case "種別毎内訳":
+			List<Item> itemList = itemList(id);
+			for (Item item : itemList) {
+				HashMap<String, Integer> sum_Set = null;
+				if (section.equals("実績")) sum_Set = sum_Set(action_List_All(date, id));
+				if (section.equals("予算")) sum_Set = sum_Set_Plan(plan_List_All(date, id));
+				carryover += sum_Set.get("total");
+			}
+			break;
+		default:
+			break;
+		}
+		return carryover;
 	}
 
 	public List<Action> year_List(String year, int i, String subject) {
@@ -1622,6 +1641,18 @@ public class KakeiboService {
 
 	public List<Action> action_List_All(String date) {
 		return actionRepository.all(to_LocalDate(date));
+	}
+
+	public List<Action> action_List_All(String date, int item_id ) {
+		return actionRepository.all(item_id, to_LocalDate(date));
+	}
+
+	public List<Plan> plan_List_All(String date) {
+		return planRepository.all(to_LocalDate(date));
+	}
+
+	public List<Plan> plan_List_All(String date, int item_id ) {
+		return planRepository.all(item_id, to_LocalDate(date));
 	}
 
 	public List<Plan> plan_List_All() {

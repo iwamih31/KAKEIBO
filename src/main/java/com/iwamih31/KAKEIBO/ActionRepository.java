@@ -44,4 +44,14 @@ public interface ActionRepository extends JpaRepository<Action, Integer> {
 	public List<Action> all(
 			@Param("the_day") LocalDate the_day);
 
+	/**	Action リスト取得（item_id 指定, the_day前日まで, the_day 順） */
+	@Query("select action"
+			+ " from Action action"
+			+ " where action.item_id = :item_id"
+			+ " and action.the_day < :the_day"
+			+ " order by action.the_day asc")
+	public List<Action> all(
+			@Param("item_id") Integer item_id,
+			@Param("the_day") LocalDate the_day);
+
 }
