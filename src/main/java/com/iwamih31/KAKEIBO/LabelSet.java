@@ -54,7 +54,7 @@ public class LabelSet {
 			set("並び順",	 4),
 			set("上げる",	 2),
 			set("下げる",	 2),
-			set("表示",	 	 4),
+			set("表示",	 	 5),
 	};
 
 	public static Set[] settingItem_Set = {
