@@ -1089,8 +1089,7 @@ public class KakeiboService {
 					int income = plan.getIncome();
 					int spending = plan.getSpending();
 					List<String> list = new ArrayList<>();
-					if(date.split("-").length > 1) add(list, type.getId());
-					if(date.split("-").length == 1) add(list, plan.getId());
+					add(list, plan.getId());
 					add(list, type_Value);
 					add(list, item.getName());
 					if(date.split("-").length > 1) add(list, item.getNote());
