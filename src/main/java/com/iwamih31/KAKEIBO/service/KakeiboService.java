@@ -1205,7 +1205,7 @@ public class KakeiboService {
 				add(list, id);
 				add(list, the_day);
 				add(list, item_Value);
-				add(list, note);
+				add(list, plan.getNote());
 				add(list, income);
 				add(list, spending);
 				add(list, income - spending);
