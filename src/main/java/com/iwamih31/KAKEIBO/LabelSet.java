@@ -31,6 +31,16 @@ public class LabelSet {
 	public static Set[] type_Set = {
 			set("日付",	 	 7),
 			set("項目",	 	10),
+			set("詳細",	 	15),
+			set("備考",	 	15),
+			set("入金",	 	 7),
+			set("出金",		 7),
+			set("合計",		 7),
+	};
+
+	public static Set[] type_Plan_Set = {
+			set("日付",	 	 7),
+			set("項目",	 	10),
 			set("備考",	 	15),
 			set("入金",	 	 7),
 			set("出金",		 7),

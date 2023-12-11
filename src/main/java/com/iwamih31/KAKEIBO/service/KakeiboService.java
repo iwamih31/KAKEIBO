@@ -1439,6 +1439,8 @@ public class KakeiboService {
 		case "種別毎一覧":
 			return LabelSet.summary_Type_Set;
 		case "種別毎内訳":
+			if (section.equals("実績")) return LabelSet.type_Set;
+			if (section.equals("予算")) return LabelSet.type_Plan_Set;
 			return LabelSet.type_Set;
 		case "全データ一覧":
 		case "データ毎一覧":
