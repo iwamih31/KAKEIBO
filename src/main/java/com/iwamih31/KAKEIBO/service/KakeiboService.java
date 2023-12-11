@@ -795,7 +795,7 @@ public class KakeiboService {
 
 	public String year_Month(LocalDate localDate) {
 		// 表示形式を指定
-		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM");
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
 		return dateTimeFormatter.format(localDate);
 	}
 
@@ -1094,7 +1094,9 @@ public class KakeiboService {
 					add(list, type_Value);
 					add(list, item.getName());
 					if(date.split("-").length > 1) add(list, item.getNote());
-					if(date.split("-").length == 1) add(list, plan.getThe_day());
+					if(date.split("-").length == 1) {
+						add(list, year_Month(plan.getThe_day()));
+					}
 					add(list, income);
 					add(list, spending);
 					add(list, income - spending);
@@ -1491,18 +1493,6 @@ public class KakeiboService {
 				menu.add(new Link("月毎", "/Summary_Plan"));
 			}
 			break;
-		case "データ毎一覧":
-			if (section.equals("実績")) {
-				menu.add(new Link("Excel出力", "/Output/Excel"));
-				menu.add(new Link("種別毎", "/Summary_Type"));
-				menu.add(new Link("項目毎", "/Summary"));
-			}
-			if (section.equals("予算")) {
-				menu.add(new Link("Excel出力", "/Output/Excel"));
-				menu.add(new Link("種別毎", "/Plan_Type"));
-				menu.add(new Link("項目毎", "/Plan"));
-			}
-			break;
 		case "種別毎一覧":
 			if (section.equals("実績")) {
 				menu.add(new Link("Excel出力", "/Output/Excel"));
@@ -1514,6 +1504,16 @@ public class KakeiboService {
 				menu.add(new Link("項目毎", "/Plan"));
 				menu.add(new Link("月毎", "/Summary_Plan"));
 			}
+			break;
+		case "データ毎一覧":
+			menu.add(new Link("Excel出力", "/Output/Excel"));
+			menu.add(new Link("種別毎", "/Summary_Type"));
+			menu.add(new Link("項目毎", "/Summary"));
+			break;
+		case "月毎一覧":
+			menu.add(new Link("Excel出力", "/Output/Excel"));
+			menu.add(new Link("種別毎", "/Plan_Type"));
+			menu.add(new Link("項目毎", "/Plan"));
 			break;
 		case "種別毎内訳":
 			menu.add(new Link("Excel出力", "/Output/Excel"));
