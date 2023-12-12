@@ -1313,7 +1313,7 @@ public class KakeiboService {
 			}
 			break;
 		case "項目変更":
-			data = data_Item_List(id);
+			data = data_Item_Change(id);
 			break;
 		default:
 			break;
@@ -1334,6 +1334,17 @@ public class KakeiboService {
 			} else {
 				add(list, (int)type.getRank());
 			}
+			data.add(list);
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Item_Change(int type_Id) {
+		List<List<String>> data = new ArrayList<>();
+		for (Item item : itemList(type_Id)) {
+			List<String> list = new ArrayList<>();
+			add(list, item.getId());
+			add(list, item.getName());
 			data.add(list);
 		}
 		return data;

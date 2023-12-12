@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<!-- library フラグメントの定義（JavaScript／CSS） -->
+	<th:block th:fragment="library">
+		<link rel="stylesheet" th:href="@{/css/main.css}">
+	</th:block>
+
+	<!--	main フラグメントの定義（メインコンテンツ）	-->
+	<div th:fragment="main">
+		<!-- ヘッダー部分 -->
+		<div class="header bg_skyblue">
+			<!-- タイトル表示 -->
+			<form id="title" th:action="@{${req + page.title.url}}" method="get">
+				<input type="hidden" name="date" th:value="${page.date.text}"/>
+				<button type="submit" class="btn-title">
+					<h1 class="h2">[[${page.title.text}]]</h1>
+				</button>
+			</form>
+			<!-- 日付表示 -->
+			<div class="date">
+				<form id="date" th:action="@{${req + page.date.url}}" method="get">
+					<input type="hidden" name="date" th:value="${page.date.text}"/>
+					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+					<button type="submit" class="btn_inherit">
+						<h3 >
+							[[${page.date.text}]]
+						</h3>
+					</button>
+				</form>
+			</div>
+		</div>
+		<!-- 本体部分 -->
+		<div>
+			<!-- 操作系表示 -->
+			<div class="flex-end margin_1em">
+				<div class="name">
+					<form id="type" th:action="@{${req + '/ChangeType'}}" method="post">
+						<input type="hidden" name="date" th:value="${page.date.text}"/>
+						<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+						<button type="submit" class="btn_inherit">
+							[[${type}]]
+						</button>
+					</form>
+				</div>
+				<div class="name">
+					<form id="section" th:action="@{${req + page.table.section.url}}" method="get">
+						<input type="hidden" name="date" th:value="${page.date.text}"/>
+						<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+						<button type="submit" class="btn_inherit">
+							[[${page.table.section.text}]]
+						</button>
+					</form>
+				</div>
+				<div class="nav">
+					<th:block th:each="button, status : ${page.menu}">
+						<form th:id="'button' + ${status.index}" method="post" th:action="@{${req + button.url}}">
+							<input type="hidden" name="date" th:value="${page.date.text}"/>
+							<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+							<button th:form="'button' + ${status.index}" type="submit" class="btn btn-primary">
+								[[${button.text}]]
+							</button>
+						</form>
+					</th:block>
+				</div>
+			</div>
+			<!-- メッセージ表示	-->
+			<div class="flex">
+				<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
+			</div>
+			<!-- テーブル表示 -->
+			<table class="table table-striped table-bordered table-hover">
+				<thead class="thead-light">
+					<tr>
+						<th th:each="column : ${page.table.columns}"
+						 class="th-width" th:width="${column.value * 1.5} + '%'">
+							[[${column.name}]]
+						</th>
+					</tr>
+				</thead>
+				<tbody th:if="${page.table.data.size() &gt; 0}">
+					<tr th:each="row : ${page.table.data}">
+						<td>
+							<form th:id="'update' + ${row[0]}" method="post" th:action="@{${req + url}}">
+								<input type="hidden" name="date" th:value="${page.date.text}"/>
+								<input type="hidden" name="section" th:value="${page.table.section.text}"/>
+								<input type="hidden" name="id" th:value="${row[0]}"/>
+								<button th:form="'update' + ${row[0]}" type="submit" class="btn btn-primary">
+									[[${row[1]}]]
+								</button>
+							</form>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<br>
+		<a th:href="@{/main}">メインページへ</a>
+	</div>
+
+</html>

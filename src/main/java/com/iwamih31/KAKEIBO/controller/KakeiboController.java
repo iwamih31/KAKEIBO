@@ -368,8 +368,9 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			@RequestParam("id")int type_id,
 			Model model) {
-		add_View_Data_(model, "change");
+		add_View_Data_(model, "changeItem");
 		model.addAttribute("page", service.page("項目変更", section, date, type_id));
+		model.addAttribute("type", service.type(type_id).getName());
 		model.addAttribute("url", "/Item");
 		return "view";
 	}
