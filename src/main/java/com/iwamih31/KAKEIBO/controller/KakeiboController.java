@@ -113,7 +113,7 @@ public class KakeiboController {
 		int carryover = service.carryover(section, date);
 		model.addAttribute("carryover", carryover);
 		model.addAttribute("asset", carryover + sum_Set.get("total"));
-		model.addAttribute("row_url", "/Type");
+		model.addAttribute("row_url", "/Item");
 		return "view";
 	}
 
@@ -131,7 +131,7 @@ public class KakeiboController {
 		int carryover = service.carryover(section, date);
 		model.addAttribute("carryover", carryover);
 		model.addAttribute("asset", carryover + sum_Set.get("total"));
-		model.addAttribute("row_url", "/Type");
+		model.addAttribute("row_url", "/Item");
 		return "view";
 	}
 
@@ -311,6 +311,29 @@ public class KakeiboController {
 		model.addAttribute("sum_spending", sum_Set.get("spending"));
 		model.addAttribute("total", sum_Set.get("total"));
 		int carryover = service.carryover(title, section, date, type_id);
+		model.addAttribute("carryover", carryover);
+		model.addAttribute("asset", carryover + sum_Set.get("total"));
+		model.addAttribute("row_url", service.row_url(title, section));
+		return "view";
+	}
+
+	@PostMapping("/Item")
+	public String item(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int item_id,
+			Model model) {
+		add_View_Data_(model, "item");
+		String title = "項目毎内訳";
+		model.addAttribute("page", service.page(title, section, date, item_id));
+		Item item = service.item(item_id);
+		model.addAttribute("type", service.type(item.getType_id()));
+		model.addAttribute("item", item);
+		HashMap<String, Integer> sum_Set = service.sum_Set(title, section, date, item_id);
+		model.addAttribute("sum_income", sum_Set.get("income"));
+		model.addAttribute("sum_spending", sum_Set.get("spending"));
+		model.addAttribute("total", sum_Set.get("total"));
+		int carryover = service.carryover(title, section, date, item_id);
 		model.addAttribute("carryover", carryover);
 		model.addAttribute("asset", carryover + sum_Set.get("total"));
 		model.addAttribute("row_url", service.row_url(title, section));

@@ -965,7 +965,7 @@ public class KakeiboService {
 					spending += action.getSpending();
 				}
 				List<String> list = new ArrayList<>();
-				add(list, type.getId());
+				add(list, item.getId());
 				add(list, type_Value);
 				add(list, item.getName());
 				add(list, item.getNote());
@@ -999,7 +999,7 @@ public class KakeiboService {
 					spending += plan.getSpending();
 				}
 				List<String> list = new ArrayList<>();
-				add(list, type.getId());
+				add(list, item.getId());
 				add(list, type_Value);
 				add(list, item.getName());
 				add(list, item.getNote());
@@ -1162,12 +1162,11 @@ public class KakeiboService {
 		return data;
 	}
 
-	private List<List<String>> data_Action(int type_id, String date) {
+	private List<List<String>> data_Action_Type(int type_id, String date) {
 		List<List<String>> data = new ArrayList<>();
 		Type type = type(type_id);
 		List<Item> itemList = itemList(type.getId());
 		for (Item item : itemList) {
-			String item_Value = item.getName();
 			List<Action> actionList = action_List_Item(item.getId(), date);
 			for (Action action : actionList) {
 				int income = action.getIncome();
@@ -1175,7 +1174,7 @@ public class KakeiboService {
 				List<String> list = new ArrayList<>();
 				add(list, action.getId());
 				add(list, date(action.getThe_day()));
-				add(list, item_Value);
+				add(list, item.getName());
 				add(list, action.getDetail());
 				add(list, action.getNote());
 				add(list, income);
@@ -1188,7 +1187,27 @@ public class KakeiboService {
 		return data;
 	}
 
-	private List<List<String>> data_Plan(int type_id, String date) {
+	private List<List<String>> data_Action_Item(int item_id, String date) {
+		List<List<String>> data = new ArrayList<>();
+		List<Action> actionList = action_List_Item(item_id, date);
+		for (Action action : actionList) {
+			int income = action.getIncome();
+			int spending = action.getSpending();
+			List<String> list = new ArrayList<>();
+			add(list, action.getId());
+			add(list, action.getThe_day());
+			add(list, action.getDetail());
+			add(list, action.getNote());
+			add(list, income);
+			add(list, spending);
+			add(list, income - spending);
+			___consoleOut___(list);
+			data.add(list);
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Plan_Type(int type_id, String date) {
 		List<List<String>> data = new ArrayList<>();
 		Type type = type(type_id);
 		List<Item> itemList = itemList(type.getId());
@@ -1200,7 +1219,6 @@ public class KakeiboService {
 				int income = plan.getIncome();
 				int spending = plan.getSpending();
 				String the_day = date(plan.getThe_day());
-				String note = plan.getNote();
 				List<String> list = new ArrayList<>();
 				add(list, id);
 				add(list, the_day);
@@ -1212,6 +1230,26 @@ public class KakeiboService {
 				___consoleOut___(list);
 				data.add(list);
 			}
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Plan_Item(int item_id, String date) {
+		List<List<String>> data = new ArrayList<>();
+		List<Plan> planList = plan_List_Item(item_id, date);
+		for (Plan plan : planList) {
+			int id = plan.getId();
+			int income = plan.getIncome();
+			int spending = plan.getSpending();
+			List<String> list = new ArrayList<>();
+			add(list, id);
+			add(list, plan.getThe_day());
+			add(list, plan.getNote());
+			add(list, income);
+			add(list, spending);
+			add(list, income - spending);
+			___consoleOut___(list);
+			data.add(list);
 		}
 		return data;
 	}
@@ -1260,12 +1298,19 @@ public class KakeiboService {
 			break;
 		case "種別毎内訳":
 			if (section.equals("実績")) {
-				data = data_Action(id, date);
+				data = data_Action_Type(id, date);
 			}
 			if (section.equals("予算")) {
-				data = data_Plan(id, date);
+				data = data_Plan_Type(id, date);
 			}
-
+			break;
+		case "項目毎内訳":
+			if (section.equals("実績")) {
+				data = data_Action_Item(id, date);
+			}
+			if (section.equals("予算")) {
+				data = data_Plan_Item(id, date);
+			}
 			break;
 		default:
 			break;
@@ -1715,8 +1760,17 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 	}
 
 	public HashMap<String, Integer> sum_Set(String title, String section, String date, int id) {
-		if (section.equals("実績")) return sum_Set(action_List_Type(id, date));
-		if (section.equals("予算")) return sum_Set_Plan(plan_List_Type(id, date));
+		switch (title) {
+		case "項目毎内訳":
+			if (section.equals("実績")) return sum_Set(action_List_Item(id, date));
+			if (section.equals("予算")) return sum_Set_Plan(plan_List_Item(id, date));
+			break;
+
+		default:
+			if (section.equals("実績")) return sum_Set(action_List_Type(id, date));
+			if (section.equals("予算")) return sum_Set_Plan(plan_List_Type(id, date));
+			break;
+		}
 		return null;
 	}
 
