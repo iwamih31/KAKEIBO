@@ -250,7 +250,7 @@ public class KakeiboController {
 		int carryover = service.carryover(section, date);
 		model.addAttribute("carryover", carryover);
 		model.addAttribute("asset", carryover + sum_Set.get("total"));
-		model.addAttribute("row_url", "/Plan_Type");
+		model.addAttribute("row_url", "/Type");
 		return "view";
 	}
 
