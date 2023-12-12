@@ -1312,6 +1312,9 @@ public class KakeiboService {
 				data = data_Plan_Item(id, date);
 			}
 			break;
+		case "項目変更":
+			data = data_Item_List(id);
+			break;
 		default:
 			break;
 		}

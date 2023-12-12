@@ -34,6 +34,14 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 			+ " from Item item")
 	public List<String> itemList();
 
+	/**	項目名 一覧取得（type_id 指定） */
+	@Query("select distinct item.name"
+			+ " from Item item"
+			+ " where item.type_id = :type_id"
+			+ " order by item.name asc")
+	public List<String> itemList(
+			@Param("type_id") Integer type_id);
+
 	/**	id から name 取得 */
 	@Query("select item.name"
 			+ " from Item item"
