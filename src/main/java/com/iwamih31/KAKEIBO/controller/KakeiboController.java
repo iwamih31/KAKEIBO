@@ -882,25 +882,25 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@PostMapping("/OwnerSetting")
+	@PostMapping("/SettingOwner")
 	public String ownerSetting(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
 			Model model) {
-		add_View_Data_(model, "setting", "所有者設定");
+		add_View_Data_(model, "setting");
 		model.addAttribute("page", service.page("所有者設定", section, date));
 		model.addAttribute("ownerList", service.owner_Report());
 		model.addAttribute("url", "/InsertOwner");
 		return "view";
 	}
 
-	@GetMapping("/OwnerInsert")
+	@GetMapping("/InsertOwner")
 	public String ownerInsert(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
 			Model model) {
-		add_View_Data_(model, "ownerInsert", "新規項目追加");
-		model.addAttribute("page", service.page("所有者設定", section, date));
+		add_View_Data_(model, "ownerInsert");
+		model.addAttribute("page", service.page("新規項目追加", section, date));
 		model.addAttribute("owner", service.new_Owner());
 		model.addAttribute("next_id", service.next_Owner_Id());
 		return "view";

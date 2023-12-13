@@ -1583,7 +1583,7 @@ public class KakeiboService {
 			menu.add(new Link("種別選択", "/SelectType"));
 			break;
 		case "各種設定":
-			menu.add(new Link("所有者設定", "/OwnerSetting"));
+			menu.add(new Link("所有者設定", "/SettingOwner"));
 			menu.add(new Link("種別設定", "/SettingType"));
 			break;
 		case "種別設定":
