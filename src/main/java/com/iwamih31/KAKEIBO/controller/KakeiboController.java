@@ -882,10 +882,13 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@GetMapping("/OwnerSetting")
+	@PostMapping("/OwnerSetting")
 	public String ownerSetting(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
 			Model model) {
 		add_View_Data_(model, "ownerSetting", "所有者設定");
+		model.addAttribute("page", service.page("所有者設定", section, date));
 		model.addAttribute("ownerList", service.owner_Report());
 		return "view";
 	}
