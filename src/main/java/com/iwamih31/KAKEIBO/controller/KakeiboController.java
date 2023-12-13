@@ -505,6 +505,18 @@ public class KakeiboController {
 		return "view";
 	}
 
+	@PostMapping("/UpdateOwner")
+	public String updateOwner(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			Model model) {
+		add_View_Data_(model, "updateOwner");
+		model.addAttribute("page", service.page("所有者情報更新", section, date));
+		model.addAttribute("owner", service.owner(id));
+		return "view";
+	}
+
 	@PostMapping("/Setting")
 	public String setting(
 			@RequestParam("date")String date,
@@ -889,12 +901,12 @@ public class KakeiboController {
 			Model model) {
 		add_View_Data_(model, "setting");
 		model.addAttribute("page", service.page("所有者設定", section, date));
-		model.addAttribute("url", "/InsertOwner");
+		model.addAttribute("url", "/UpdateOwner");
 		return "view";
 	}
 
 	@GetMapping("/InsertOwner")
-	public String ownerInsert(
+	public String insertOwner(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
 			Model model) {
@@ -1069,33 +1081,6 @@ public class KakeiboController {
 		String message = service.insert_Action(action);
 		redirectAttributes.addFlashAttribute("message", message);
 		return redirect("/Daily?date=" + date);
-	}
-
-	@PostMapping("/OwnerUpdate")
-	public String ownerUpdate(
-			@RequestParam("id")int id,
-			Model model) {
-		add_View_Data_(model, "ownerUpdate", "所有者情報更新");
-		model.addAttribute("id", id);
-		model.addAttribute("owner", service.owner(id));
-		return "view";
-	}
-
-	@PostMapping("/ActionUpdate")
-	public String actionUpdate(
-			@RequestParam("id")int id,
-			@RequestParam("date")String date,
-			Model model) {
-		add_View_Data_(model, "actionUpdate", "出納情報更新");
-		model.addAttribute("guide", "内容変更後更新ボタンを押してください");
-		model.addAttribute("do_Name", "更新");
-		model.addAttribute("cancel_url", req("/Daily"));
-		model.addAttribute("do_url", req("/Action/Update"));
-		model.addAttribute("id", id);
-		model.addAttribute("date", date);
-		model.addAttribute("object", service.action(id));
-		model.addAttribute("label_Set_List", LabelSet.actionUpdate_Set);
-		return "view";
 	}
 
 	@PostMapping("/Owner/Update")
