@@ -938,6 +938,9 @@ public class KakeiboService {
 		case "並び順変更":
 			data = data_Type_All();
 			break;
+		case "所有者設定":
+			data = data_Owner_All();
+			break;
 		default:
 			data = data_Action_All();
 			break;
@@ -1334,6 +1337,18 @@ public class KakeiboService {
 			} else {
 				add(list, (int)type.getRank());
 			}
+			data.add(list);
+		}
+		return data;
+	}
+
+	private List<List<String>> data_Owner_All() {
+		List<List<String>> data = new ArrayList<>();
+		for (Owner owner : owner_Report()) {
+			List<String> list = new ArrayList<>();
+			add(list, owner.getId());
+			add(list, owner.getItem_name());
+			add(list, owner.getItem_value());
 			data.add(list);
 		}
 		return data;
