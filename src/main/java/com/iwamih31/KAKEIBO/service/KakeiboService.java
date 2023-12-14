@@ -1510,6 +1510,10 @@ public class KakeiboService {
 		switch (title) {
 		case "項目別一覧":
 			return LabelSet.summary_Set;
+		case "項目毎内訳":
+			if (section.equals("実績")) return LabelSet.item_Set;
+			if (section.equals("予算")) return LabelSet.item_Plan_Set;
+			return LabelSet.type_Set;
 		case "種別毎一覧":
 			return LabelSet.summary_Type_Set;
 		case "種別毎内訳":
