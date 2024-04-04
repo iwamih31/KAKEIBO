@@ -68,6 +68,7 @@ public class KakeiboController {
 			Model model) {
 		model.addAttribute("title", "メイン画面");
 		model.addAttribute("req", req());
+		model.addAttribute("app_name", req().replace("/", ""));
 		return "main";
 	}
 
