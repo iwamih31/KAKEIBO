@@ -7,7 +7,7 @@
 	</th:block>
 
 	<!--	main フラグメントの定義（メインコンテンツ）	-->
-	<div th:fragment="main"  th:object="${action}">
+	<div th:fragment="main"  th:object="${plan}">
 		<!-- ヘッダー部分 -->
 		<div class="header bg_skyblue">
 			<!-- タイトル表示 -->
@@ -92,7 +92,7 @@
 			<form id="delete" method="post" th:action="@{${req} + '/DeleteAction'}">
 				<input type="hidden" name="date" th:value="${page.date.text}" />
 				<input type="hidden" name="section" th:value="${page.table.section.text}" />
-				<input type="hidden" name="id" th:value="${action.id}" />
+				<input type="hidden" name="id" th:value="${plan.id}" />
 			</form>
 			<form id="new_item" method="post" th:action="@{${req} + '/InsertItem'}">
 				<input type="hidden" name="date" th:value="${page.date.text}" />

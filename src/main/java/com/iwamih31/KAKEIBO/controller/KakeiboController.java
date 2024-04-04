@@ -215,7 +215,7 @@ public class KakeiboController {
 		int carryover = service.carryover(section, date);
 		model.addAttribute("carryover", carryover);
 		model.addAttribute("asset", carryover + sum_Set.get("total"));
-		model.addAttribute("row_url", "/UpdatePlan");
+		model.addAttribute("row_url", "/UpdateAction");
 		return "view";
 	}
 
@@ -471,7 +471,14 @@ public class KakeiboController {
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
 		redirectAttributes.addAttribute("id", id);
-		return redirect("/UpdateAction");
+		switch (section) {
+		case "実績":
+			return redirect("/UpdateAction");
+		case "予算":
+			return redirect("/UpdatePlan");
+		default:
+			return redirect("/Summary");
+		}
 	}
 
 	@GetMapping("/UpdateAction")
@@ -490,7 +497,7 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@PostMapping("/UpdatePlan")
+	@GetMapping("/UpdatePlan")
 	public String updatePlan(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
@@ -499,7 +506,7 @@ public class KakeiboController {
 		add_View_Data_(model, "updatePlan");
 		model.addAttribute("page", service.page("データ修正", section, date));
 		Plan plan = service.plan(id);
-		model.addAttribute("action", plan);
+		model.addAttribute("plan", plan);
 		String typeName = service.type(plan).getName();
 		model.addAttribute("type", typeName);
 		model.addAttribute("itemList", service.itemList(typeName));
@@ -513,8 +520,8 @@ public class KakeiboController {
 			@RequestParam("id")int id,
 			Model model) {
 		add_View_Data_(model, "updateOwner");
-		model.addAttribute("page", service.page("所有者情報更新", section, date));
-		model.addAttribute("owner", service.owner(id));
+		model.addAttribute("page", service.page("使用者情報更新", section, date));
+		model.addAttribute("object", service.owner(id));
 		return "view";
 	}
 
@@ -526,6 +533,16 @@ public class KakeiboController {
 		add_View_Data_(model, "menu");
 		model.addAttribute("page", service.page("各種設定", section, date));
 		return "view";
+	}
+
+	@PostMapping("/SettingOwner")
+	public String settingOwner(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/SettingOwner");
 	}
 
 	@PostMapping("/SettingType")
@@ -548,6 +565,17 @@ public class KakeiboController {
 		redirectAttributes.addAttribute("section", section);
 		redirectAttributes.addAttribute("type", type);
 		return redirect("/SettingItem");
+	}
+
+	@GetMapping("/SettingOwner")
+	public String settingOwner(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			Model model) {
+		add_View_Data_(model, "setting");
+		model.addAttribute("page", service.page("使用者設定", section, date));
+		model.addAttribute("url", "/UpdateOwner");
+		return "view";
 	}
 
 	@GetMapping("/SettingType")
@@ -667,10 +695,26 @@ public class KakeiboController {
 			@RequestParam("id")int id,
 			Model model) {
 		add_View_Data_(model, "delete");
-		model.addAttribute("page", service.page("データ削除", section, date, id));
+		String delete_name = "データ";
+		model.addAttribute("page", service.page(delete_name + "削除", section, date, id));
 		model.addAttribute("id", id);
-		model.addAttribute("delete_name", "データ");
+		model.addAttribute("delete_name", delete_name);
 		model.addAttribute("target", "Action");
+		return "view";
+	}
+
+	@PostMapping("/DeleteOwner")
+	public String deleteOwner(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			Model model) {
+		add_View_Data_(model, "delete");
+		String delete_name = "使用者情報";
+		model.addAttribute("page", service.page(delete_name + "削除", section, date, id));
+		model.addAttribute("id", id);
+		model.addAttribute("delete_name", delete_name);
+		model.addAttribute("target", "Owner");
 		return "view";
 	}
 
@@ -706,11 +750,24 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			@RequestParam("id")int id,
 			RedirectAttributes redirectAttributes) {
-		String message = service.delete_Action(id);
+		String message = service.delete(id, section);
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
 		return redirect("/Summary");
+	}
+
+	@PostMapping("/Delete/Owner")
+	public String delete_Owner(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("id")int id,
+			RedirectAttributes redirectAttributes) {
+		String message = service.delete_Owner(id);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/SettingOwner");
 	}
 
 	@PostMapping("/Order/Type")
@@ -794,6 +851,19 @@ public class KakeiboController {
 		return redirect("/SettingType");
 	}
 
+	@PostMapping("/Insert/Owner")
+	public String insert_Owner(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@ModelAttribute("owner")Owner owner,
+			RedirectAttributes redirectAttributes) {
+		String message = service.insert_Owner(owner);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/SettingOwner");
+	}
+
 	@PostMapping("/Set/Year")
 	public String set_Year(
 			@RequestParam("date")String date,
@@ -828,6 +898,19 @@ public class KakeiboController {
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
 		return redirect("/SettingType");
+	}
+
+	@PostMapping("/Update/Owner")
+	public String update_Owner(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@ModelAttribute("owner")Owner owner,
+			RedirectAttributes redirectAttributes) {
+		String message = service.update_Owner(owner);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/SettingOwner");
 	}
 
 	@PostMapping("/Update/Action")
@@ -887,7 +970,7 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			Model model) {
 		add_View_Data_(model, "owner");
-		model.addAttribute("page", service.page("所有者情報", section, date));
+		model.addAttribute("page", service.page("使用者情報", section, date));
 		String[] item_Names = service.owner_Item_Names();
 		model.addAttribute("name", item_Names[0]);
 		model.addAttribute("department", item_Names[1]);
@@ -895,26 +978,15 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@PostMapping("/SettingOwner")
-	public String settingOwner(
-			@RequestParam("date")String date,
-			@RequestParam("section")String section,
-			Model model) {
-		add_View_Data_(model, "setting");
-		model.addAttribute("page", service.page("所有者設定", section, date));
-		model.addAttribute("url", "/UpdateOwner");
-		return "view";
-	}
 
-	@GetMapping("/InsertOwner")
+	@PostMapping("/InsertOwner")
 	public String insertOwner(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
 			Model model) {
-		add_View_Data_(model, "ownerInsert");
+		add_View_Data_(model, "insertOwner");
 		model.addAttribute("page", service.page("新規項目追加", section, date));
 		model.addAttribute("owner", service.new_Owner());
-		model.addAttribute("next_id", service.next_Owner_Id());
 		return "view";
 	}
 
@@ -1102,7 +1174,7 @@ public class KakeiboController {
 	@GetMapping("/OwnerReport")
 	public String ownerReport(
 			Model model) {
-		add_View_Data_(model, "ownerReport", "所有者情報印刷");
+		add_View_Data_(model, "ownerReport", "使用者情報印刷");
 		model.addAttribute("label_Set", LabelSet.ownerReport_Set);
 		model.addAttribute("owner_Report", service.owner_Report());
 		return "view";

@@ -68,6 +68,12 @@ public class LabelSet {
 			set("種別",	 	7),
 	};
 
+	public static Set[] settingOwner_Set = {
+			set("項目",	 	 7),
+			set("内容",	 	35),
+			set("",	 5),
+	};
+
 	public static Set[] settingType_Set = {
 			set("種別",	 	 7),
 			set("内容",	 	30),
@@ -204,11 +210,17 @@ public class LabelSet {
 			set("支出",		 6),
 	};
 
+	public static Set[] owner_Set = {
+			set("項目",		 7),
+			set("内容",		 30),
+	};
+
 	public static Set[] ownerReport_Set = {
 			set("ID",		 6),
 			set("項目",		 4),
 			set("内容",		 8),
 	};
+
 	public static Set[] cash_Set = {
 			set("金種",		10),
 			set("枚数",		10),

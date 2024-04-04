@@ -55,12 +55,12 @@ public class KakeiboService {
 	private PlanRepository planRepository;
 
 	public String name() {
-		List<String> name = ownerRepository.item_value("所有者名");
+		List<String> name = ownerRepository.item_value("使用者名");
 		if (name.isEmpty()) {
-			Owner owner_Item = new Owner(null, "所有者名", "My家計簿");
+			Owner owner_Item = new Owner(null, "使用者名", "My家計簿");
 			ownerRepository.save(owner_Item);
 		}
-		return ownerRepository.item_value("所有者名").get(0);
+		return ownerRepository.item_value("使用者名").get(0);
 	}
 
 	public Action action(int id) {
@@ -83,7 +83,7 @@ public class KakeiboService {
 
 	public String owner_Insert(Owner owner_Item, int id) {
 		owner_Item.setId(id);
-		String message = "ID = " + owner_Item.getId() + " の所有者データ登録";
+		String message = "ID = " + owner_Item.getId() + " の使用者データ登録";
 		try {
 			ownerRepository.save(owner_Item);
 			message += "が完了しました";
@@ -148,6 +148,20 @@ public class KakeiboService {
 		return message;
 	}
 
+	public String insert_Owner(Owner owner) {
+		int id = next_Owner_Id();
+		owner.setId(id);
+		String message = owner.getItem_name() + " を登録";
+		try {
+			ownerRepository.save(owner);
+			message += " しました";
+		} catch (Exception e) {
+			message += "できませんでした";
+			e.printStackTrace();
+		}
+		return message;
+	}
+
 	/** 新規項目作成 */
 	public String insert_Item(Item item) {
 		if (item.getName().equals(""))  item.setName("その他");;
@@ -181,7 +195,7 @@ public class KakeiboService {
 
 	public String owner_Update(Owner owner, int id) {
 		owner.setId(id);
-		String message = "ID = " + owner.getId() + " の所有者データ更新";
+		String message = "ID = " + owner.getId() + " の使用者データ更新";
 		try {
 			ownerRepository.save(owner);
 			message += "が完了しました";
@@ -220,6 +234,18 @@ public class KakeiboService {
 		return message;
 	}
 
+	public String update_Owner(Owner owner) {
+		String message = owner.getItem_name() + " の更新";
+		try {
+			ownerRepository.save(owner);
+			message += "が完了しました";
+		} catch (Exception e) {
+			message += "が正常に行われませんでした";
+			e.printStackTrace();
+		}
+		return message;
+	}
+
 	public String update_Item(Item item) {
 		String message = item.getName() + " の更新";
 		try {
@@ -232,11 +258,51 @@ public class KakeiboService {
 		return message;
 	}
 
+	public String delete(int id, String section) {
+		switch (section) {
+			case "実績":
+				return delete_Action(id);
+			case "予算":
+				return delete_Plan(id);
+			default:
+				return section + "を削除出来ませんでした。";
+		}
+	}
+
 	public String delete_Action(int id) {
 		Action action = action(id);
 		String message = action.getDetail() + " データを削除";
 		try {
 			actionRepository.deleteById(id);
+			message += "しました";
+		} catch (Exception e) {
+			e.printStackTrace();
+			message += "できませんでした" + e.getMessage();
+		}
+		___consoleOut___(message);
+		return message;
+	}
+
+	public String delete_Plan(int id) {
+		Plan plan = plan(id);
+		String item_Name = item(plan.getItem_id()).getName();
+		String message = item_Name + plan.getThe_day() + " のデータを削除";
+		try {
+			planRepository.deleteById(id);
+			message += "しました";
+		} catch (Exception e) {
+			e.printStackTrace();
+			message += "できませんでした" + e.getMessage();
+		}
+		___consoleOut___(message);
+		return message;
+	}
+
+	public String delete_Owner(int id) {
+		Owner owner = owner(id);
+		String message = owner.getItem_name() + " を削除";
+		try {
+			ownerRepository.deleteById(id);
 			message += "しました";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -323,7 +389,7 @@ public class KakeiboService {
 	}
 
 	public String[] owner_Item_Names() {
-		String[] item_Names = { "所有者名", "部署名" };
+		String[] item_Names = { "使用者名", "部署名" };
 		return item_Names;
 	}
 
@@ -332,9 +398,6 @@ public class KakeiboService {
 	}
 
 	public Owner new_Owner() {
-		Owner new_Owner = new Owner(next_Owner_Id(), "", "");
-		if (new_Owner.getId() == 1)
-			set_Owner();
 		return new Owner(next_Owner_Id(), "", "");
 	}
 
@@ -420,7 +483,7 @@ public class KakeiboService {
 		ownerRepository.save(new Owner(2, item_Names[1], ""));
 	}
 
-	/** 所有者データをExcelファイルとして出力 */
+	/** 使用者データをExcelファイルとして出力 */
 	public String owner_Output_Excel(HttpServletResponse response) {
 		Excel excel = new Excel();
 		String message = null;
@@ -436,13 +499,13 @@ public class KakeiboService {
 					String.valueOf(owner.getItem_value())
 			};
 		}
-		message = excel.output_Excel("所有者", column_Names, column_Width, table_Data, response);
+		message = excel.output_Excel("使用者", column_Names, column_Width, table_Data, response);
 		return message;
 	}
 
 	private List<String[]> head_Rows_Daily(String date) {
 		String da = japanese_Date(date);
-		String co = owner_item_value("所有者名");
+		String co = owner_item_value("使用者名");
 		String[][] head_Rows = {
 				{ "", co, "", "", ""},
 				{ "", "", "", "", ""},
@@ -453,7 +516,7 @@ public class KakeiboService {
 
 	private List<String[]> head_Rows_Monthly(String date) {
 		String da = japanese_Date(date, "Gy年M月分");
-		String co = owner_item_value("所有者名");
+		String co = owner_item_value("使用者名");
 		String[][] head_Rows = {
 				{ da, "", "", "", co, ""},
 				{ "", "", "", "", "", ""}
@@ -464,7 +527,7 @@ public class KakeiboService {
 	private List<String[]> head_Rows_Year(String date, String subject) {
 		String da = japanese_Date(date, "Gy年度分");
 		String su = subject;
-		String co = owner_item_value("所有者名");
+		String co = owner_item_value("使用者名");
 		String[][] head_Rows = {
 				{ da, "", su, "", co, ""},
 				{ "", "", "", "", "", ""}
@@ -938,7 +1001,7 @@ public class KakeiboService {
 		case "並び順変更":
 			data = data_Type_All();
 			break;
-		case "所有者設定":
+		case "使用者設定":
 			data = data_Owner_All();
 			break;
 		default:
@@ -1293,11 +1356,22 @@ public class KakeiboService {
 		case "項目更新":
 			data = data_Item_List(id);
 			break;
+		case "使用者情報削除":
+			data = data_Owner(id);
+			break;
+		case "種別削除":
+			data = data_Type(id);
+			break;
 		case "項目削除":
 			data = data_Item(id);
 			break;
 		case "データ削除":
-			data = data_Action(id);
+			if (section.equals("実績")) {
+				data = data_Action(id);
+			}
+			if (section.equals("予算")) {
+				data = data_Plan(id);
+			}
 			break;
 		case "種別毎内訳":
 			if (section.equals("実績")) {
@@ -1344,7 +1418,7 @@ public class KakeiboService {
 
 	private List<List<String>> data_Owner_All() {
 		List<List<String>> data = new ArrayList<>();
-		for (Owner owner : owner_Report()) {
+		for (Owner owner : owner_All()) {
 			List<String> list = new ArrayList<>();
 			add(list, owner.getId());
 			add(list, owner.getItem_name());
@@ -1378,6 +1452,29 @@ public class KakeiboService {
 		return data;
 	}
 
+	private List<List<String>> data_Owner(int id) {
+		List<List<String>> data = new ArrayList<>();
+		Owner owner = owner(id);
+		List<String> list = new ArrayList<>();
+		add(list, owner.getId());
+		add(list, owner.getItem_name());
+		add(list, owner.getItem_value());
+		data.add(list);
+		return data;
+	}
+
+	private List<List<String>> data_Type(int id) {
+		List<List<String>> data = new ArrayList<>();
+		Type type = type(id);
+		List<String> list = new ArrayList<>();
+		add(list, type.getId());
+		add(list, type.getName());
+		add(list, type.getNote());
+		add(list, (int)type.getRank());
+		data.add(list);
+		return data;
+	}
+
 	private List<List<String>> data_Item(int item_Id) {
 		List<List<String>> data = new ArrayList<>();
 		Item item = item(item_Id);
@@ -1403,6 +1500,22 @@ public class KakeiboService {
 		add(list, to_Space(action.getIncome()));
 		add(list, to_Space(action.getSpending()));
 		add(list, action.getNote());
+		data.add(list);
+		return data;
+	}
+
+	private List<List<String>> data_Plan(int plan_Id) {
+		List<List<String>> data = new ArrayList<>();
+		Plan plan = plan(plan_Id);
+		List<String> list = new ArrayList<>();
+		add(list, plan.getId());
+		add(list, year_Month(plan.getThe_day()));
+		Item item = item(plan.getItem_id());
+		add(list, type(item.getType_id()).getName());
+		add(list, item.getName());
+		add(list, to_Space(plan.getIncome()));
+		add(list, to_Space(plan.getSpending()));
+		add(list, plan.getNote());
 		data.add(list);
 		return data;
 	}
@@ -1523,6 +1636,8 @@ public class KakeiboService {
 		case "全データ一覧":
 		case "データ毎一覧":
 		case "データ削除":
+			if (section.equals("実績")) return LabelSet.action_Set;
+			if (section.equals("予算")) return LabelSet.plan_Set;
 		case "入出金データ":
 			return LabelSet.action_Set;
 		case "月毎一覧":
@@ -1534,6 +1649,8 @@ public class KakeiboService {
 			if (section.equals("予算")) return LabelSet.plan_Set;
 		case "種別選択":
 			return LabelSet.selectType_Set;
+		case "使用者設定":
+			return LabelSet.settingOwner_Set;
 		case "種別設定":
 			return LabelSet.settingType_Set;
 		case "項目設定":
@@ -1542,10 +1659,14 @@ public class KakeiboService {
 			return LabelSet.insertType_Set;
 		case "項目作成":
 			return LabelSet.insertItem_Set;
+		case "使用者情報更新":
+			return LabelSet.owner_Set;
 		case "種別更新":
 			return LabelSet.updateType_Set;
 		case "項目更新":
 			return LabelSet.updateItem_Set;
+		case "使用者情報削除":
+			return LabelSet.owner_Set;
 		case "種別削除":
 			return LabelSet.deleteType_Set;
 		case "項目削除":
@@ -1602,12 +1723,15 @@ public class KakeiboService {
 			menu.add(new Link("種別選択", "/SelectType"));
 			break;
 		case "各種設定":
-			menu.add(new Link("所有者設定", "/SettingOwner"));
+			menu.add(new Link("使用者設定", "/SettingOwner"));
 			menu.add(new Link("種別設定", "/SettingType"));
 			break;
 		case "種別設定":
 			menu.add(new Link("種別登録", "/InsertType"));
 			menu.add(new Link("並べ替え", "/OrderType"));
+			break;
+		case "使用者設定":
+			menu.add(new Link("項目追加", "/InsertOwner"));
 			break;
 		case "種別選択":
 			menu.add(new Link("種別登録", "/InsertType"));

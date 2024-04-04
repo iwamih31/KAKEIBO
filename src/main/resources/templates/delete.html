@@ -59,7 +59,7 @@
 								</th:block>
 								<th:block  th:if="${value == ''}">
 									<td>
-
+										　
 									</td>
 								</th:block>
 
@@ -73,7 +73,7 @@
 				<input type="hidden" name="section" th:value="${page.table.section.text}"/>
 				<input type="hidden" name="id" th:value="${id}"/>
 			</form>
-			<form id="cancel" method="post" th:action="@{${req} + '/Update' + target}">
+			<form id="cancel" method="post" th:action="@{${req + '/Update' + target}}">
 				<input type="hidden" name="date" th:value="${page.date.text}"/>
 				<input type="hidden" name="section" th:value="${page.table.section.text}"/>
 				<input type="hidden" name="id" th:value="${id}"/>
