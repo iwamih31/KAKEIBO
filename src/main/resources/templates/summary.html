@@ -3,13 +3,13 @@
 
 	<!-- library フラグメントの定義（JavaScript／CSS） -->
 	<th:block th:fragment="library">
-		<link rel="stylesheet" th:href="@{/css/list.css}">
+		<link rel="stylesheet" th:href="@{/css/main.css}">
 	</th:block>
 
 	<!-- main フラグメントの定義（メインコンテンツ） -->
 	<div th:fragment="main">
 		<!-- ヘッダー部分 -->
-		<div class="header bg_skyblue">
+		<div id="head" class="header bg_skyblue">
 			<!-- タイトル表示 -->
 			<form id="title" th:action="@{${req + page.title.url}}" method="get">
 				<input type="hidden" name="date" th:value="${page.date.text}"/>

@@ -57,7 +57,7 @@
 			<!-- 入力フォーム	-->
 			<div class="form">
 				日付を選択してください
-				<form id="year" th:action="@{${req + '/Summary'}}" method="post">
+				<form id="year" th:action="@{${req + url}}" method="post">
 					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
 					<input type="date" name="date" th:value="${day}"/>
 					<button type="submit" class="btn btn-primary">

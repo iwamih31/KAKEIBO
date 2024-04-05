@@ -20,6 +20,7 @@ import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.Item;
 import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.Owner;
+import com.iwamih31.KAKEIBO.Page;
 import com.iwamih31.KAKEIBO.Plan;
 import com.iwamih31.KAKEIBO.Type;
 import com.iwamih31.KAKEIBO.service.KakeiboService;
@@ -75,9 +76,9 @@ public class KakeiboController {
 	@GetMapping("/Start")
 	public String start(
 			RedirectAttributes redirectAttributes) {
-		redirectAttributes.addAttribute("date", service.this_Year());
+		redirectAttributes.addAttribute("date", service.this_Year_Month());
 		redirectAttributes.addAttribute("section", "実績");
-		return redirect("/Summary");
+		return redirect("/Summary_Action");
 	}
 
 	@PostMapping("/Summary")
@@ -164,7 +165,9 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			Model model) {
 		add_View_Data_(model, "day");
-		model.addAttribute("page", service.page("日付選択", section, date));
+		Page page = service.page("日付選択", section, date);
+		model.addAttribute("page", page);
+		model.addAttribute("url", page.getMenu().get(0).getUrl());
 		model.addAttribute("day", service.to_LocalDate(date));
 		return "view";
 	}
@@ -187,6 +190,16 @@ public class KakeiboController {
 	public String summary_Action(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/Summary_Action");
+	}
+
+	@GetMapping("/Summary_Action")
+	public String summary_Action(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
 			Model model) {
 		add_View_Data_(model, "summary");
 		model.addAttribute("page", service.page("データ毎一覧", section, date));
@@ -202,6 +215,16 @@ public class KakeiboController {
 	}
 
 	@PostMapping("/Summary_Plan")
+	public String summary_Plan(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			RedirectAttributes redirectAttributes) {
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/Summary_Plan");
+	}
+
+	@GetMapping("/Summary_Plan")
 	public String summary_Plan(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
@@ -404,11 +427,11 @@ public class KakeiboController {
 	public String insertPlan(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
-			@RequestParam("id")Integer type_id,
+			@RequestParam("id")String type_id,
 			RedirectAttributes redirectAttributes) {
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		redirectAttributes.addAttribute("id", type_id);
+		redirectAttributes.addAttribute("type_id", type_id);
 		return redirect("/InsertPlan");
 	}
 
@@ -431,7 +454,7 @@ public class KakeiboController {
 	public String insertPlan(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
-			@RequestParam("id")Integer type_id,
+			@RequestParam("type_id")Integer type_id,
 			Model model) {
 		service.___consoleOut___("date = " + date);
 		add_View_Data_(model, "insertPlan");
@@ -439,6 +462,7 @@ public class KakeiboController {
 		model.addAttribute("plan", service.new_Plan(date));
 		model.addAttribute("type", service.type_Name(type_id));
 		model.addAttribute("itemList", service.itemList(type_id));
+		model.addAttribute("id", type_id);
 		return "view";
 	}
 
@@ -754,7 +778,7 @@ public class KakeiboController {
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		return redirect("/Summary");
+		return redirect("/Summary_Action");
 	}
 
 	@PostMapping("/Delete/Owner")
@@ -822,20 +846,22 @@ public class KakeiboController {
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		return redirect("/Summary");
+		return redirect("/Summary_Action");
 	}
 
 	@PostMapping("/Insert/Plan")
 	public String insert_Plan(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
+			@RequestParam("type_id")String type_id,
 			@ModelAttribute("plan")Plan plan,
 			RedirectAttributes redirectAttributes) {
 		String message = service.insert_Plan(plan);
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		return redirect("/Plan");
+		redirectAttributes.addAttribute("type_id", type_id);
+		return redirect("/InsertPlan");
 	}
 
 	@PostMapping("/Insert/Type")
@@ -925,7 +951,22 @@ public class KakeiboController {
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		return redirect("/Summary");
+		return redirect("/Summary_Action");
+	}
+
+	@PostMapping("/Update/Plan")
+	public String update_Plan(
+			@RequestParam("date")String date,
+			@RequestParam("section")String section,
+			@RequestParam("income")String income,
+			@RequestParam("spending")String spending,
+			@ModelAttribute("plan")Plan plan,
+			RedirectAttributes redirectAttributes) {
+		String message = service.update_Plan(plan, income, spending);
+		redirectAttributes.addFlashAttribute("message", message);
+		redirectAttributes.addAttribute("date", date);
+		redirectAttributes.addAttribute("section", section);
+		return redirect("/Summary_Plan");
 	}
 
 	@PostMapping("/Update/Item")

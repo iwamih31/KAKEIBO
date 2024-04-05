@@ -112,7 +112,7 @@ public class KakeiboService {
 	}
 
 	public String insert_Plan(Plan plan) {
-		int id = next_Action_Id();
+		int id = next_Plan_Id();
 		plan.setId(id);
 		if(plan.getIncome() == null) plan.setIncome(0);
 		if(plan.getSpending() == null) plan.setSpending(0);
@@ -211,9 +211,27 @@ public class KakeiboService {
 		else action.setIncome(Integer.valueOf(income));
 		if (spending.equals("")) action.setSpending(0);
 		else action.setSpending(Integer.valueOf(spending));
-		String message = action.getDetail() + " データを更新";
+		Item item = item(action.getItem_id());
+		String message = action.getThe_day() + item.getName() + " のデータを更新";
 		try {
 			actionRepository.save(action);
+			message += "しました";
+		} catch (Exception e) {
+			message += "することがきませんでした";
+			e.printStackTrace();
+		}
+		return message;
+	}
+
+	public String update_Plan(Plan plan, String income, String spending) {
+		if (income.equals("")) plan.setIncome(0);
+		else plan.setIncome(Integer.valueOf(income));
+		if (spending.equals("")) plan.setSpending(0);
+		else plan.setSpending(Integer.valueOf(spending));
+		Item item = item( plan.getItem_id());
+		String message = plan.getThe_day() + item.getName() + " のデータを更新";
+		try {
+			planRepository.save(plan);
 			message += "しました";
 		} catch (Exception e) {
 			message += "することがきませんでした";
@@ -271,7 +289,8 @@ public class KakeiboService {
 
 	public String delete_Action(int id) {
 		Action action = action(id);
-		String message = action.getDetail() + " データを削除";
+		Item item = item(action.getItem_id());
+		String message = action.getThe_day() + item.getName() + " のデータを削除";
 		try {
 			actionRepository.deleteById(id);
 			message += "しました";
@@ -447,6 +466,15 @@ public class KakeiboService {
 		if (lastElement != null)
 			nextId = lastElement.getId() + 1;
 		___consoleOut___("next_Action_Id() = " + nextId);
+		return nextId;
+	}
+
+	public int next_Plan_Id() {
+		int nextId = 1;
+		Plan lastElement = getLastElement(planRepository.findAll());
+		if (lastElement != null)
+			nextId = lastElement.getId() + 1;
+		___consoleOut___("next_Plan_Id() = " + nextId);
 		return nextId;
 	}
 
@@ -960,6 +988,9 @@ public class KakeiboService {
 	private List<List<String>> data(String title, String section, String date) {
 		List<List<String>> data = new ArrayList<>();
 		switch (title) {
+		case "新規入力":
+			// データなし
+			break;
 		case "項目別一覧":
 			if (section.equals("実績")) {
 				data = data_Item_List(date);
@@ -1140,18 +1171,19 @@ public class KakeiboService {
 	private List<List<String>> data_Plan_List(String date) {
 		date = plan_Date(date);
 		List<List<String>> data = new ArrayList<>();
-		String current_Type_Value = "0";
+		String current_Type_Value = "";
 		for (Type type : typeList()) {
 			String type_Value = type.getName();
 			List<Item> itemList = itemList(type.getId());
 			for (Item item : itemList) {
-				if(current_Type_Value.equals(type.getName())) {
-					type_Value = "0";
-				} else {
-					current_Type_Value = type.getName();
-				}
 				List<Plan> planList = plan_List_Item(item.getId(), date);
 				for (Plan plan : planList) {
+					if(current_Type_Value.equals(type.getName())) {
+						type_Value = "";
+					} else {
+						type_Value = type.getName();
+						current_Type_Value = type.getName();
+					}
 					int income = plan.getIncome();
 					int spending = plan.getSpending();
 					List<String> list = new ArrayList<>();
@@ -1743,6 +1775,16 @@ public class KakeiboService {
 			menu.add(new Link("年間", "/Year"));
 			menu.add(new Link("月間", "/Month"));
 			menu.add(new Link("日別", "/Day"));
+			break;
+		case "年度選択":
+		case "月次選択":
+		case "日付選択":
+			if (section.equals("実績")) {
+				menu.add(new Link("確定", "/Summary_Action"));
+			}
+			if (section.equals("予算")) {
+				menu.add(new Link("確定", "/Summary_Plan"));
+			}
 			break;
 		default:
 			break;

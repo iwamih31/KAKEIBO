@@ -42,7 +42,7 @@
 				<div th:if="${message}" class="alert arert-success">[[${message}]]</div>
 			</div>
 
-			<form id="update" method="post" th:action="@{${req} + '/Update/Action'}">
+			<form id="update" method="post" th:action="@{${req} + '/Update/Plan'}">
 				<input type="hidden" name="date" th:value="${page.date.text}" />
 				<input type="hidden" name="section" th:value="${page.table.section.text}" />
 				<input type="hidden" th:field="*{id}" />
