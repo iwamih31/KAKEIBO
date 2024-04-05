@@ -167,7 +167,7 @@ public class KakeiboController {
 		add_View_Data_(model, "day");
 		model.addAttribute("page", service.page("日付選択", section, date));
 		model.addAttribute("url", service.url(section));
-		model.addAttribute("day", service.to_LocalDate(date));
+		model.addAttribute("day", service.today());
 		return "view";
 	}
 
@@ -418,7 +418,7 @@ public class KakeiboController {
 			RedirectAttributes redirectAttributes) {
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		redirectAttributes.addAttribute("id", type_id);
+		redirectAttributes.addAttribute("type_id", type_id);
 		return redirect("/InsertAction");
 	}
 
@@ -438,7 +438,7 @@ public class KakeiboController {
 	public String insertAction(
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
-			@RequestParam("id")Integer type_id,
+			@RequestParam("type_id")Integer type_id,
 			Model model) {
 		service.___consoleOut___("date = " + date);
 		add_View_Data_(model, "insertAction");
@@ -446,6 +446,7 @@ public class KakeiboController {
 		model.addAttribute("action", service.new_Action(date));
 		model.addAttribute("type", service.type_Name(type_id));
 		model.addAttribute("itemList", service.itemList(type_id));
+		model.addAttribute("type_id", type_id);
 		return "view";
 	}
 
@@ -461,7 +462,7 @@ public class KakeiboController {
 		model.addAttribute("plan", service.new_Plan(date));
 		model.addAttribute("type", service.type_Name(type_id));
 		model.addAttribute("itemList", service.itemList(type_id));
-		model.addAttribute("id", type_id);
+		model.addAttribute("type_id", type_id);
 		return "view";
 	}
 
@@ -840,12 +841,14 @@ public class KakeiboController {
 			@RequestParam("date")String date,
 			@RequestParam("section")String section,
 			@ModelAttribute("action")Action action,
+			@RequestParam("type_id")String type_id,
 			RedirectAttributes redirectAttributes) {
 		String message = service.insert_Action(action);
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		return redirect("/Summary_Action");
+		redirectAttributes.addAttribute("type_id", type_id);
+		return redirect("/InsertAction");
 	}
 
 	@PostMapping("/Insert/Plan")
