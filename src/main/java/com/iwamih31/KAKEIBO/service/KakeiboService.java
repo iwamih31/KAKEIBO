@@ -1776,16 +1776,6 @@ public class KakeiboService {
 			menu.add(new Link("月間", "/Month"));
 			menu.add(new Link("日別", "/Day"));
 			break;
-		case "年度選択":
-		case "月次選択":
-		case "日付選択":
-			if (section.equals("実績")) {
-				menu.add(new Link("確定", "/Summary_Action"));
-			}
-			if (section.equals("予算")) {
-				menu.add(new Link("確定", "/Summary_Plan"));
-			}
-			break;
 		default:
 			break;
 		}
@@ -2058,6 +2048,18 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 			return "/";
 		}
 		return "/";
+	}
+
+	public String url(String section) {
+		switch (section) {
+			case "実績":
+				return "/Summary_Action";
+			case "予算":
+				return "/Summary_Plan";
+			default:
+				return "";
+		}
+
 	}
 
 }
