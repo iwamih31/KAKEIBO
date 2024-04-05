@@ -66,6 +66,7 @@ public class LabelSet {
 
 	public static Set[] selectType_Set = {
 			set("種別",	 	7),
+			set("内容",	 	35),
 	};
 
 	public static Set[] settingOwner_Set = {

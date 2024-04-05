@@ -938,9 +938,8 @@ public class KakeiboController {
 		redirectAttributes.addFlashAttribute("message", message);
 		redirectAttributes.addAttribute("date", date);
 		redirectAttributes.addAttribute("section", section);
-		String type = service.type_Name(item);
-		redirectAttributes.addAttribute("type", type);
-		return redirect("/SettingItem");
+		redirectAttributes.addAttribute("id", item.getType_id());
+		return redirect("/InsertAction");
 	}
 
 	@PostMapping("/Insert/Item")
