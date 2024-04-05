@@ -2027,17 +2027,6 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 		}
 	}
 
-	public String date_URL(String section) {
-		switch (section) {
-		case "実績":
-			return "/Summary";
-		case "予算":
-			return "/Plan";
-		default:
-			return "/Start";
-		}
-	}
-
 	public String row_url(String title, String section) {
 		switch (title) {
 		case "種別毎内訳":
@@ -2057,7 +2046,7 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 			case "予算":
 				return "/Summary_Plan";
 			default:
-				return "";
+				return "/";
 		}
 
 	}

@@ -57,10 +57,9 @@
 			<!-- 入力フォーム	-->
 			<div class="form">
 				年度を選択してください
-				<form id="year" th:action="@{${req + '/Set/Year'}}" method="post">
-					<input type="hidden" name="date" th:value="${page.date.text}"/>
+				<form id="year" th:action="@{${req + url}}" method="post">
 					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
-					<select name="year">
+					<select name="date">
 						<option th:each="option : ${options}" th:selected="${option == selected_year}">
 							[[${option}]]
 						</option >

@@ -20,7 +20,6 @@ import com.iwamih31.KAKEIBO.Cash;
 import com.iwamih31.KAKEIBO.Item;
 import com.iwamih31.KAKEIBO.LabelSet;
 import com.iwamih31.KAKEIBO.Owner;
-import com.iwamih31.KAKEIBO.Page;
 import com.iwamih31.KAKEIBO.Plan;
 import com.iwamih31.KAKEIBO.Type;
 import com.iwamih31.KAKEIBO.service.KakeiboService;
@@ -154,6 +153,7 @@ public class KakeiboController {
 			Model model) {
 		add_View_Data_(model, "year");
 		model.addAttribute("page", service.page("年度選択", section, date));
+		model.addAttribute("url", service.url(section));
 		model.addAttribute("options", OptionData.year);
 		model.addAttribute("selected_year", service.year(date));
 		return "view";
@@ -165,9 +165,8 @@ public class KakeiboController {
 			@RequestParam("section")String section,
 			Model model) {
 		add_View_Data_(model, "day");
-		Page page = service.page("日付選択", section, date);
-		model.addAttribute("page", page);
-		model.addAttribute("url", page.getMenu().get(0).getUrl());
+		model.addAttribute("page", service.page("日付選択", section, date));
+		model.addAttribute("url", service.url(section));
 		model.addAttribute("day", service.to_LocalDate(date));
 		return "view";
 	}
@@ -890,17 +889,6 @@ public class KakeiboController {
 		return redirect("/SettingOwner");
 	}
 
-	@PostMapping("/Set/Year")
-	public String set_Year(
-			@RequestParam("date")String date,
-			@RequestParam("section")String section,
-			@ModelAttribute("year")String year,
-			RedirectAttributes redirectAttributes) {
-		redirectAttributes.addAttribute("date", year);
-		redirectAttributes.addAttribute("section", section);
-		return redirect(service.date_URL(section));
-	}
-
 	@PostMapping("/Set/Month")
 	public String set_Month(
 			@RequestParam("date")String date,
@@ -910,7 +898,7 @@ public class KakeiboController {
 			RedirectAttributes redirectAttributes) {
 		redirectAttributes.addAttribute("date", service.date(year, month));
 		redirectAttributes.addAttribute("section", section);
-		return redirect(service.date_URL(section));
+		return redirect(service.url(section));
 	}
 
 	@PostMapping("/Update/Type")
