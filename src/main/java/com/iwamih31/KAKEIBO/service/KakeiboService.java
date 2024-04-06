@@ -1821,7 +1821,6 @@ public class KakeiboService {
 		return sum_Set.get("total");
 	}
 
-
 	public int carryover(String title, String section, String date, int id) {
 		int carryover = 0;
 		switch (title) {
