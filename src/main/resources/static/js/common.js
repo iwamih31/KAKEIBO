@@ -2,17 +2,17 @@
  *
  */
 
-
-let header_element = document.getElementById('head');
+// id='head'のエレメントを取得
+let head_element = document.getElementById('head');
 // クエリパラメータを取得
-let param = location.search;
 let param_map = query_param_to_map(param);
 
 // クエリパラメータにsectionがあれば
 if (param_map.get('section')) {
 	// クエリパラメータに応じたcssに切り替える
-	if (param_map.get('section')==='予算') {
-	    header_element.classList.replace('bg_skyblue', 'bg_pink');
+	if (param_map.get('section') === '予算') {
+	    head_element.classList.replace('bg_skyblue', 'bg_pink');
+	    head_element.style.backgroundColor = 'pink';
 	}
 }
 
