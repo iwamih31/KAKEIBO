@@ -1399,5 +1399,4 @@ public class KakeiboController {
 		System.out.println("template = " + template);
 	}
 
-
 }
