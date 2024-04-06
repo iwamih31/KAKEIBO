@@ -1398,5 +1398,4 @@ public class KakeiboController {
 		model.addAttribute("req", req());
 		System.out.println("template = " + template);
 	}
-
 }
