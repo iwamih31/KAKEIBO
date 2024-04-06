@@ -2047,7 +2047,6 @@ public List<Plan> plan_List_Item(int item_id, String date) {
 			default:
 				return "/";
 		}
-
 	}
 
 }
