@@ -1069,22 +1069,22 @@ public class KakeiboController {
 //		return "view";
 //	}
 
-	@PostMapping("/ActionApply/Select")
-	public String actionApply_Select(
-			@RequestParam("post_date")String date,
-			@RequestParam("field")String item,
-			@ModelAttribute("object")Action action,
-			Model model) {
-		add_View_Data_(model, "select", "適用選択");
-		model.addAttribute("url", "/ActionApply/Input");
-		model.addAttribute("date", date);
-		model.addAttribute("displayed_Date", service.japanese_Date(date));
-		model.addAttribute("name", service.name());
-		model.addAttribute("guide", "適用を選択して下さい");
-		model.addAttribute("object", action);
-		model.addAttribute("field", item);
-		return "view";
-	}
+//	@PostMapping("/ActionApply/Select")
+//	public String actionApply_Select(
+//			@RequestParam("post_date")String date,
+//			@RequestParam("field")String item,
+//			@ModelAttribute("object")Action action,
+//			Model model) {
+//		add_View_Data_(model, "select", "適用選択");
+//		model.addAttribute("url", "/ActionApply/Input");
+//		model.addAttribute("date", date);
+//		model.addAttribute("displayed_Date", service.japanese_Date(date));
+//		model.addAttribute("name", service.name());
+//		model.addAttribute("guide", "適用を選択して下さい");
+//		model.addAttribute("object", action);
+//		model.addAttribute("field", item);
+//		return "view";
+//	}
 
 	@PostMapping("/ActionApply/Input")
 	public String actionApply_Input(
