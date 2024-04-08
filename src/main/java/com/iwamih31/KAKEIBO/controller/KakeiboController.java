@@ -1081,8 +1081,6 @@ public class KakeiboController {
 		model.addAttribute("displayed_Date", service.japanese_Date(date));
 		model.addAttribute("name", service.name());
 		model.addAttribute("guide", "適用を選択して下さい");
-
-//		service.setItem_id(action, type, item);
 		model.addAttribute("object", action);
 		model.addAttribute("field", item);
 		return "view";
