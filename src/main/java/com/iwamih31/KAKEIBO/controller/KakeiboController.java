@@ -1021,21 +1021,36 @@ public class KakeiboController {
 		return "view";
 	}
 
-	@PostMapping("/ActionSubject/Select")
-	public String actionSubject_Select(
-			@RequestParam("date")String date,
-			Model model) {
-		add_View_Data_(model, "select", "科目選択");
-		model.addAttribute("url", "/ActionSubject/Input");
-		model.addAttribute("date", date);
-		model.addAttribute("displayed_Date", service.japanese_Date(date));
-		model.addAttribute("name", service.name());
-		model.addAttribute("guide", "科目を選択して下さい");
-		Action action = service.new_Action(date);
-		model.addAttribute("object", action);
-		model.addAttribute("field", action.getItem_id());
-		return "view";
-	}
+//	@PostMapping("/ActionInput")
+//	public String actionInput(
+//			@RequestParam("post_date")String date,
+//			@ModelAttribute("action")Action action,
+//			Model model) {
+//		add_View_Data_(model, "actionInput", "新規出納追加");
+//		model.addAttribute("date", date);
+//		model.addAttribute("japanese_Date", service.japanese_Date(date));
+//		model.addAttribute("name", service.name());
+//		model.addAttribute("action", action);
+//		model.addAttribute("next_id", service.next_Action_Id());
+////		model.addAttribute("label_Set_List", LabelSet.actionInsert_Set);
+//		return "view";
+//	}
+//
+//	@PostMapping("/ActionSubject/Select")
+//	public String actionSubject_Select(
+//			@RequestParam("date")String date,
+//			Model model) {
+//		add_View_Data_(model, "select", "科目選択");
+//		model.addAttribute("url", "/ActionSubject/Input");
+//		model.addAttribute("date", date);
+//		model.addAttribute("displayed_Date", service.japanese_Date(date));
+//		model.addAttribute("name", service.name());
+//		model.addAttribute("guide", "科目を選択して下さい");
+//		Action action = service.new_Action(date);
+//		model.addAttribute("object", action);
+//		model.addAttribute("field", action.getItem_id());
+//		return "view";
+//	}
 
 	@PostMapping("/ActionSubject/Input")
 	public String actionSubject_Input(
