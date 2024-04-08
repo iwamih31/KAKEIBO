@@ -1157,18 +1157,18 @@ public class KakeiboController {
 		return redirect("/OwnerSetting");
 	}
 
-	@PostMapping("/ActionIncome/Insert")
-	public String actionIncome_Insert(
-			@RequestParam("post_date")String date,
-			@RequestParam("field")int income,
-			@ModelAttribute("object")Action action,
-			RedirectAttributes redirectAttributes) {
-		action.setIncome(income);
-		action.setSpending(0);
-		String message = service.insert_Action(action);
-		redirectAttributes.addFlashAttribute("message", message);
-		return redirect("/Daily?date=" + date);
-	}
+//	@PostMapping("/ActionIncome/Insert")
+//	public String actionIncome_Insert(
+//			@RequestParam("post_date")String date,
+//			@RequestParam("field")int income,
+//			@ModelAttribute("object")Action action,
+//			RedirectAttributes redirectAttributes) {
+//		action.setIncome(income);
+//		action.setSpending(0);
+//		String message = service.insert_Action(action);
+//		redirectAttributes.addFlashAttribute("message", message);
+//		return redirect("/Daily?date=" + date);
+//	}
 
 	@PostMapping("/ActionSpending/Insert")
 	public String actionSpending_Insert(
