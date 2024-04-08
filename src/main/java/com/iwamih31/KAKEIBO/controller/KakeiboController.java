@@ -1103,24 +1103,24 @@ public class KakeiboController {
 //		return "view";
 //	}
 
-	@PostMapping("/ActionAccount/Select")
-	public String actionAccount_Select(
-			@RequestParam("post_date")String date,
-			@RequestParam("field")String detail,
-			@ModelAttribute("object")Action action,
-			Model model) {
-		add_View_Data_(model, "select", "収支選択");
-		model.addAttribute("url", "/ActionAccount/Input");
-		model.addAttribute("date", date);
-		model.addAttribute("displayed_Date", service.japanese_Date(date));
-		model.addAttribute("name", service.name());
-		model.addAttribute("guide", "収支を選択して下さい");
-		action.setDetail(detail);
-		model.addAttribute("object", action);
-		model.addAttribute("field", "");
-		model.addAttribute("options", service.accounts());
-		return "view";
-	}
+//	@PostMapping("/ActionAccount/Select")
+//	public String actionAccount_Select(
+//			@RequestParam("post_date")String date,
+//			@RequestParam("field")String detail,
+//			@ModelAttribute("object")Action action,
+//			Model model) {
+//		add_View_Data_(model, "select", "収支選択");
+//		model.addAttribute("url", "/ActionAccount/Input");
+//		model.addAttribute("date", date);
+//		model.addAttribute("displayed_Date", service.japanese_Date(date));
+//		model.addAttribute("name", service.name());
+//		model.addAttribute("guide", "収支を選択して下さい");
+//		action.setDetail(detail);
+//		model.addAttribute("object", action);
+//		model.addAttribute("field", "");
+//		model.addAttribute("options", service.accounts());
+//		return "view";
+//	}
 
 	@PostMapping("/ActionAccount/Input")
 	public String actionAccount_Input(
