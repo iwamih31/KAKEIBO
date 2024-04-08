@@ -1149,7 +1149,6 @@ public class KakeiboController {
 		return "view";
 	}
 
-
 	@PostMapping("/Owner/Insert")
 	public String owner_Insert(
 			@RequestParam("post_id")int id,
