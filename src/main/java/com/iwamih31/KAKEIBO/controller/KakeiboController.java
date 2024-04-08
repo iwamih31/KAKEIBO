@@ -1147,15 +1147,15 @@ public class KakeiboController {
 //		return "view";
 //	}
 
-	@PostMapping("/Owner/Insert")
-	public String owner_Insert(
-			@RequestParam("post_id")int id,
-			@ModelAttribute("owner")Owner owner,
-			RedirectAttributes redirectAttributes) {
-		String message = service.owner_Insert(owner, id);
-		redirectAttributes.addFlashAttribute("message", message);
-		return redirect("/OwnerSetting");
-	}
+//	@PostMapping("/Owner/Insert")
+//	public String owner_Insert(
+//			@RequestParam("post_id")int id,
+//			@ModelAttribute("owner")Owner owner,
+//			RedirectAttributes redirectAttributes) {
+//		String message = service.owner_Insert(owner, id);
+//		redirectAttributes.addFlashAttribute("message", message);
+//		return redirect("/OwnerSetting");
+//	}
 
 //	@PostMapping("/ActionIncome/Insert")
 //	public String actionIncome_Insert(
