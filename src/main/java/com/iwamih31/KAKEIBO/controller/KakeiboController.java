@@ -1122,30 +1122,30 @@ public class KakeiboController {
 //		return "view";
 //	}
 
-	@PostMapping("/ActionAccount/Input")
-	public String actionAccount_Input(
-			@RequestParam("post_date")String date,
-			@RequestParam("field")String account,
-			@ModelAttribute("object")Action action,
-			Model model) {
-		add_View_Data_(model, "input", "金額入力");
-		model.addAttribute("date", date);
-		model.addAttribute("displayed_Date", service.japanese_Date(date));
-		model.addAttribute("name", service.name());
-		model.addAttribute("guide", account +"金額を入力して下さい");
-		model.addAttribute("object", action);
-		switch (account) {
-			case "収入":
-				model.addAttribute("url", "/ActionIncome/Insert");
-				model.addAttribute("field", action.getIncome());
-				break;
-			case "支出":
-				model.addAttribute("url", "/ActionSpending/Insert");
-				model.addAttribute("field", action.getSpending());
-				break;
-		}
-		return "view";
-	}
+//	@PostMapping("/ActionAccount/Input")
+//	public String actionAccount_Input(
+//			@RequestParam("post_date")String date,
+//			@RequestParam("field")String account,
+//			@ModelAttribute("object")Action action,
+//			Model model) {
+//		add_View_Data_(model, "input", "金額入力");
+//		model.addAttribute("date", date);
+//		model.addAttribute("displayed_Date", service.japanese_Date(date));
+//		model.addAttribute("name", service.name());
+//		model.addAttribute("guide", account +"金額を入力して下さい");
+//		model.addAttribute("object", action);
+//		switch (account) {
+//			case "収入":
+//				model.addAttribute("url", "/ActionIncome/Insert");
+//				model.addAttribute("field", action.getIncome());
+//				break;
+//			case "支出":
+//				model.addAttribute("url", "/ActionSpending/Insert");
+//				model.addAttribute("field", action.getSpending());
+//				break;
+//		}
+//		return "view";
+//	}
 
 	@PostMapping("/Owner/Insert")
 	public String owner_Insert(
