@@ -3,27 +3,27 @@
  */
 
 
-function onload_body() {
-	head_Color_Switch();
-}
 
 function head_Color_Switch() {
 	// id='head'のエレメントを取得
-	var head_element = document.querySelector('#head');
+	const head_element = document.getElementById("head");
 	// クエリパラメータを取得
+	var param = window.location.search;
 	var param_map = query_param_to_map(param);
 
 	// クエリパラメータにsectionがあれば
 	if (param_map.get('section')) {
 		// クエリパラメータに応じたcssに切り替える
-		if (param_map.get('section') == '予算') {
+		if (param_map.get('section') === '予算') {
 		    head_element.classList.replace('bg_skyblue', 'bg_pink');
+		    head_element.classList.add('bg_pink');
 		    head_element.style.backgroundColor = 'pink';
 		    head_element.class = 'header bg_pink';
 		}
 	}
 }
 
+window.addEventListener('DOMContentLoaded', head_Color_Switch());
 
 // クエリパラメータを取得してMAPにする
 function query_param_to_map(param) {
