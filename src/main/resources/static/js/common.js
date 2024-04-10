@@ -36,7 +36,6 @@ function query_param_to_map(param) {
     return param_map;
 }
 
-
  var n3 = document.getElementsByClassName('num3');
 for (var i = 0; n3.length; i++){
 	let p = n3[i].textContent.replace('\xA5', '');
