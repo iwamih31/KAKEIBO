@@ -3,7 +3,6 @@
  */
 
 
-
 function head_Color_Switch() {
 	// id='head'のエレメントを取得
 	const head_element = document.getElementById("head");
