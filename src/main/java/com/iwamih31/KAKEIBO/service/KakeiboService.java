@@ -760,18 +760,15 @@ public class KakeiboService {
 
 	// 和暦の文字列をLocalDateに変換
 	public LocalDate to_LocalDate(String japanese_Date, String format_Pattern) {
-
-    // DateTimeFormatterオブジェクトを生成し、和暦のパターンを設定する
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format_Pattern, Locale.JAPAN)
-            .withChronology(JapaneseChronology.INSTANCE)
-            .withResolverStyle(ResolverStyle.SMART);
-
-    // 和暦の文字列を JapaneseDate に変換する
-    JapaneseDate wareki = JapaneseDate.from(formatter.parse(japanese_Date));
-
-    // JapaneseDateからLocalDateに変換する
-    return LocalDate.from(wareki);
-}
+	    // DateTimeFormatterオブジェクトを生成し、和暦のパターンを設定する
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format_Pattern, Locale.JAPAN)
+	            .withChronology(JapaneseChronology.INSTANCE)
+	            .withResolverStyle(ResolverStyle.SMART);
+	    // 和暦の文字列を JapaneseDate に変換する
+	    JapaneseDate wareki = JapaneseDate.from(formatter.parse(japanese_Date));
+	    // JapaneseDateからLocalDateに変換する
+	    return LocalDate.from(wareki);
+	}
 
 	public State state(int id, String name, String date) {
 		return new State(id, name, to_LocalDate(date));
