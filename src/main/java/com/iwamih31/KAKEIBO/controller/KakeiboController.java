@@ -1275,7 +1275,7 @@ public class KakeiboController {
 			RedirectAttributes redirectAttributes) {
 		String message = service.daily_Output_Excel(date, httpServletResponse);
 		redirectAttributes.addFlashAttribute("message", message);
-	return redirect("/Daily?date=" + date);
+		return redirect("/Daily?date=" + date);
 	}
 
 	@PostMapping("/Monthly/Output/Excel")
