@@ -35,7 +35,7 @@
 				<form method="post" th:action="@{${req} + '/Summary_Plan'}">
 					<input type="hidden" name="date" th:value="${page.date.text}"/>
 					<input type="hidden" name="section" value="予算"/>
-					<button type="submit" class="btn btn-primary">予算</button>
+					<button type="submit" class="btn btn-primary bg_green">予算</button>
 				</form>
 				<form method="post" th:action="@{${req} + '/Summary_Action'}">
 					<input type="hidden" name="date" th:value="${page.date.text}"/>
@@ -45,12 +45,12 @@
 				<form method="post" th:action="@{${req} + '/Owner'}">
 					<input type="hidden" name="date" th:value="${page.date.text}"/>
 					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
-					<button type="submit" class="btn btn-primary bg_yellow">使用者情報</button>
+					<button type="submit" class="btn btn-primary bg_gold">使用者情報</button>
 				</form>
 				<form method="post" th:action="@{${req} + '/Setting'}">
 					<input type="hidden" name="date" th:value="${page.date.text}"/>
 					<input type="hidden" name="section" th:value="${page.table.section.text}"/>
-					<button type="submit" class="btn btn-primary bg_green">設定</button>
+					<button type="submit" class="btn btn-primary bg_black">設定</button>
 				</form>
 				<form method="post" action="/shutdown">
 					<button type="submit" class="btn btn-primary bg_red">終了する</button>
@@ -70,5 +70,9 @@
 		</a>
 	</div>
 	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<script th:if="${page.table.section.text}=='予算'"
+		type="text/javascript" th:src="@{/js/budget.js}">
+	</script>
+
 </body>
 </html>

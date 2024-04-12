@@ -9,7 +9,7 @@
 	<!-- main フラグメントの定義（メインコンテンツ） -->
 	<div th:fragment="main">
 		<!-- ヘッダー部分 -->
-		<div id="head" class="header bg_skyblue">
+		<div class="header bg_skyblue">
 			<!-- タイトル表示 -->
 			<form id="title" th:action="@{${req + page.title.url}}" method="get">
 				<input type="hidden" name="date" th:value="${page.date.text}"/>

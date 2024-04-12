@@ -120,8 +120,12 @@ nav button,
 	border-color: black;
 }
 
-.bg_yellow {
+.bg_gold {
 	background-color: goldenrod;
+}
+
+.bg_yellow {
+	background-color: yellow;
 }
 
 .bg_skyblue {
@@ -129,7 +133,7 @@ nav button,
 }
 
 .bg_green {
-	background-color: green;
+	background-color: limegreen;
 }
 
 .bg_lightgreen {
@@ -146,6 +150,10 @@ nav button,
 
 .bg_white {
 	background-color: white;
+}
+
+.bg_black {
+	background-color: black;
 }
 
 .color_red {
